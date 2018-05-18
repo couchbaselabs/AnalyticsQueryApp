@@ -31,8 +31,8 @@ class SDKClient(object):
         try:
             logger = Logger.getLogger("com.couchbase.client");
             logger.setLevel(Level.WARNING);
-            fh = FileHandler("java_client.log");
-            logger.addHandler(fh);
+#             fh = FileHandler("java_client.log");
+#             logger.addHandler(fh);
             for h in logger.getParent().getHandlers():
                 if isinstance(h, ConsoleHandler) :
                     h.setLevel(Level.WARNING);
