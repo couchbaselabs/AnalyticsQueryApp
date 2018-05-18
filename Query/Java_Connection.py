@@ -12,7 +12,7 @@ from com.couchbase.client.java.env import DefaultCouchbaseEnvironment
 from com.couchbase.client.core.retry import BestEffortRetryStrategy
 from com.couchbase.client.core.env import QueryServiceConfig
 
-env = DefaultCouchbaseEnvironment.builder().queryServiceConfig(QueryServiceConfig.create(2,100)).mutationTokensEnabled(True).computationPoolSize(5).socketConnectTimeout(100000).keepAliveTimeout(100000).keepAliveInterval(100000).connectTimeout(100000).autoreleaseAfter(10000).retryStrategy(BestEffortRetryStrategy.INSTANCE).build();
+env = DefaultCouchbaseEnvironment.builder().maxRequestLifetime(300000).queryServiceConfig(QueryServiceConfig.create(2,100)).mutationTokensEnabled(True).computationPoolSize(5).socketConnectTimeout(100000).keepAliveTimeout(100000).keepAliveInterval(100000).connectTimeout(100000).autoreleaseAfter(10000).retryStrategy(BestEffortRetryStrategy.INSTANCE).build();
 class SDKClient(object):
     """Java SDK Client Implementation for testrunner - master branch Implementation"""
 
