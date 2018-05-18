@@ -1,0 +1,824 @@
+[2018-04-26 16:02:44,180] - [MainThread] - [load_queries:_run_concurrent_queries:121] - INFO - Running queries concurrently now...
+[2018-04-26 16:02:44,223] - [query_thread_2] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17314) from default_ds;
+[2018-04-26 16:02:44,224] - [query_thread_6] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11222) from default_ds;
+[2018-04-26 16:02:44,223] - [query_thread_1] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12566) from default_ds;
+[2018-04-26 16:02:44,224] - [query_thread_3] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10871) from default_ds;
+[2018-04-26 16:02:44,224] - [query_thread_4] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12855) from default_ds;
+[2018-04-26 16:02:44,226] - [query_thread_7] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15318) from default_ds;
+[2018-04-26 16:02:44,224] - [query_thread_5] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19409) from default_ds;
+[2018-04-26 16:02:44,240] - [query_thread_16] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11555) from default_ds;
+[2018-04-26 16:02:44,233] - [query_thread_30] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19866) from default_ds;
+[2018-04-26 16:02:44,227] - [query_thread_10] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14613) from default_ds;
+[2018-04-26 16:02:44,227] - [query_thread_9] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13295) from default_ds;
+[2018-04-26 16:02:44,233] - [query_thread_31] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12736) from default_ds;
+[2018-04-26 16:02:44,239] - [query_thread_47] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13826) from default_ds;
+[2018-04-26 16:02:44,239] - [query_thread_12] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18752) from default_ds;
+[2018-04-26 16:02:44,227] - [query_thread_8] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16259) from default_ds;
+[2018-04-26 16:02:44,233] - [query_thread_29] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16372) from default_ds;
+[2018-04-26 16:02:44,237] - [query_thread_45] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16231) from default_ds;
+[2018-04-26 16:02:44,237] - [query_thread_46] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15220) from default_ds;
+[2018-04-26 16:02:44,239] - [query_thread_19] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14100) from default_ds;
+[2018-04-26 16:02:44,234] - [query_thread_32] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10817) from default_ds;
+[2018-04-26 16:02:44,240] - [query_thread_37] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12396) from default_ds;
+[2018-04-26 16:02:44,240] - [query_thread_38] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14087) from default_ds;
+[2018-04-26 16:02:44,234] - [query_thread_14] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10616) from default_ds;
+[2018-04-26 16:02:44,240] - [query_thread_22] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18558) from default_ds;
+[2018-04-26 16:02:44,240] - [query_thread_18] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16208) from default_ds;
+[2018-04-26 16:02:44,239] - [query_thread_48] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19131) from default_ds;
+[2018-04-26 16:02:44,240] - [query_thread_15] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10040) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_44] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10401) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_26] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19524) from default_ds;
+[2018-04-26 16:02:44,234] - [query_thread_33] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19338) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_36] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12365) from default_ds;
+[2018-04-26 16:02:44,234] - [query_thread_35] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15311) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_39] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12165) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_13] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19465) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_40] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10960) from default_ds;
+[2018-04-26 16:02:44,234] - [query_thread_34] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11466) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_24] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14512) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_25] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11865) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_23] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14644) from default_ds;
+[2018-04-26 16:02:44,236] - [MainThread] - [load_queries:_run_concurrent_queries:134] - INFO - submitted 50 queries
+[2018-04-26 16:02:44,236] - [query_thread_41] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19252) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_42] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13000) from default_ds;
+[2018-04-26 16:02:44,239] - [query_thread_11] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16150) from default_ds;
+[2018-04-26 16:02:44,239] - [query_thread_17] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13919) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_43] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14839) from default_ds;
+[2018-04-26 16:02:44,242] - [query_thread_49] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13922) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_21] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15184) from default_ds;
+[2018-04-26 16:02:44,236] - [query_thread_20] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13712) from default_ds;
+[2018-04-26 16:02:44,240] - [query_thread_27] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13171) from default_ds;
+[2018-04-26 16:02:44,243] - [query_thread_28] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12766) from default_ds;
+[2018-04-26 16:02:49,285] - [query_thread_54] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13738) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_65] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16678) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_69] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11455) from default_ds;
+[2018-04-26 16:02:49,290] - [query_thread_72] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14225) from default_ds;
+[2018-04-26 16:02:49,290] - [query_thread_73] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18164) from default_ds;
+[2018-04-26 16:02:49,292] - [query_thread_74] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19014) from default_ds;
+[2018-04-26 16:02:49,292] - [query_thread_75] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11969) from default_ds;
+[2018-04-26 16:02:49,292] - [query_thread_76] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17763) from default_ds;
+[2018-04-26 16:02:49,285] - [query_thread_55] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17585) from default_ds;
+[2018-04-26 16:02:49,295] - [query_thread_79] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13979) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_63] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12071) from default_ds;
+[2018-04-26 16:02:49,296] - [query_thread_81] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10930) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_67] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15488) from default_ds;
+[2018-04-26 16:02:49,296] - [query_thread_84] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11295) from default_ds;
+[2018-04-26 16:02:49,293] - [query_thread_77] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14735) from default_ds;
+[2018-04-26 16:02:49,296] - [query_thread_87] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17453) from default_ds;
+[2018-04-26 16:02:49,295] - [query_thread_70] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19530) from default_ds;
+[2018-04-26 16:02:49,298] - [query_thread_90] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16318) from default_ds;
+[2018-04-26 16:02:49,285] - [query_thread_57] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18876) from default_ds;
+[2018-04-26 16:02:49,299] - [query_thread_92] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14610) from default_ds;
+[2018-04-26 16:02:49,296] - [query_thread_82] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11901) from default_ds;
+[2018-04-26 16:02:49,285] - [query_thread_58] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15558) from default_ds;
+[2018-04-26 16:02:49,301] - [query_thread_95] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13563) from default_ds;
+[2018-04-26 16:02:49,283] - [query_thread_50] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14999) from default_ds;
+[2018-04-26 16:02:49,296] - [query_thread_86] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10523) from default_ds;
+[2018-04-26 16:02:49,285] - [query_thread_56] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16722) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_60] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18113) from default_ds;
+[2018-04-26 16:02:49,298] - [query_thread_88] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16777) from default_ds;
+[2018-04-26 16:02:49,285] - [query_thread_53] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10876) from default_ds;
+[2018-04-26 16:02:49,285] - [query_thread_59] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17978) from default_ds;
+[2018-04-26 16:02:49,301] - [query_thread_94] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15109) from default_ds;
+[2018-04-26 16:02:49,302] - [query_thread_97] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18057) from default_ds;
+[2018-04-26 16:02:49,295] - [query_thread_80] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18097) from default_ds;
+[2018-04-26 16:02:49,296] - [query_thread_83] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11859) from default_ds;
+[2018-04-26 16:02:49,296] - [query_thread_85] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16118) from default_ds;
+[2018-04-26 16:02:49,298] - [query_thread_89] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17506) from default_ds;
+[2018-04-26 16:02:49,299] - [query_thread_91] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17378) from default_ds;
+[2018-04-26 16:02:49,299] - [query_thread_93] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12513) from default_ds;
+[2018-04-26 16:02:49,283] - [query_thread_51] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15758) from default_ds;
+[2018-04-26 16:02:49,302] - [MainThread] - [load_queries:_run_concurrent_queries:134] - INFO - submitted 100 queries
+[2018-04-26 16:02:49,285] - [query_thread_52] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18245) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_64] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10033) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_61] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16789) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_62] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17363) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_66] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11462) from default_ds;
+[2018-04-26 16:02:49,289] - [query_thread_68] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11614) from default_ds;
+[2018-04-26 16:02:49,290] - [query_thread_71] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17601) from default_ds;
+[2018-04-26 16:02:49,295] - [query_thread_78] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16995) from default_ds;
+[2018-04-26 16:02:49,301] - [query_thread_96] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11870) from default_ds;
+[2018-04-26 16:02:49,302] - [query_thread_98] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16019) from default_ds;
+[2018-04-26 16:02:49,302] - [query_thread_99] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14517) from default_ds;
+[2018-04-26 16:02:54,315] - [query_thread_101] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17722) from default_ds;
+[2018-04-26 16:02:54,315] - [query_thread_103] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15154) from default_ds;
+[2018-04-26 16:02:54,315] - [query_thread_100] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19151) from default_ds;
+[2018-04-26 16:02:54,316] - [query_thread_109] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17204) from default_ds;
+[2018-04-26 16:02:54,318] - [query_thread_117] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14291) from default_ds;
+[2018-04-26 16:02:54,316] - [query_thread_111] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17305) from default_ds;
+[2018-04-26 16:02:54,318] - [query_thread_115] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11804) from default_ds;
+[2018-04-26 16:02:54,315] - [query_thread_104] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11147) from default_ds;
+[2018-04-26 16:02:54,319] - [query_thread_119] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13428) from default_ds;
+[2018-04-26 16:02:54,315] - [query_thread_102] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18665) from default_ds;
+[2018-04-26 16:02:54,321] - [query_thread_126] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10498) from default_ds;
+[2018-04-26 16:02:54,322] - [query_thread_129] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12364) from default_ds;
+[2018-04-26 16:02:54,318] - [query_thread_113] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19545) from default_ds;
+[2018-04-26 16:02:54,319] - [query_thread_120] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18156) from default_ds;
+[2018-04-26 16:02:54,315] - [query_thread_105] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15019) from default_ds;
+[2018-04-26 16:02:54,316] - [query_thread_106] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12513) from default_ds;
+[2018-04-26 16:02:54,316] - [query_thread_107] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13515) from default_ds;
+[2018-04-26 16:02:54,321] - [query_thread_128] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11930) from default_ds;
+[2018-04-26 16:02:54,316] - [query_thread_108] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14543) from default_ds;
+[2018-04-26 16:02:54,316] - [query_thread_110] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10639) from default_ds;
+[2018-04-26 16:02:54,336] - [query_thread_136] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16261) from default_ds;
+[2018-04-26 16:02:54,336] - [query_thread_138] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15940) from default_ds;
+[2018-04-26 16:02:54,336] - [query_thread_141] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16592) from default_ds;
+[2018-04-26 16:02:54,338] - [query_thread_135] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14334) from default_ds;
+[2018-04-26 16:02:54,338] - [query_thread_144] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18900) from default_ds;
+[2018-04-26 16:02:54,338] - [query_thread_147] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15747) from default_ds;
+[2018-04-26 16:02:54,318] - [query_thread_112] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12348) from default_ds;
+[2018-04-26 16:02:54,318] - [query_thread_114] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18083) from default_ds;
+[2018-04-26 16:02:54,318] - [query_thread_116] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16326) from default_ds;
+[2018-04-26 16:02:54,319] - [query_thread_118] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14495) from default_ds;
+[2018-04-26 16:02:54,319] - [query_thread_121] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12137) from default_ds;
+[2018-04-26 16:02:54,338] - [query_thread_148] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19395) from default_ds;
+[2018-04-26 16:02:54,319] - [query_thread_122] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11835) from default_ds;
+[2018-04-26 16:02:54,319] - [query_thread_123] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19956) from default_ds;
+[2018-04-26 16:02:54,321] - [query_thread_124] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15575) from default_ds;
+[2018-04-26 16:02:54,321] - [query_thread_125] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16472) from default_ds;
+[2018-04-26 16:02:54,321] - [query_thread_127] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19310) from default_ds;
+[2018-04-26 16:02:54,322] - [query_thread_130] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11464) from default_ds;
+[2018-04-26 16:02:54,335] - [query_thread_132] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16251) from default_ds;
+[2018-04-26 16:02:54,335] - [query_thread_133] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12874) from default_ds;
+[2018-04-26 16:02:54,335] - [query_thread_134] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17764) from default_ds;
+[2018-04-26 16:02:54,335] - [query_thread_131] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13624) from default_ds;
+[2018-04-26 16:02:54,336] - [query_thread_137] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15026) from default_ds;
+[2018-04-26 16:02:54,336] - [query_thread_139] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16994) from default_ds;
+[2018-04-26 16:02:54,336] - [query_thread_140] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18598) from default_ds;
+[2018-04-26 16:02:54,338] - [query_thread_142] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16998) from default_ds;
+[2018-04-26 16:02:54,338] - [query_thread_143] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11657) from default_ds;
+[2018-04-26 16:02:54,338] - [query_thread_145] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12667) from default_ds;
+[2018-04-26 16:02:54,338] - [query_thread_146] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16804) from default_ds;
+[2018-04-26 16:02:54,338] - [MainThread] - [load_queries:_run_concurrent_queries:134] - INFO - submitted 150 queries
+[2018-04-26 16:02:54,338] - [query_thread_149] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17978) from default_ds;
+[2018-04-26 16:02:55,694] - [query_thread_6] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_6 : success----------
+[2018-04-26 16:02:56,030] - [query_thread_16] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_16 : success----------
+[2018-04-26 16:02:56,928] - [query_thread_1] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_1 : success----------
+[2018-04-26 16:02:59,354] - [query_thread_150] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17902) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_156] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12397) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_159] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14947) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_155] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10046) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_163] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10557) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_164] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14782) from default_ds;
+[2018-04-26 16:02:59,354] - [query_thread_151] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11591) from default_ds;
+[2018-04-26 16:02:59,357] - [query_thread_168] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10452) from default_ds;
+[2018-04-26 16:02:59,354] - [query_thread_152] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13171) from default_ds;
+[2018-04-26 16:02:59,357] - [query_thread_171] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13002) from default_ds;
+[2018-04-26 16:02:59,357] - [query_thread_172] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17915) from default_ds;
+[2018-04-26 16:02:59,358] - [query_thread_175] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14041) from default_ds;
+[2018-04-26 16:02:59,358] - [query_thread_174] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12331) from default_ds;
+[2018-04-26 16:02:59,358] - [query_thread_177] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16630) from default_ds;
+[2018-04-26 16:02:59,358] - [query_thread_179] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19257) from default_ds;
+[2018-04-26 16:02:59,359] - [query_thread_181] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15641) from default_ds;
+[2018-04-26 16:02:59,359] - [query_thread_182] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17050) from default_ds;
+[2018-04-26 16:02:59,361] - [query_thread_184] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16145) from default_ds;
+[2018-04-26 16:02:59,358] - [query_thread_176] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12933) from default_ds;
+[2018-04-26 16:02:59,361] - [query_thread_185] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13478) from default_ds;
+[2018-04-26 16:02:59,361] - [query_thread_188] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16783) from default_ds;
+[2018-04-26 16:02:59,361] - [query_thread_189] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10344) from default_ds;
+[2018-04-26 16:02:59,362] - [query_thread_191] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13995) from default_ds;
+[2018-04-26 16:02:59,362] - [query_thread_193] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18229) from default_ds;
+[2018-04-26 16:02:59,362] - [query_thread_196] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17560) from default_ds;
+[2018-04-26 16:02:59,364] - [query_thread_197] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14372) from default_ds;
+[2018-04-26 16:02:59,359] - [query_thread_180] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13266) from default_ds;
+[2018-04-26 16:02:59,361] - [query_thread_183] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16152) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_160] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12401) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_153] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16810) from default_ds;
+[2018-04-26 16:02:59,362] - [query_thread_194] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13381) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_154] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18267) from default_ds;
+[2018-04-26 16:02:59,364] - [query_thread_198] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16087) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_157] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17538) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_158] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17646) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_161] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12797) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_162] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18820) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_165] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19567) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_166] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19399) from default_ds;
+[2018-04-26 16:02:59,355] - [query_thread_167] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15601) from default_ds;
+[2018-04-26 16:02:59,357] - [query_thread_169] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15622) from default_ds;
+[2018-04-26 16:02:59,357] - [query_thread_170] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19531) from default_ds;
+[2018-04-26 16:02:59,358] - [query_thread_173] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10145) from default_ds;
+[2018-04-26 16:02:59,358] - [query_thread_178] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16743) from default_ds;
+[2018-04-26 16:02:59,361] - [query_thread_186] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19353) from default_ds;
+[2018-04-26 16:02:59,361] - [query_thread_187] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15514) from default_ds;
+[2018-04-26 16:02:59,361] - [query_thread_190] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12897) from default_ds;
+[2018-04-26 16:02:59,362] - [query_thread_192] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13345) from default_ds;
+[2018-04-26 16:02:59,362] - [query_thread_195] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10496) from default_ds;
+[2018-04-26 16:02:59,364] - [MainThread] - [load_queries:_run_concurrent_queries:134] - INFO - submitted 200 queries
+[2018-04-26 16:02:59,364] - [query_thread_199] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17839) from default_ds;
+[2018-04-26 16:03:04,372] - [query_thread_202] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19017) from default_ds;
+[2018-04-26 16:03:04,372] - [query_thread_207] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11200) from default_ds;
+[2018-04-26 16:03:04,372] - [query_thread_204] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19102) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_212] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14023) from default_ds;
+[2018-04-26 16:03:04,372] - [query_thread_206] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10081) from default_ds;
+[2018-04-26 16:03:04,372] - [query_thread_200] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10392) from default_ds;
+[2018-04-26 16:03:04,377] - [query_thread_223] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),14701) from default_ds;
+[2018-04-26 16:03:04,377] - [query_thread_226] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16796) from default_ds;
+[2018-04-26 16:03:04,378] - [query_thread_227] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19457) from default_ds;
+[2018-04-26 16:03:04,378] - [query_thread_229] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13220) from default_ds;
+[2018-04-26 16:03:04,378] - [query_thread_230] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16428) from default_ds;
+[2018-04-26 16:03:04,380] - [query_thread_232] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10455) from default_ds;
+[2018-04-26 16:03:04,380] - [query_thread_234] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15828) from default_ds;
+[2018-04-26 16:03:04,380] - [query_thread_236] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18371) from default_ds;
+[2018-04-26 16:03:04,380] - [query_thread_237] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19071) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_215] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),13161) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_217] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12759) from default_ds;
+[2018-04-26 16:03:04,381] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:04,381] - [query_thread_240] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12791) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_220] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15488) from default_ds;
+[2018-04-26 16:03:04,372] - [query_thread_205] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15465) from default_ds;
+[2018-04-26 16:03:04,377] - [query_thread_225] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17087) from default_ds;
+[2018-04-26 16:03:04,374] - [query_thread_209] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18819) from default_ds;
+[2018-04-26 16:03:04,374] - [query_thread_210] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17830) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_211] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10473) from default_ds;
+[2018-04-26 16:03:04,378] - [query_thread_231] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18325) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_213] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10821) from default_ds;
+[2018-04-26 16:03:04,381] - [query_thread_238] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15139) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_214] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12198) from default_ds;
+[2018-04-26 16:03:04,374] - [query_thread_203] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19243) from default_ds;
+[2018-04-26 16:03:04,381] - [query_thread_239] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12722) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_219] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18038) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_221] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17603) from default_ds;
+[2018-04-26 16:03:04,372] - [query_thread_201] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10966) from default_ds;
+[2018-04-26 16:03:04,381] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 237
+[2018-04-26 16:03:04,374] - [query_thread_208] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),15344) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_216] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),19077) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_218] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),10365) from default_ds;
+[2018-04-26 16:03:04,375] - [query_thread_222] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),12856) from default_ds;
+[2018-04-26 16:03:04,377] - [query_thread_224] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),16504) from default_ds;
+[2018-04-26 16:03:04,387] - [query_thread_241] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:04,378] - [query_thread_228] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),11213) from default_ds;
+[2018-04-26 16:03:04,380] - [query_thread_233] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),18948) from default_ds;
+[2018-04-26 16:03:04,380] - [query_thread_235] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select sleep(count(*),17067) from default_ds;
+[2018-04-26 16:03:04,387] - [query_thread_242] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:04,387] - [query_thread_243] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:07,812] - [query_thread_3] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_3 : success----------
+[2018-04-26 16:03:09,391] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:09,391] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 239
+[2018-04-26 16:03:09,392] - [query_thread_244] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:11,359] - [query_thread_7] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_7 : success----------
+[2018-04-26 16:03:12,974] - [query_thread_2] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_2 : success----------
+[2018-04-26 16:03:14,397] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:14,398] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 238
+[2018-04-26 16:03:14,398] - [query_thread_245] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:14,398] - [query_thread_246] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:19,401] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:19,403] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 240
+[2018-04-26 16:03:24,405] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:24,407] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 240
+[2018-04-26 16:03:24,664] - [query_thread_9] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_9 : success----------
+[2018-04-26 16:03:27,240] - [query_thread_5] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_5 : success----------
+[2018-04-26 16:03:29,411] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:29,413] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 238
+[2018-04-26 16:03:29,414] - [query_thread_247] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:29,414] - [query_thread_248] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:32,859] - [query_thread_30] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_30 : success----------
+[2018-04-26 16:03:34,414] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:34,414] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 239
+[2018-04-26 16:03:34,414] - [query_thread_249] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:39,286] - [query_thread_10] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_10 : success----------
+[2018-04-26 16:03:39,418] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:39,420] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 239
+[2018-04-26 16:03:39,421] - [query_thread_250] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:40,094] - [query_thread_4] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_4 : success----------
+[2018-04-26 16:03:44,424] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:44,426] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 239
+[2018-04-26 16:03:44,427] - [query_thread_251] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:45,598] - [query_thread_31] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_31 : success----------
+[2018-04-26 16:03:49,430] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:49,431] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 239
+[2018-04-26 16:03:49,431] - [query_thread_252] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:52,244] - [query_thread_121] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_121 : success----------
+[2018-04-26 16:03:53,809] - [query_thread_24] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_24 : success----------
+[2018-04-26 16:03:54,436] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:54,437] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 238
+[2018-04-26 16:03:54,437] - [query_thread_254] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:54,437] - [query_thread_253] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,302] - [query_thread_42] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_41] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_17] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_8] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_33] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_37] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_45] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_42] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,302] - [query_thread_22] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_21] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_23] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,305] - [query_thread_22] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,305] - [query_thread_21] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,303] - [query_thread_35] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_26] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_39] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_28] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_14] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_12] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,306] - [query_thread_28] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,305] - [query_thread_8] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,302] - [query_thread_20] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,305] - [query_thread_17] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,302] - [query_thread_13] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_36] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_15] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,308] - [query_thread_13] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,302] - [query_thread_48] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_49] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_47] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_34] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_32] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_38] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,306] - [query_thread_26] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,302] - [query_thread_19] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,306] - [query_thread_14] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,309] - [query_thread_15] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,309] - [query_thread_49] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,302] - [query_thread_44] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,309] - [query_thread_34] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,303] - [query_thread_18] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_11] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,312] - [query_thread_44] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,312] - [query_thread_18] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,302] - [query_thread_27] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,302] - [query_thread_43] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_46] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,309] - [query_thread_36] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,303] - [query_thread_29] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,303] - [query_thread_25] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:03:59,313] - [query_thread_29] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,313] - [query_thread_25] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,309] - [query_thread_48] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,303] - [query_thread_33] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,305] - [query_thread_41] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,305] - [query_thread_37] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,305] - [query_thread_45] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,305] - [query_thread_23] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,305] - [query_thread_35] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,306] - [query_thread_39] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,306] - [query_thread_12] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,308] - [query_thread_20] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,309] - [query_thread_47] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,309] - [query_thread_32] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,311] - [query_thread_38] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,311] - [query_thread_19] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,312] - [query_thread_11] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,312] - [query_thread_27] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,312] - [query_thread_43] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,313] - [query_thread_46] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:03:59,440] - [MainThread] - [load_queries:_run_concurrent_queries:142] - INFO - ##################################################
+[2018-04-26 16:03:59,440] - [MainThread] - [load_queries:_run_concurrent_queries:143] - INFO - Total queries running on the cluster: 205
+[2018-04-26 16:03:59,444] - [query_thread_257] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_263] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_260] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_256] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_264] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,446] - [query_thread_267] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,446] - [query_thread_271] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,447] - [query_thread_272] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,447] - [query_thread_273] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,447] - [query_thread_274] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,447] - [query_thread_275] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,447] - [query_thread_276] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,447] - [query_thread_277] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,448] - [query_thread_278] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,448] - [query_thread_279] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,448] - [query_thread_280] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_282] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_265] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_259] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,446] - [query_thread_268] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_287] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_288] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_255] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_258] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_283] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_285] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_286] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_261] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_262] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,444] - [query_thread_266] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,446] - [query_thread_269] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,446] - [query_thread_270] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_281] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_284] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:03:59,450] - [query_thread_289] - [load_queries:execute_statement_on_cbas_util:239] - INFO - Running query on cbas: select count(*) from default_ds;
+[2018-04-26 16:04:00,105] - [query_thread_118] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_118 : success----------
+[2018-04-26 16:04:03,088] - [query_thread_246] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_246 : success----------
+[2018-04-26 16:04:03,088] - [query_thread_213] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_213 : success----------
+[2018-04-26 16:04:04,355] - [query_thread_93] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_91] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_80] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_98] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_99] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_54] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_72] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_88] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_83] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_74] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_71] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_61] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_52] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_90] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_78] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_95] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_93] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,355] - [query_thread_50] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_94] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_91] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,355] - [query_thread_87] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_82] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_97] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_56] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_80] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,357] - [query_thread_75] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_79] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_92] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_69] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_58] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_85] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_59] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_68] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_89] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_73] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,355] - [query_thread_70] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_76] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_81] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_64] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_60] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_57] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_66] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_65] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,361] - [query_thread_58] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,355] - [query_thread_51] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_84] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_62] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_53] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_96] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_86] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,359] - [query_thread_97] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,357] - [query_thread_55] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,357] - [query_thread_98] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,357] - [query_thread_63] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:04,362] - [query_thread_70] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_99] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_54] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_72] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_88] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_83] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_71] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_61] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_52] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,364] - [query_thread_66] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,364] - [query_thread_62] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_74] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,365] - [query_thread_96] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_90] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_78] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,358] - [query_thread_95] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,359] - [query_thread_50] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,359] - [query_thread_94] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,359] - [query_thread_87] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,359] - [query_thread_82] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_56] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_75] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_79] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_92] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_69] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,365] - [query_thread_55] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_85] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_59] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_68] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,365] - [query_thread_63] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_89] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,361] - [query_thread_73] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,362] - [query_thread_76] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,362] - [query_thread_81] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,362] - [query_thread_64] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,362] - [query_thread_60] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,362] - [query_thread_57] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,364] - [query_thread_65] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,364] - [query_thread_51] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,364] - [query_thread_84] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,364] - [query_thread_53] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:04,365] - [query_thread_86] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,325] - [query_thread_103] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,325] - [query_thread_126] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,325] - [query_thread_109] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,325] - [query_thread_111] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,325] - [query_thread_100] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,325] - [query_thread_117] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,325] - [query_thread_104] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,326] - [query_thread_103] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,331] - [query_thread_126] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,331] - [query_thread_109] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,331] - [query_thread_111] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,331] - [query_thread_100] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,331] - [query_thread_117] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,332] - [query_thread_104] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,430] - [query_thread_143] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_114] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_105] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_131] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_135] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_106] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_131] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_138] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,431] - [query_thread_142] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_145] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_144] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_130] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_120] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_108] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_133] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_102] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_135] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,430] - [query_thread_114] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_148] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,431] - [query_thread_141] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,431] - [query_thread_147] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_132] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_125] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_127] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_113] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_110] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_129] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,431] - [query_thread_116] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,431] - [query_thread_140] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,433] - [query_thread_120] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_123] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_124] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,433] - [query_thread_108] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,433] - [query_thread_133] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_145] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,430] - [query_thread_134] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_105] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,430] - [query_thread_137] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_128] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_112] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,434] - [query_thread_116] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,436] - [query_thread_137] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_148] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_123] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,430] - [query_thread_122] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,436] - [query_thread_134] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,430] - [query_thread_149] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,434] - [query_thread_147] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_106] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_107] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,431] - [query_thread_146] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,434] - [query_thread_110] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_138] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,430] - [query_thread_139] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,430] - [query_thread_143] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_142] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,431] - [query_thread_136] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:09,433] - [query_thread_144] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,433] - [query_thread_130] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,433] - [query_thread_102] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_141] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_132] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_125] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_127] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_113] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_129] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,436] - [query_thread_128] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_140] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,434] - [query_thread_124] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,436] - [query_thread_112] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,437] - [query_thread_122] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,437] - [query_thread_149] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,437] - [query_thread_107] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,437] - [query_thread_146] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,437] - [query_thread_139] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:09,438] - [query_thread_136] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:11,542] - [query_thread_101] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_101 : success----------
+[2018-04-26 16:04:11,549] - [query_thread_247] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_247 : success----------
+[2018-04-26 16:04:11,921] - [query_thread_115] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_115 : success----------
+[2018-04-26 16:04:14,078] - [query_thread_40] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_40 : success----------
+[2018-04-26 16:04:14,096] - [query_thread_251] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_251 : success----------
+[2018-04-26 16:04:14,398] - [query_thread_159] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,400] - [query_thread_162] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,401] - [query_thread_159] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,398] - [query_thread_158] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,398] - [query_thread_171] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,400] - [query_thread_191] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,400] - [query_thread_193] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_171] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,401] - [query_thread_162] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,401] - [query_thread_155] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,401] - [query_thread_180] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_177] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,401] - [query_thread_163] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,407] - [query_thread_155] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,403] - [query_thread_150] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,407] - [query_thread_163] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,401] - [query_thread_153] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_198] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_156] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_161] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_181] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_178] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_151] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_190] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,408] - [query_thread_178] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,408] - [query_thread_151] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,408] - [query_thread_190] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,398] - [query_thread_165] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_152] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,410] - [query_thread_165] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,404] - [query_thread_164] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,410] - [query_thread_152] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,404] - [query_thread_195] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_196] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,411] - [query_thread_195] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,404] - [query_thread_157] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_189] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_158] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,411] - [query_thread_157] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,404] - [query_thread_179] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_183] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_160] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_194] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,411] - [query_thread_179] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,411] - [query_thread_183] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,404] - [query_thread_166] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,398] - [query_thread_175] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,400] - [query_thread_176] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,405] - [query_thread_191] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,405] - [query_thread_193] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,400] - [query_thread_168] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,413] - [query_thread_175] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,414] - [query_thread_168] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,400] - [query_thread_167] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,413] - [query_thread_176] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,400] - [query_thread_188] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,400] - [query_thread_186] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,417] - [query_thread_188] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,417] - [query_thread_186] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,407] - [query_thread_180] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,401] - [query_thread_184] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,401] - [query_thread_172] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_170] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,407] - [query_thread_150] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,417] - [query_thread_172] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,403] - [query_thread_199] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_169] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,403] - [query_thread_174] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_187] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,407] - [query_thread_161] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,407] - [query_thread_181] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,404] - [query_thread_185] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_192] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,404] - [query_thread_182] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,407] - [query_thread_198] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,420] - [query_thread_192] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,420] - [query_thread_182] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,404] - [query_thread_154] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:14,411] - [query_thread_189] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,407] - [query_thread_177] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,421] - [query_thread_154] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,407] - [query_thread_153] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,407] - [query_thread_156] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,410] - [query_thread_164] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,411] - [query_thread_196] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,411] - [query_thread_160] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,411] - [query_thread_194] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,413] - [query_thread_166] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,415] - [query_thread_167] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,417] - [query_thread_184] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,417] - [query_thread_170] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,418] - [query_thread_199] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,418] - [query_thread_169] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,418] - [query_thread_174] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,418] - [query_thread_187] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:14,420] - [query_thread_185] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,461] - [query_thread_243] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_241] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_220] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_222] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_220] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,463] - [query_thread_206] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_222] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,463] - [query_thread_236] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_219] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_231] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_226] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_231] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,463] - [query_thread_207] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_217] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_204] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_202] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,466] - [query_thread_217] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,466] - [query_thread_204] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,464] - [query_thread_211] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_223] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_237] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,467] - [query_thread_211] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,463] - [query_thread_228] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_206] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,464] - [query_thread_224] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_200] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_212] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_234] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_203] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_233] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_239] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_221] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_219] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,464] - [query_thread_226] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,463] - [query_thread_216] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_235] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_243] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,463] - [query_thread_241] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,463] - [query_thread_240] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_232] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,467] - [query_thread_233] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,464] - [query_thread_209] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,469] - [query_thread_221] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,464] - [query_thread_210] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_205] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,467] - [query_thread_200] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,470] - [query_thread_209] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,464] - [query_thread_230] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_236] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,464] - [query_thread_218] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_215] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_208] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,464] - [query_thread_227] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,463] - [query_thread_225] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,466] - [query_thread_201] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:19,466] - [query_thread_207] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,471] - [query_thread_225] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,469] - [query_thread_216] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,466] - [query_thread_202] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,467] - [query_thread_223] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,467] - [query_thread_237] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,467] - [query_thread_228] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,467] - [query_thread_224] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,467] - [query_thread_212] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,467] - [query_thread_234] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,467] - [query_thread_203] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,467] - [query_thread_239] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,469] - [query_thread_235] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,470] - [query_thread_240] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,470] - [query_thread_232] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,470] - [query_thread_205] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,470] - [query_thread_210] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,471] - [query_thread_230] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,471] - [query_thread_218] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,471] - [query_thread_215] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,471] - [query_thread_208] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,471] - [query_thread_227] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:19,473] - [query_thread_201] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:24,440] - [query_thread_244] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:24,441] - [query_thread_244] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:25,371] - [query_thread_119] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_119 : success----------
+[2018-04-26 16:04:26,295] - [query_thread_214] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_214 : success----------
+[2018-04-26 16:04:26,312] - [query_thread_275] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_275 : success----------
+[2018-04-26 16:04:26,703] - [query_thread_238] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_238 : success----------
+[2018-04-26 16:04:29,407] - [query_thread_245] - [load_queries:execute_statement_on_cbas:319] - INFO - RequestCancelledException from Java SDK. com.couchbase.client.core.RequestCancelledException: Could not dispatch request, cancelling instead of retrying.
+[2018-04-26 16:04:29,408] - [query_thread_245] - [load_queries:_run_query:216] - INFO - Request RequestCancelledException
+[2018-04-26 16:04:40,105] - [query_thread_77] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_77 : success----------
+[2018-04-26 16:04:40,111] - [query_thread_253] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_253 : success----------
+[2018-04-26 16:04:40,121] - [query_thread_254] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_254 : success----------
+[2018-04-26 16:04:41,081] - [query_thread_197] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_197 : success----------
+[2018-04-26 16:04:41,805] - [query_thread_67] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_67 : success----------
+[2018-04-26 16:04:41,857] - [query_thread_242] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_242 : success----------
+[2018-04-26 16:04:41,869] - [query_thread_284] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_284 : success----------
+[2018-04-26 16:04:41,871] - [query_thread_267] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_267 : success----------
+[2018-04-26 16:04:41,875] - [query_thread_260] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_260 : success----------
+[2018-04-26 16:04:41,881] - [query_thread_259] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_259 : success----------
+[2018-04-26 16:04:41,897] - [query_thread_272] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_272 : success----------
+[2018-04-26 16:04:41,905] - [query_thread_265] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_265 : success----------
+[2018-04-26 16:04:41,918] - [query_thread_273] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_273 : success----------
+[2018-04-26 16:04:41,927] - [query_thread_283] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_283 : success----------
+[2018-04-26 16:04:41,943] - [query_thread_264] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_264 : success----------
+[2018-04-26 16:04:41,996] - [query_thread_257] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_257 : success----------
+[2018-04-26 16:04:42,141] - [query_thread_270] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_270 : success----------
+[2018-04-26 16:04:42,165] - [query_thread_256] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_256 : success----------
+[2018-04-26 16:04:42,184] - [query_thread_276] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_276 : success----------
+[2018-04-26 16:04:42,197] - [query_thread_287] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_287 : success----------
+[2018-04-26 16:04:42,216] - [query_thread_271] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_271 : success----------
+[2018-04-26 16:04:42,230] - [query_thread_279] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_279 : success----------
+[2018-04-26 16:04:42,240] - [query_thread_278] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_278 : success----------
+[2018-04-26 16:04:42,257] - [query_thread_248] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_248 : success----------
+[2018-04-26 16:04:42,296] - [query_thread_266] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_266 : success----------
+[2018-04-26 16:04:42,391] - [query_thread_268] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_268 : success----------
+[2018-04-26 16:04:42,421] - [query_thread_269] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_269 : success----------
+[2018-04-26 16:04:42,436] - [query_thread_277] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_277 : success----------
+[2018-04-26 16:04:42,453] - [query_thread_258] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_258 : success----------
+[2018-04-26 16:04:42,463] - [query_thread_280] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_280 : success----------
+[2018-04-26 16:04:42,516] - [query_thread_285] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_285 : success----------
+[2018-04-26 16:04:42,568] - [query_thread_261] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_261 : success----------
+[2018-04-26 16:04:42,592] - [query_thread_282] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_282 : success----------
+[2018-04-26 16:04:42,627] - [query_thread_252] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_252 : success----------
+[2018-04-26 16:04:42,637] - [query_thread_289] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_289 : success----------
+[2018-04-26 16:04:42,642] - [query_thread_249] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_249 : success----------
+[2018-04-26 16:04:42,653] - [query_thread_263] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_263 : success----------
+[2018-04-26 16:04:42,664] - [query_thread_255] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_255 : success----------
+[2018-04-26 16:04:42,671] - [query_thread_281] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_281 : success----------
+[2018-04-26 16:04:42,716] - [query_thread_286] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_286 : success----------
+[2018-04-26 16:04:42,727] - [query_thread_288] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_288 : success----------
+[2018-04-26 16:04:42,740] - [query_thread_262] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_262 : success----------
+[2018-04-26 16:04:42,747] - [query_thread_274] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_274 : success----------
+[2018-04-26 16:04:42,756] - [query_thread_250] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_250 : success----------
+[2018-04-26 16:04:51,240] - [query_thread_173] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_173 : success----------
+[2018-04-26 16:04:53,355] - [query_thread_229] - [load_queries:_run_query:193] - INFO - --------Thread query_thread_229 : success----------
