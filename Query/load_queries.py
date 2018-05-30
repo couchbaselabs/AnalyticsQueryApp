@@ -157,7 +157,7 @@ class query_load(SDKClient):
                 i += 1
                 if i % self.concurrent_batch_size == 0:
                     log.info("submitted {0} queries".format(i))
-                    time.sleep(5)
+#                     time.sleep(5)
                 thread.start()
             
             time.sleep(2)
