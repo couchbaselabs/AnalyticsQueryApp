@@ -291,7 +291,7 @@ class query_load(SDKClient):
         output = {}
         q = AnalyticsQuery.simple(statement, params)
         try:
-            result = self.bucket.query(q, 300, TimeUnit.SECONDS)
+            result = self.bucket.query(q, 3600, TimeUnit.SECONDS)
             
             output["status"] = result.status()
             output["metrics"] = str(result.info().asJsonObject())
