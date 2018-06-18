@@ -126,7 +126,6 @@ class query_load(SDKClient):
         threads = []
         total_query_count = 0
         for i in range(0, num_queries):
-#             query = "select sleep(count(*),%s) from default_ds;"%random.randint(10000,20000)
             total_query_count += 1
             threads.append(Thread(target=self._run_query,
                                   name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
@@ -138,20 +137,19 @@ class query_load(SDKClient):
                 log.info("submitted {0} queries".format(i))
                 time.sleep(5)
             thread.start()
-#         for thread in threads:
-#             thread.join()
+            
         st_time = time.time()
         while st_time+duration > time.time():
             threads = []
             log.info("#"*50)
             log.info ("Total queries running on the cluster: %s"%self.total_count)
-            for i in range(0, num_queries-self.total_count):
+            new_queries_to_run = num_queries-self.total_count
+            for i in range(0, new_queries_to_run):
                 total_query_count += 1
-#                 query = "select count(*) from default_ds;"
                 threads.append(Thread(target=self._run_query,
                                       name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
             i = 0
-            self.total_count = num_queries
+            self.total_count += new_queries_to_run
             for thread in threads:
                 # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
                 i += 1
@@ -161,8 +159,6 @@ class query_load(SDKClient):
                 thread.start()
             
             time.sleep(2)
-#             for thread in threads:
-#                 thread.join()
         log.info(
             "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
                 num_queries, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
@@ -170,7 +166,6 @@ class query_load(SDKClient):
             raise Exception("Queries Failed:%s , Queries Error Out:%s"%(self.failed_count,self.error_count))
     
     def _run_query(self, query,validate_item_count=False, expected_count=0):
-        # Execute query (with sleep induced)
         name = threading.currentThread().getName();
         client_context_id = name
         try:
