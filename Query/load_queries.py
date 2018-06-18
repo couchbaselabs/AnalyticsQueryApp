@@ -197,6 +197,7 @@ class query_load(SDKClient):
                 log.info("Status = %s", status)
                 log.info("********Thread %s : failure**********", name)
                 self.failed_count += 1
+                self.total_count -= 1
     
         except Exception, e:
             log.info("********EXCEPTION: Thread %s **********", name)
