@@ -318,23 +318,23 @@ class query_load(SDKClient):
             
         except TimeoutException as e:
             log.info("Request TimeoutException from Java SDK. %s"%str(e))
-            traceback.print_exception(*sys.exc_info())
+#             traceback.print_exception(*sys.exc_info())
             raise Exception("Request TimeoutException")
         except RequestCancelledException as e:
             log.info("RequestCancelledException from Java SDK. %s"%str(e))
-            traceback.print_exception(*sys.exc_info())
+#             traceback.print_exception(*sys.exc_info())
             raise Exception("Request RequestCancelledException")
         except RejectedExecutionException as e:
             log.info("Request RejectedExecutionException from Java SDK. %s"%str(e))
-            traceback.print_exception(*sys.exc_info())
+#             traceback.print_exception(*sys.exc_info())
             raise Exception("Request Rejected")
         except CouchbaseException as e:
             log.info("CouchbaseException from Java SDK. %s"%str(e))
-            traceback.print_exception(*sys.exc_info())
+#             traceback.print_exception(*sys.exc_info())
             raise Exception("CouchbaseException")
         except RuntimeException as e:
             log.info("RuntimeException from Java SDK. %s"%str(e))
-            traceback.print_exception(*sys.exc_info())
+#             traceback.print_exception(*sys.exc_info())
             raise Exception("Request RuntimeException")
         return output
     
