@@ -148,6 +148,10 @@ class query_load(SDKClient):
                 total_query_count += 1
                 threads.append(Thread(target=self._run_query,
                                       name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
+                if total_query_count%1000 == 0:
+                    log.warning(
+                "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                    total_query_count, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
             i = 0
             self.total_count += new_queries_to_run
             for thread in threads:
@@ -159,6 +163,7 @@ class query_load(SDKClient):
                 thread.start()
             
             time.sleep(2)
+            
         log.info(
             "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
                 num_queries, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
