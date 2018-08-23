@@ -200,7 +200,7 @@ class query_load(SDKClient):
                     self.total_count -= 1
             else:
                 log.info("Status = %s", status)
-                log.info("********Thread %s : failure**********", name)
+                log.warning("********Thread %s : failure**********", name)
                 self.failed_count += 1
                 self.total_count -= 1
     
