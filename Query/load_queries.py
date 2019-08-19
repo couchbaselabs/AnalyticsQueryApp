@@ -12,6 +12,7 @@ import time
 from optparse import OptionParser
 from Java_Connection import SDKClient
 from com.couchbase.client.java.analytics import AnalyticsQuery, AnalyticsParams
+from com.couchbase.client.java.query import N1qlQuery, N1qlParams, consistency
 from java.lang import System, RuntimeException
 from java.util.concurrent import TimeoutException, RejectedExecutionException,\
     TimeUnit
@@ -35,18 +36,34 @@ def parse_options():
     parser.add_option("-l", "--log-level",
                       dest="loglevel", default="INFO", help="e.g -l debug,info,warning")
 
-    parser.add_option("-n", "--querycount", dest="querycount",
+    parser.add_option("-n", "--querycount", dest="querycount", default= "10",
                       help="Number queries to be run to be always running ton the cluster.")    
 
     parser.add_option("-d", "--duration", dest="duration",
                       help="Duration for which queries to be run.")
+
+    parser.add_option("-t", "--threads", dest="threads", default="10",
+                      help="Number of queries that will be run to completion")
+
+    parser.add_option("-1", "--n1ql", dest="n1ql", default=False,
+                      help="Set if App is for query use")
+
+    parser.add_option("-f", "--query_file", dest="query_file", default=None,
+                      help="A file containing the list of queries you wish to be run")
+
+    parser.add_option("-2", "--query_timeout", dest="query_timeout", default=300,
+                      help="How long each query should run for")
+
+    parser.add_option("-3", "--scan_consistency", dest="scan_consistency", default="NOT_BOUNDED",
+                      help="The Scan_consistency of each query")
+
     (options, args) = parser.parse_args()
     
     return options
 
 class query_load(SDKClient):
     
-    def __init__(self, server_ip, server_port, queries, bucket, querycount):
+    def __init__(self, server_ip, server_port, queries, bucket, querycount, batch_size=50):
         self.ip = server_ip
         self.port = server_port
         self.queries = queries
@@ -58,8 +75,9 @@ class query_load(SDKClient):
         self.error_count = 0
         self.cancel_count = 0
         self.timeout_count = 0
+        self.total_query_count = 0
         self.handles = []
-        self.concurrent_batch_size = 50
+        self.concurrent_batch_size = batch_size
         self.total_count = querycount
         
         SDKClient(self.ip, "Administrator", "password")
@@ -119,16 +137,24 @@ class query_load(SDKClient):
                 self.connectionLive = False
                 log.error("%s"%e)
                 traceback.print_exception(*sys.exc_info())
-                
-    def _run_concurrent_queries(self, query, num_queries, duration = 120):
+
+    def _run_concurrent_queries(self, query, num_queries, duration = 120, n1ql_system_test=False, timeout=300, scan_consistency="NOT_BOUNDED"):
         # Run queries concurrently
         log.info("Running queries concurrently now...")
         threads = []
         total_query_count = 0
-        for i in range(0, num_queries):
-            total_query_count += 1
+        query_count = 0
+        if n1ql_system_test:
+            name = threading.currentThread().getName()
+            thread_name = "query_for_{0}".format(name)
             threads.append(Thread(target=self._run_query,
-                                  name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
+                                  name=thread_name,
+                                  args=(random.choice(query), False, 0, True, timeout, scan_consistency)))
+        else:
+            for i in range(0, num_queries):
+                total_query_count += 1
+                threads.append(Thread(target=self._run_query,
+                                      name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
         i = 0
         for thread in threads:
             # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
@@ -137,46 +163,69 @@ class query_load(SDKClient):
                 log.info("submitted {0} queries".format(i))
                 time.sleep(5)
             thread.start()
-            
-        st_time = time.time()
-        while st_time+duration > time.time():
-            threads = []
-            log.info("#"*50)
-            log.info ("Total queries running on the cluster: %s"%self.total_count)
-            new_queries_to_run = num_queries-self.total_count
-            for i in range(0, new_queries_to_run):
-                total_query_count += 1
-                threads.append(Thread(target=self._run_query,
-                                      name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
-                if total_query_count%1000 == 0:
-                    log.warning(
-                "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
-                    total_query_count, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
-            i = 0
-            self.total_count += new_queries_to_run
+
+        # For n1ql apps we want all queries to finish executing before starting up new queries
+        if n1ql_system_test:
             for thread in threads:
-                # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
+                thread.join()
+                self.total_query_count += 1
+                query_count += 1
+        st_time = time.time()
+        i = 0
+        while st_time+duration > time.time():
+            if n1ql_system_test:
+                thread_name = "query_for_{0}".format(name + "_" + str(i))
+                log.info("#"*50)
+                thread_name = Thread(target=self._run_query, name=thread_name, args=(random.choice(query), False, 0, True, timeout, scan_consistency))
+                self.total_count += 1
+                thread_name.start()
+                thread_name.join()
                 i += 1
-                if i % self.concurrent_batch_size == 0:
-                    log.info("submitted {0} queries".format(i))
-#                     time.sleep(5)
-                thread.start()
-            
-            time.sleep(2)
-            
-        log.info(
-            "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
-                num_queries, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
+                query_count += 1
+                self.total_query_count += 1
+            else:
+                threads = []
+                log.info("#"*50)
+                log.info ("Total queries running on the cluster: %s"%self.total_count)
+                new_queries_to_run = num_queries-self.total_count
+                for i in range(0, new_queries_to_run):
+                    total_query_count += 1
+                    threads.append(Thread(target=self._run_query,
+                                          name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
+                    if total_query_count%1000 == 0:
+                        log.warning(
+                    "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                        total_query_count, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
+                i = 0
+                self.total_count += new_queries_to_run
+                for thread in threads:
+                    # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
+                    i += 1
+                    if i % self.concurrent_batch_size == 0:
+                        log.info("submitted {0} queries".format(i))
+    #                    time.sleep(5)
+                    thread.start()
+
+                time.sleep(2)
+        if n1ql_system_test:
+            log.info("%s queries submitted" % query_count)
+        else:
+            log.info(
+                "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                    num_queries, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
         if self.failed_count+self.error_count != 0:
             raise Exception("Queries Failed:%s , Queries Error Out:%s"%(self.failed_count,self.error_count))
     
-    def _run_query(self, query,validate_item_count=False, expected_count=0):
+    def _run_query(self, query,validate_item_count=False, expected_count=0, n1ql_execution=False, timeout=300, scan_consistency="NOT_BOUNDED"):
         name = threading.currentThread().getName();
         client_context_id = name
         try:
-            status, metrics, errors, results, handle = self.execute_statement_on_cbas_util(
-                query, timeout=300,
-                client_context_id=client_context_id, thread_name=name)
+            if n1ql_execution:
+                status, metrics, errors, results, handle = self.execute_statement_on_util(
+                    query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql", scan_consistency=scan_consistency)
+            else:
+                status, metrics, errors, results, handle = self.execute_statement_on_util(query, timeout=300,
+                                                                                               client_context_id=client_context_id, thread_name=name)
             # Validate if the status of the request is success, and if the count matches num_items
             if status == "success":
                 if validate_item_count:
@@ -203,7 +252,6 @@ class query_load(SDKClient):
                 log.warning("********Thread %s : failure**********", name)
                 self.failed_count += 1
                 self.total_count -= 1
-    
         except Exception, e:
             log.info("********EXCEPTION: Thread %s **********", name)
             if str(e) == "Request Rejected":
@@ -236,14 +284,19 @@ class query_load(SDKClient):
                 self.total_count -= 1
                 log.info(str(e))
                 
-    def execute_statement_on_cbas_util(self, statement, timeout=300, client_context_id=None, username=None, password=None, analytics_timeout=300, thread_name=None):
+    def execute_statement_on_util(self, statement, timeout=300, client_context_id=None, username=None, password=None, analytics_timeout=300, thread_name=None, utility="cbas",scan_consistency="NOT_BOUNDED"):
         """
         Executes a statement on CBAS using the REST API using REST Client
         """
         pretty = "true"
         try:
-            log.info("Running query on cbas via %s: %s"%(thread_name,statement))
-            response = self.execute_statement_on_cbas(statement, pretty, client_context_id, username, password,timeout=timeout, analytics_timeout=analytics_timeout)
+            if utility == "n1ql":
+                log.info("Running query on n1ql via %s: %s" % (thread_name, statement))
+                response = self.execute_statement_on_n1ql(statement, pretty=True, client_context_id=client_context_id, username=username, password=password,
+                                                          timeout=timeout,scan_consistency=scan_consistency)
+            else:
+                log.info("Running query on cbas via %s: %s"%(thread_name,statement))
+                response = self.execute_statement_on_cbas(statement, pretty, client_context_id, username, password,timeout=timeout, analytics_timeout=analytics_timeout)
             
             if type(response) == str: 
                 response = json.loads(response)
@@ -270,7 +323,6 @@ class query_load(SDKClient):
                     metrics = json.loads(metrics)
             else:
                 metrics = None
-                
             return response["status"], metrics, errors, results, handle
     
         except Exception,e:
@@ -315,7 +367,7 @@ class query_load(SDKClient):
                 log.info("analytics query %s failed status:{0},content:{1}".format(
                     output["status"], result))
                 raise Exception("Analytics Service API failed")
-            
+
         except TimeoutException as e:
             log.info("Request TimeoutException from Java SDK. %s"%str(e))
 #             traceback.print_exception(*sys.exc_info())
@@ -335,6 +387,68 @@ class query_load(SDKClient):
         except RuntimeException as e:
             log.info("RuntimeException from Java SDK. %s"%str(e))
 #             traceback.print_exception(*sys.exc_info())
+            raise Exception("Request RuntimeException")
+        return output
+
+    def execute_statement_on_n1ql(self, statement, pretty=True, client_context_id=None,
+                                  username=None, password=None, timeout = 300,scan_consistency="NOT_BOUNDED"):
+        params = N1qlParams.build()
+        params = params.pretty(pretty)
+        params = params.rawParam("timeout", str(timeout) + "s")
+        if scan_consistency == "REQUEST_PLUS":
+            params = params.consistency(consistency.ScanConsistency.REQUEST_PLUS)
+        elif scan_consistency == "STATEMENT_PLUS":
+            params = params.consistency(consistency.ScanConsistency.STATEMENT_PLUS)
+        else:
+            params = params.consistency(consistency.ScanConsistency.NOT_BOUNDED)
+
+        if client_context_id:
+            params = params.withContextId(client_context_id)
+
+        output = {}
+        q = N1qlQuery.simple(statement, params)
+        try:
+            result = self.bucket.query(q, 3600, TimeUnit.SECONDS)
+
+            output["status"] = result.status()
+            output["metrics"] = str(result.info().asJsonObject())
+
+            try:
+                output["results"] = str(result.allRows())
+            except:
+                output["results"] = None
+
+            output["errors"] = json.loads(str(result.errors()))
+
+            if str(output['status']) == "fatal":
+                msg = output['errors'][0]['msg']
+                if "Job requirement" in msg and "exceeds capacity" in msg:
+                    raise Exception("Capacity cannot meet job requirement")
+            elif str(output['status']) == "success":
+                output["errors"] = None
+                pass
+            elif str(output['status'] == 'timeout'):
+                log.info("timeout")
+                raise Exception("Request TimeoutException")
+            else:
+                log.info("n1ql query %s failed status:{0},content:{1}".format(
+                    output["status"], result))
+                raise Exception("N1ql Service API failed")
+
+        except TimeoutException as e:
+            log.info("Request TimeoutException from Java SDK. %s" % str(e))
+            raise Exception("Request TimeoutException")
+        except RequestCancelledException as e:
+            log.info("RequestCancelledException from Java SDK. %s" % str(e))
+            raise Exception("Request RequestCancelledException")
+        except RejectedExecutionException as e:
+            log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            raise Exception("Request Rejected")
+        except CouchbaseException as e:
+            log.info("CouchbaseException from Java SDK. %s" % str(e))
+            raise Exception("CouchbaseException")
+        except RuntimeException as e:
+            log.info("RuntimeException from Java SDK. %s" % str(e))
             raise Exception("Request RuntimeException")
         return output
     
@@ -368,13 +482,42 @@ options = None
 def main():
     options = parse_options()
     setup_log(options)
-    load = query_load(options.server_ip, options.port, [], options.bucket,int(options.querycount))
-    query = ['SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds1 where duration between 3009 and 3010 and profile is not missing and array_length(profile.friends) > 5 limit 100',
-             'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds2 where duration between 3009 and 3010 and profile is not missing',
+    if options.n1ql:
+        load = query_load(options.server_ip, options.port, [], options.bucket,int(options.threads), int(options.threads))
+    else:
+        load = query_load(options.server_ip, options.port, [], options.bucket,int(options.querycount))
+
+    if options.query_file:
+        f = open(options.query_file, 'r')
+        queries = f.readlines()
+        i=0
+        for query in queries:
+            queries[i] = query.strip()
+            i+=1
+        f.close()
+    else:
+        queries = ['SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds1 where duration between 3009 and 3010 and profile is not missing and array_length(profile.friends) > 5 limit 100',
+            'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds2 where duration between 3009 and 3010 and profile is not missing',
              'select sum(friends.num_friends) from (select array_length(profile.friends) as num_friends from ds3) as friends',
              'SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result = "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3009 and 3010 UNION ALL SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result != "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3010 and 3012']
-    
-    load._run_concurrent_queries(query, int(options.querycount), duration=int(options.duration))
+    if options.n1ql:
+        threads = []
+        for i in range(0, load.concurrent_batch_size):
+            threads.append(Thread(target=load._run_concurrent_queries,
+                                  name="query_thread_{0}".format(i),
+                                  args=(queries, int(options.querycount), int(options.duration), options.n1ql, options.query_timeout, options.scan_consistency)))
+
+        for thread in threads:
+            thread.start()
+
+        for thread in threads:
+            thread.join()
+    else:
+        load._run_concurrent_queries(queries, int(options.querycount), duration=int(options.duration))
+
+    print "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+        load.total_query_count, load.failed_count, load.success_count, load.rejected_count, load.cancel_count, load.timeout_count)
+
     print load.total_count
     print "Done!!"
 
