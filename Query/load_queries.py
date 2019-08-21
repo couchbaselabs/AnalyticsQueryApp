@@ -45,17 +45,20 @@ def parse_options():
     parser.add_option("-t", "--threads", dest="threads", default="10",
                       help="Number of queries that will be run to completion")
 
-    parser.add_option("-1", "--n1ql", dest="n1ql", default=False,
-                      help="Set if App is for query use")
-
     parser.add_option("-f", "--query_file", dest="query_file", default=None,
                       help="A file containing the list of queries you wish to be run")
+
+    parser.add_option("-1", "--n1ql", dest="n1ql", default=False,
+                      help="Set if App is for query use")
 
     parser.add_option("-2", "--query_timeout", dest="query_timeout", default=300,
                       help="How long each query should run for")
 
     parser.add_option("-3", "--scan_consistency", dest="scan_consistency", default="NOT_BOUNDED",
                       help="The Scan_consistency of each query")
+
+    parser.add_option("-4", "--bucket_names",  dest="bucket_names", default="[]",
+                      help="The list of bucket_names in the test running")
 
     (options, args) = parser.parse_args()
     
@@ -487,12 +490,18 @@ def main():
     else:
         load = query_load(options.server_ip, options.port, [], options.bucket,int(options.querycount))
 
+    bucket_list = options.bucket_names.strip('[]').split(',')
+    
     if options.query_file:
         f = open(options.query_file, 'r')
         queries = f.readlines()
         i=0
         for query in queries:
             queries[i] = query.strip()
+            for x in range(0, len(bucket_list)):
+                bucket_name = "bucket" + str(x)
+                if bucket_name in query:
+                    queries[i] = query.replace(bucket_name, bucket_list[x])
             i+=1
         f.close()
     else:
