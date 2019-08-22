@@ -40,7 +40,7 @@ def parse_options():
                       help="Number queries to be run to be always running on the cluster. For n1ql this param should = number of threads.")
 
     parser.add_option("-d", "--duration", dest="duration",
-                      help="Duration for which queries to be run.")
+                      help="Duration for which queries to be run. WARNING: A duration of 0 will set queries to run infinitely (if n1ql flag is set)")
 
     parser.add_option("-t", "--threads", dest="threads", default="10",
                       help="Number of queries that will be run to completion")
@@ -59,6 +59,9 @@ def parse_options():
 
     parser.add_option("-B", "--bucket_names",  dest="bucket_names", default="[]",
                       help="The list of bucket_names in the test running")
+
+    parser.add_option("-P", "--print_duration",  dest="print_duration", default=3600,
+                      help="The time interval you would like to wait before printing how many queries have been executed")
 
     (options, args) = parser.parse_args()
     
@@ -175,41 +178,72 @@ class query_load(SDKClient):
                 query_count += 1
         st_time = time.time()
         i = 0
-        while st_time+duration > time.time():
-            if n1ql_system_test:
-                thread_name = "query_for_{0}".format(name + "_" + str(i))
-                log.info("#"*50)
-                thread_name = Thread(target=self._run_query, name=thread_name, args=(random.choice(query), False, 0, True, timeout, scan_consistency))
-                self.total_count += 1
-                thread_name.start()
-                thread_name.join()
-                i += 1
-                query_count += 1
-                self.total_query_count += 1
-            else:
-                threads = []
-                log.info("#"*50)
-                log.info ("Total queries running on the cluster: %s"%self.total_count)
-                new_queries_to_run = num_queries-self.total_count
-                for i in range(0, new_queries_to_run):
-                    total_query_count += 1
-                    threads.append(Thread(target=self._run_query,
-                                          name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
-                    if total_query_count%1000 == 0:
-                        log.warning(
-                    "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
-                        total_query_count, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
-                i = 0
-                self.total_count += new_queries_to_run
-                for thread in threads:
-                    # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
+        if duration == 0:
+            while True:
+                if n1ql_system_test:
+                    log.info("#" * 50)
+                    self.total_count += 1
+                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency)
                     i += 1
-                    if i % self.concurrent_batch_size == 0:
-                        log.info("submitted {0} queries".format(i))
-    #                    time.sleep(5)
-                    thread.start()
+                    query_count += 1
+                    self.total_query_count += 1
+                else:
+                    threads = []
+                    log.info("#" * 50)
+                    log.info("Total queries running on the cluster: %s" % self.total_count)
+                    new_queries_to_run = num_queries - self.total_count
+                    for i in range(0, new_queries_to_run):
+                        total_query_count += 1
+                        threads.append(Thread(target=self._run_query,
+                                              name="query_thread_{0}".format(total_query_count),
+                                              args=(random.choice(query), False)))
+                        if total_query_count % 1000 == 0:
+                            log.warning(
+                                "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                                    total_query_count, self.failed_count, self.success_count, self.rejected_count,
+                                    self.cancel_count, self.timeout_count))
+                    i = 0
+                    self.total_count += new_queries_to_run
+                    for thread in threads:
+                        # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
+                        i += 1
+                        if i % self.concurrent_batch_size == 0:
+                            log.info("submitted {0} queries".format(i))
+                        #                    time.sleep(5)
+                        thread.start()
 
-                time.sleep(2)
+                    time.sleep(2)
+        else:
+            while st_time+duration > time.time():
+                if n1ql_system_test:
+                    log.info("#"*50)
+                    self.total_count += 1
+                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency)
+                    i += 1
+                    query_count += 1
+                    self.total_query_count += 1
+                else:
+                    threads = []
+                    log.info("#"*50)
+                    log.info ("Total queries running on the cluster: %s"%self.total_count)
+                    new_queries_to_run = num_queries-self.total_count
+                    for i in range(0, new_queries_to_run):
+                        total_query_count += 1
+                        threads.append(Thread(target=self._run_query,
+                                              name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
+                        if total_query_count%1000 == 0:
+                            log.warning(
+                        "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                            total_query_count, self.failed_count, self.success_count, self.rejected_count, self.cancel_count, self.timeout_count))
+                    i = 0
+                    self.total_count += new_queries_to_run
+                    for thread in threads:
+                        # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
+                        i += 1
+                        if i % self.concurrent_batch_size == 0:
+                            log.info("submitted {0} queries".format(i))
+                        thread.start()
+                    time.sleep(2)
         if n1ql_system_test:
             log.info("%s queries submitted" % query_count)
         else:
@@ -454,6 +488,25 @@ class query_load(SDKClient):
             log.info("RuntimeException from Java SDK. %s" % str(e))
             raise Exception("Request RuntimeException")
         return output
+
+    def monitor_query_status(self, duration, print_duration=3600):
+        st_time = time.time()
+        update_time = time.time()
+        if duration == 0:
+            while True:
+                if st_time + print_duration < time.time():
+                    print "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                        self.total_query_count, self.failed_count, self.success_count, self.rejected_count,
+                        self.cancel_count, self.timeout_count)
+                    st_time = time.time()
+        else:
+            while st_time + duration > time.time():
+                if update_time + print_duration < time.time():
+                    print "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                        self.total_query_count, self.failed_count, self.success_count, self.rejected_count,
+                        self.cancel_count, self.timeout_count)
+                    update_time = time.time()
+
     
 def create_log_file(log_config_file_name, log_file_name, level):
     tmpl_log_file = open("jython.logging.conf")
@@ -515,6 +568,8 @@ def main():
             threads.append(Thread(target=load._run_concurrent_queries,
                                   name="query_thread_{0}".format(i),
                                   args=(queries, int(options.querycount), int(options.duration), options.n1ql, options.query_timeout, options.scan_consistency)))
+
+        threads.append(Thread(target=load.monitor_query_status, name="monitor_thread", args=(int(options.duration),int(options.print_duration))))
 
         for thread in threads:
             thread.start()
