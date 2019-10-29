@@ -48,6 +48,9 @@ def parse_options():
     parser.add_option("-f", "--query_file", dest="query_file", default=None,
                       help="A file containing the list of queries you wish to be run")
 
+    parser.add_option("-v", "--validate", dest="validate", default=False,
+                      help="Set if you want n1ql queries to be validated or not")
+
     parser.add_option("-Q", "--n1ql", dest="n1ql", default=False,
                       help="Set if App is for query use")
 
@@ -144,7 +147,7 @@ class query_load(SDKClient):
                 log.error("%s"%e)
                 traceback.print_exception(*sys.exc_info())
 
-    def _run_concurrent_queries(self, query, num_queries, duration = 120, n1ql_system_test=False, timeout=300, scan_consistency="NOT_BOUNDED"):
+    def _run_concurrent_queries(self, query, num_queries, duration = 120, n1ql_system_test=False, timeout=300, scan_consistency="NOT_BOUNDED",validate=False):
         # Run queries concurrently
         log.info("Running queries concurrently now...")
         threads = []
@@ -155,7 +158,7 @@ class query_load(SDKClient):
             thread_name = "query_for_{0}".format(name)
             threads.append(Thread(target=self._run_query,
                                   name=thread_name,
-                                  args=(random.choice(query), False, 0, True, timeout, scan_consistency)))
+                                  args=(random.choice(query), False, 0, True, timeout, scan_consistency,validate)))
         else:
             for i in range(0, num_queries):
                 total_query_count += 1
@@ -169,13 +172,14 @@ class query_load(SDKClient):
                 log.info("submitted {0} queries".format(i))
                 time.sleep(5)
             thread.start()
+            self.total_query_count += 1
+            query_count += 1
 
         # For n1ql apps we want all queries to finish executing before starting up new queries
         if n1ql_system_test:
             for thread in threads:
                 thread.join()
-                self.total_query_count += 1
-                query_count += 1
+
         st_time = time.time()
         i = 0
         if duration == 0:
@@ -183,7 +187,7 @@ class query_load(SDKClient):
                 if n1ql_system_test:
                     log.info("#" * 50)
                     self.total_count += 1
-                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency)
+                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency,validate)
                     i += 1
                     query_count += 1
                     self.total_query_count += 1
@@ -218,7 +222,7 @@ class query_load(SDKClient):
                 if n1ql_system_test:
                     log.info("#"*50)
                     self.total_count += 1
-                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency)
+                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency, validate)
                     i += 1
                     query_count += 1
                     self.total_query_count += 1
@@ -253,12 +257,24 @@ class query_load(SDKClient):
         if self.failed_count+self.error_count != 0:
             raise Exception("Queries Failed:%s , Queries Error Out:%s"%(self.failed_count,self.error_count))
     
-    def _run_query(self, query,validate_item_count=False, expected_count=0, n1ql_execution=False, timeout=300, scan_consistency="NOT_BOUNDED"):
+    def _run_query(self, query,validate_item_count=False, expected_count=0, n1ql_execution=False, timeout=300, scan_consistency="NOT_BOUNDED", validate=True):
         name = threading.currentThread().getName();
         client_context_id = name
         try:
             if n1ql_execution:
-                status, metrics, errors, results, handle = self.execute_statement_on_util(
+                if validate:
+                    status, metrics, errors, results, handle = self.execute_statement_on_util(
+                        query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql",
+                        scan_consistency=scan_consistency)
+                    if status == "success":
+                        split_query = query.split("WHERE")
+                        primary_query = split_query[0] + "USE INDEX (`#primary`) WHERE" + split_query[1]
+                        primary_status, primary_metrics, primary_errors, primary_results, primary_handle = self.execute_statement_on_util(
+                        primary_query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql",
+                        scan_consistency=scan_consistency)
+
+                else:
+                    status, metrics, errors, results, handle = self.execute_statement_on_util(
                     query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql", scan_consistency=scan_consistency)
             else:
                 status, metrics, errors, results, handle = self.execute_statement_on_util(query, timeout=300,
@@ -279,6 +295,37 @@ class query_load(SDKClient):
                             name)
                         self.success_count += 1
                         self.total_count -= 1
+                elif validate:
+                    if primary_status == "success":
+                        if metrics['resultCount'] != 0:
+                            if results != primary_results:
+                                log.info("Query result : %s", results[0]['$1'])
+                                log.info(
+                                    "********Thread %s : failure**********",
+                                    name)
+                                print "Mismatch of results!"
+                                print("=" * 100)
+                                print "Query: %s" % query
+                                print "Primary Index Query: %s" % primary_query
+                                print("=" * 100)
+                                self.failed_count += 1
+                                self.total_count -= 1
+                            else:
+                                log.info(
+                                    "--------Thread %s : success----------",
+                                    name)
+                                self.success_count += 1
+                                self.total_count -= 1
+                        else:
+                            print ("Results are zero! Please change query to have results!")
+                            print query
+                            self.failed_count += 1
+                            self.total_count -= 1
+                    else:
+                        print "Primary Index did not run properly, cannot vaildate results"
+                        self.failed_count += 1
+                        self.total_count -= 1
+
                 else:
                     log.info("--------Thread %s : success----------",
                                   name)
@@ -567,7 +614,7 @@ def main():
         for i in range(0, load.concurrent_batch_size):
             threads.append(Thread(target=load._run_concurrent_queries,
                                   name="query_thread_{0}".format(i),
-                                  args=(queries, int(options.querycount), int(options.duration), options.n1ql, options.query_timeout, options.scan_consistency)))
+                                  args=(queries, int(options.querycount), int(options.duration), options.n1ql, options.query_timeout, options.scan_consistency,options.validate)))
 
         threads.append(Thread(target=load.monitor_query_status, name="monitor_thread", args=(int(options.duration),int(options.print_duration))))
 
