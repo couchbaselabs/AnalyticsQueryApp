@@ -19,6 +19,17 @@ from java.util.concurrent import TimeoutException, RejectedExecutionException,\
 from com.couchbase.client.core import RequestCancelledException, CouchbaseException
 import traceback, sys
 
+
+HOTEL_DS_IDX_QUERY_TEMPLATES = [
+    {"idx1" : "select meta().id from keyspacenameplaceholder where country='United States' and `type`='hotel' "
+              "and (any r in reviews satisfies r.ratings.`Check in / front desk` is not null end) limit 10 ",
+    "idx2" : "select avg(price) as AvgPrice, min(price) as MinPrice, max(price) as MaxPrice from keyspacenameplaceholder "
+              "where free_breakfast=True and free_parking=True and price is not null and array_count(public_likes)>5 "
+              "and `type`='hotel' group by country",
+    "idx3" : "select city,country,count(*) from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
+              "and `type`='hotel'  group by country,city order by country,city limit 50 offset 50"}
+]
+
 def parse_options():
     parser = OptionParser()
     parser.add_option("-q", "--queries", dest="queries",
@@ -59,6 +70,12 @@ def parse_options():
 
     parser.add_option("-S", "--scan_consistency", dest="scan_consistency", default="NOT_BOUNDED",
                       help="The Scan_consistency of each query")
+
+    parser.add_option("-c", "--collections_mode", dest="collections_mode", default=False,
+                      help="Run the script for collections and auto-discover queries to be run")
+
+    parser.add_option("-D", "--dataset", dest="dataset", default="hotel",
+                      help="Dataset used in the test. Default = hotel")
 
     parser.add_option("-B", "--bucket_names",  dest="bucket_names", default="[]",
                       help="The list of bucket_names in the test running")
@@ -279,6 +296,8 @@ class query_load(SDKClient):
             else:
                 status, metrics, errors, results, handle = self.execute_statement_on_util(query, timeout=300,
                                                                                                client_context_id=client_context_id, thread_name=name)
+            log.info("query : {0}".format(query))
+
             # Validate if the status of the request is success, and if the count matches num_items
             if status == "success":
                 if validate_item_count:
@@ -333,6 +352,8 @@ class query_load(SDKClient):
                     self.total_count -= 1
             else:
                 log.info("Status = %s", status)
+                log.warning("query : {0}".format(query))
+                log.warning("errors : {0}".format((str(errors))))
                 log.warning("********Thread %s : failure**********", name)
                 self.failed_count += 1
                 self.total_count -= 1
@@ -498,7 +519,7 @@ class query_load(SDKClient):
             output["metrics"] = str(result.info().asJsonObject())
 
             try:
-                output["results"] = str(result.allRows())
+                output["results"] = result.allRows()
             except:
                 output["results"] = None
 
@@ -554,6 +575,45 @@ class query_load(SDKClient):
                         self.cancel_count, self.timeout_count)
                     update_time = time.time()
 
+    def generate_queries_for_collections(self, dataset):
+
+        idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
+        # This needs to be expanded when there are more datasets
+        if dataset == "hotel" :
+            idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
+
+        # Determine all scopes and collections for all buckets
+        keyspaceListQuery = "select `path` from system:all_keyspaces where `bucket` is not null;"
+        queryResults = self.execute_statement_on_n1ql(keyspaceListQuery,True)
+
+        keyspaceList = []
+        for row in queryResults['results']:
+            keyspaceList.append(json.loads(str(row))['path'])
+
+        # For each collection, determine the indexes created
+
+        queryList = []
+        for keyspace in keyspaceList:
+            idxListQuery = "select `name` from system:all_indexes where `using`='gsi' and " \
+                           "`namespace_id` || ':' || `bucket_id` || '.' || `scope_id` || '.' || `keyspace_id` = '{0}' " \
+                           "order by `bucket_id`, `scope_id`, `keyspace_id`, name".format(keyspace)
+
+            queryResults = self.execute_statement_on_n1ql(idxListQuery, True)
+
+            # For each index, select the corresponding query from the index-query mapping template for the dataset.
+            # Add the query to the query_list after replacing the keyspace name
+
+            if json.loads(queryResults['metrics'])['resultCount'] > 0:
+                for row in queryResults['results']:
+                    queryList.append(idx_query_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+
+        log.info("=====  Query List (total {0} queries )  ===== ".format(len(queryList)))
+        for querystmt in queryList :
+            log.info(querystmt)
+
+        # Return query_list
+        return queryList
+
     
 def create_log_file(log_config_file_name, log_file_name, level):
     tmpl_log_file = open("jython.logging.conf")
@@ -578,7 +638,7 @@ def setup_log(options):
     log_config_filename = r'{0}'.format(os.path.join(logs_folder, "test.logging.conf"))
     create_log_file(log_config_filename, test_log_file, options.loglevel)
     logging.config.fileConfig(log_config_filename)
-    print "Logs will be stored at {0}".format(logs_folder)
+    print("Logs will be stored at {0}".format(logs_folder))
 
 log = logging.getLogger()
 options = None
@@ -592,23 +652,26 @@ def main():
 
     bucket_list = options.bucket_names.strip('[]').split(',')
 
-    if options.query_file:
-        f = open(options.query_file, 'r')
-        queries = f.readlines()
-        i=0
-        for query in queries:
-            queries[i] = query.strip()
-            for x in range(0, len(bucket_list)):
-                bucket_name = "bucket" + str(x)
-                if bucket_name in query:
-                    queries[i] = query.replace(bucket_name, bucket_list[x])
-            i+=1
-        f.close()
+    if options.collections_mode:
+        queries = load.generate_queries_for_collections(options.dataset)
     else:
-        queries = ['SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds1 where duration between 3009 and 3010 and profile is not missing and array_length(profile.friends) > 5 limit 100',
-            'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds2 where duration between 3009 and 3010 and profile is not missing',
-             'select sum(friends.num_friends) from (select array_length(profile.friends) as num_friends from ds3) as friends',
-             'SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result = "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3009 and 3010 UNION ALL SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result != "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3010 and 3012']
+        if options.query_file:
+            f = open(options.query_file, 'r')
+            queries = f.readlines()
+            i=0
+            for query in queries:
+                queries[i] = query.strip()
+                for x in range(0, len(bucket_list)):
+                    bucket_name = "bucket" + str(x)
+                    if bucket_name in query:
+                        queries[i] = query.replace(bucket_name, bucket_list[x])
+                i+=1
+            f.close()
+        else:
+            queries = ['SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds1 where duration between 3009 and 3010 and profile is not missing and array_length(profile.friends) > 5 limit 100',
+                'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds2 where duration between 3009 and 3010 and profile is not missing',
+                 'select sum(friends.num_friends) from (select array_length(profile.friends) as num_friends from ds3) as friends',
+                 'SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result = "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3009 and 3010 UNION ALL SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result != "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3010 and 3012']
     if options.n1ql:
         threads = []
         for i in range(0, load.concurrent_batch_size):
@@ -626,11 +689,11 @@ def main():
     else:
         load._run_concurrent_queries(queries, int(options.querycount), duration=int(options.duration))
 
-    print "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
-        load.total_query_count, load.failed_count, load.success_count, load.rejected_count, load.cancel_count, load.timeout_count)
+    print("%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+        load.total_query_count, load.failed_count, load.success_count, load.rejected_count, load.cancel_count, load.timeout_count))
 
-    print load.total_count
-    print "Done!!"
+    print(load.total_count)
+    print("Done!!")
 
 '''
     /opt/jython/bin/jython -J-cp '../Couchbase-Java-Client-2.5.6/*' load_queries.py --server_ip 172.23.108.231 --port 8095 --duration 600 --bucket default --querycount 10
