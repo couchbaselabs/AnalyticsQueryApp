@@ -21,13 +21,13 @@ import traceback, sys
 
 
 HOTEL_DS_IDX_QUERY_TEMPLATES = [
-    {"idx1" : "select meta().id from keyspacenameplaceholder where country='United States' and `type`='hotel' "
-              "and (any r in reviews satisfies r.ratings.`Check in / front desk` is not null end) limit 10 ",
+    {"idx1" : "select meta().id from keyspacenameplaceholder where country is not null and `type` is not null "
+              "and (any r in reviews satisfies r.ratings.`Check in / front desk` is not null end) limit 100 ",
     "idx2" : "select avg(price) as AvgPrice, min(price) as MinPrice, max(price) as MaxPrice from keyspacenameplaceholder "
               "where free_breakfast=True and free_parking=True and price is not null and array_count(public_likes)>5 "
-              "and `type`='hotel' group by country",
+              "and `type`='Hotel' group by country",
     "idx3" : "select city,country,count(*) from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
-              "and `type`='hotel'  group by country,city order by country,city limit 50 offset 50"}
+              "group by country,city order by country,city limit 100 offset 100"}
 ]
 
 def parse_options():
