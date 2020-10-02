@@ -583,7 +583,7 @@ class query_load(SDKClient):
             idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
 
         # Determine all scopes and collections for all buckets
-        keyspaceListQuery = "select '`' || `namespace` || ':`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` is not null;"
+        keyspaceListQuery = "select '`' || `namespace` || '`:`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` is not null;"
         queryResults = self.execute_statement_on_n1ql(keyspaceListQuery,True)
 
         keyspaceList = []
@@ -595,7 +595,7 @@ class query_load(SDKClient):
         queryList = []
         for keyspace in keyspaceList:
             idxListQuery = "select `name` from system:all_indexes where `using`='gsi' and " \
-                           "`namespace_id` || ':' || `bucket_id` || '.' || `scope_id` || '.' || `keyspace_id` = '{0}' " \
+                           "'`' || `namespace_id` || '`:`' || `bucket_id` || '`.`' || `scope_id` || '`.`' || `keyspace_id` || '`' = '{0}' " \
                            "order by `bucket_id`, `scope_id`, `keyspace_id`, name".format(keyspace)
 
             queryResults = self.execute_statement_on_n1ql(idxListQuery, True)
