@@ -475,22 +475,27 @@ class query_load(SDKClient):
 
         except TimeoutException as e:
             log.info("Request TimeoutException from Java SDK. %s"%str(e))
+            print("Request TimeoutException from Java SDK. %s" % str(e))
 #             traceback.print_exception(*sys.exc_info())
             raise Exception("Request TimeoutException")
         except RequestCancelledException as e:
             log.info("RequestCancelledException from Java SDK. %s"%str(e))
+            print("RequestCancelledException from Java SDK. %s"%str(e))
 #             traceback.print_exception(*sys.exc_info())
             raise Exception("Request RequestCancelledException")
         except RejectedExecutionException as e:
             log.info("Request RejectedExecutionException from Java SDK. %s"%str(e))
+            print("Request RejectedExecutionException from Java SDK. %s"%str(e))
 #             traceback.print_exception(*sys.exc_info())
             raise Exception("Request Rejected")
         except CouchbaseException as e:
             log.info("CouchbaseException from Java SDK. %s"%str(e))
+            print("CouchbaseException from Java SDK. %s"%str(e))
 #             traceback.print_exception(*sys.exc_info())
             raise Exception("CouchbaseException")
         except RuntimeException as e:
             log.info("RuntimeException from Java SDK. %s"%str(e))
+            print("RuntimeException from Java SDK. %s"%str(e))
 #             traceback.print_exception(*sys.exc_info())
             raise Exception("Request RuntimeException")
         return output
@@ -627,18 +632,32 @@ def create_log_file(log_config_file_name, log_file_name, level):
     tmpl_log_file.close()
 
 def setup_log(options):
-    abs_path = os.path.dirname(os.path.abspath(sys.argv[0]))
-    str_time = time.strftime("%y-%b-%d_%H-%M-%S", time.localtime())
-    root_log_dir = os.path.join(abs_path, "logs{0}queryrunner-{1}".format(os.sep, str_time))
-    if not os.path.exists(root_log_dir):
-        os.makedirs(root_log_dir)
-    logs_folder = os.path.join(root_log_dir, "querylogs_%s" % time.time())
-    os.mkdir(logs_folder)
-    test_log_file = os.path.join(logs_folder, "test.log")
-    log_config_filename = r'{0}'.format(os.path.join(logs_folder, "test.logging.conf"))
-    create_log_file(log_config_filename, test_log_file, options.loglevel)
-    logging.config.fileConfig(log_config_filename)
-    print("Logs will be stored at {0}".format(logs_folder))
+    log.setLevel(logging.INFO)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.INFO)
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+    timestamp = str(datetime.now().strftime('%Y%m%dT_%H%M%S'))
+    fh = logging.FileHandler("./querylogs-{0}.log".format(timestamp))
+    fh.setFormatter(formatter)
+    log.addHandler(fh)
+
+
+
+    #abs_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+    #str_time = time.strftime("%y-%b-%d_%H-%M-%S", time.localtime())
+    #root_log_dir = os.path.join(abs_path, "logs{0}queryrunner-{1}".format(os.sep, str_time))
+    #if not os.path.exists(root_log_dir):
+    #    os.makedirs(root_log_dir)
+    #logs_folder = os.path.join(root_log_dir, "querylogs_%s" % time.time())
+    #os.mkdir(logs_folder)
+    #test_log_file = os.path.join(logs_folder, "test.log")
+    #log_config_filename = r'{0}'.format(os.path.join(logs_folder, "test.logging.conf"))
+    #create_log_file(log_config_filename, test_log_file, options.loglevel)
+    #logging.config.fileConfig(log_config_filename)
+    #print("Logs will be stored at {0}".format(logs_folder))
 
 log = logging.getLogger()
 options = None
