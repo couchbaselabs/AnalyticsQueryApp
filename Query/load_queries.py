@@ -18,6 +18,7 @@ from java.util.concurrent import TimeoutException, RejectedExecutionException,\
     TimeUnit
 from com.couchbase.client.core import RequestCancelledException, CouchbaseException
 import traceback, sys
+from datetime import datetime
 
 
 HOTEL_DS_IDX_QUERY_TEMPLATES = [
