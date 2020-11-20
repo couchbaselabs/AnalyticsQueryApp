@@ -588,23 +588,36 @@ class query_load(SDKClient):
         if dataset == "hotel" :
             idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
 
-        # Determine all scopes and collections for all buckets
-        keyspaceListQuery = "select '`' || `namespace` || '`:`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` is not null;"
-        queryResults = self.execute_statement_on_n1ql(keyspaceListQuery,True)
+        for attempt in range(5):
+            try:
+                # Determine all scopes and collections for all buckets
+                keyspaceListQuery = "select '`' || `namespace` || '`:`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` is not null;"
+                queryResults = self.execute_statement_on_n1ql(keyspaceListQuery,True)
+            except Exception as e:
+                log.info("Query failed. Exception : {0}, retrying..".format(str(e)))
+                time.sleep(120)
+            else:
+                break
 
         keyspaceList = []
         for row in queryResults['results']:
             keyspaceList.append(json.loads(str(row))['path'])
 
         # For each collection, determine the indexes created
-
         queryList = []
         for keyspace in keyspaceList:
-            idxListQuery = "select `name` from system:all_indexes where `using`='gsi' and " \
-                           "'`' || `namespace_id` || '`:`' || `bucket_id` || '`.`' || `scope_id` || '`.`' || `keyspace_id` || '`' = '{0}' " \
-                           "order by `bucket_id`, `scope_id`, `keyspace_id`, name".format(keyspace)
+            for attempt in range(5):
+                try:
+                    idxListQuery = "select `name` from system:all_indexes where `using`='gsi' and " \
+                                   "'`' || `namespace_id` || '`:`' || `bucket_id` || '`.`' || `scope_id` || '`.`' || `keyspace_id` || '`' = '{0}' " \
+                                   "order by `bucket_id`, `scope_id`, `keyspace_id`, name".format(keyspace)
 
-            queryResults = self.execute_statement_on_n1ql(idxListQuery, True)
+                    queryResults = self.execute_statement_on_n1ql(idxListQuery, True)
+                except Exception as e:
+                    log.info("Query failed. Exception : {0}, retrying..".format(str(e)))
+                    time.sleep(120)
+                else:
+                    break
 
             # For each index, select the corresponding query from the index-query mapping template for the dataset.
             # Add the query to the query_list after replacing the keyspace name
