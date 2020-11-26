@@ -594,7 +594,7 @@ class query_load(SDKClient):
                 keyspaceListQuery = "select '`' || `namespace` || '`:`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` is not null;"
                 queryResults = self.execute_statement_on_n1ql(keyspaceListQuery,True)
             except Exception as e:
-                log.info("Query failed. Exception : {0}, retrying..".format(str(e)))
+                log.info("Query - {0} - failed. Exception : {1}, retrying..".format(keyspaceListQuery, str(e)))
                 time.sleep(120)
             else:
                 break
@@ -614,7 +614,7 @@ class query_load(SDKClient):
 
                     queryResults = self.execute_statement_on_n1ql(idxListQuery, True)
                 except Exception as e:
-                    log.info("Query failed. Exception : {0}, retrying..".format(str(e)))
+                    log.info("Query - {0} - failed. Exception : {1}, retrying..".format(idxListQuery, str(e)))
                     time.sleep(120)
                 else:
                     break
