@@ -624,7 +624,11 @@ class query_load(SDKClient):
 
             if json.loads(queryResults['metrics'])['resultCount'] > 0:
                 for row in queryResults['results']:
-                    queryList.append(idx_query_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+                    try:
+                        queryList.append(idx_query_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+                    except Exception as e:
+                        log.info("Issue with keyspace {0}".format(keyspace))
+                        pass
 
         log.info("=====  Query List (total {0} queries )  ===== ".format(len(queryList)))
         for querystmt in queryList :
