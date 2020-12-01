@@ -581,7 +581,7 @@ class query_load(SDKClient):
                         self.cancel_count, self.timeout_count)
                     update_time = time.time()
 
-    def generate_queries_for_collections(self, dataset):
+    def generate_queries_for_collections(self, dataset, bucketname):
 
         idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
         # This needs to be expanded when there are more datasets
@@ -591,7 +591,7 @@ class query_load(SDKClient):
         for attempt in range(5):
             try:
                 # Determine all scopes and collections for all buckets
-                keyspaceListQuery = "select '`' || `namespace` || '`:`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` = '{0};".format(self.bucket)
+                keyspaceListQuery = "select '`' || `namespace` || '`:`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` = '{0}';".format(bucketname)
                 queryResults = self.execute_statement_on_n1ql(keyspaceListQuery,True)
             except Exception as e:
                 log.info("Query - {0} - failed. Exception : {1}, retrying..".format(keyspaceListQuery, str(e)))
@@ -690,7 +690,7 @@ def main():
     bucket_list = options.bucket_names.strip('[]').split(',')
 
     if options.collections_mode:
-        queries = load.generate_queries_for_collections(options.dataset)
+        queries = load.generate_queries_for_collections(options.dataset, options.bucket)
     else:
         if options.query_file:
             f = open(options.query_file, 'r')
