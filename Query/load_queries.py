@@ -591,7 +591,7 @@ class query_load(SDKClient):
         for attempt in range(5):
             try:
                 # Determine all scopes and collections for all buckets
-                keyspaceListQuery = "select '`' || `namespace` || '`:`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` is not null;"
+                keyspaceListQuery = "select '`' || `namespace` || '`:`' || `bucket` || '`.`' || `scope` || '`.`' || `name` || '`' as `path` from system:all_keyspaces where `bucket` = '{0};".format(self.bucket)
                 queryResults = self.execute_statement_on_n1ql(keyspaceListQuery,True)
             except Exception as e:
                 log.info("Query - {0} - failed. Exception : {1}, retrying..".format(keyspaceListQuery, str(e)))
