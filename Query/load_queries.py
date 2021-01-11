@@ -6,9 +6,11 @@ Created on Apr 26, 2018
 import random, os
 import json
 import logging.config
+import uuid
 from threading import Thread
 import threading
 import time
+import requests
 from optparse import OptionParser
 from Java_Connection import SDKClient
 from com.couchbase.client.java.analytics import AnalyticsQuery, AnalyticsParams
@@ -30,6 +32,22 @@ HOTEL_DS_IDX_QUERY_TEMPLATES = [
     "idx3" : "select city,country,count(*) from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
               "group by country,city order by country,city limit 100 offset 100"}
 ]
+
+HOTEL_DS_IDX_QUERY_INSERT_TEMPLATES = [ {"idx1":"INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'type': 'hotel', 'name' : 'new hotel' })",
+                                         "idx2":"INSERT INTO keyspacenameplaceholder (KEY UUID(), VALUE price) SELECT price FROM keyspacenameplaceholder WHERE type='Hotel' AND free_breakfast=True AND free_parking=True LIMIT 5",
+                                         "idx3":"INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'int': 123})"}]
+
+HOTEL_DS_IDX_QUERY_UPDATE_TEMPLATES = [{"idx1":"UPDATE keyspacenameplaceholder SET foo = 5 limit 5",
+                                        "idx2":"UPDATE keyspacenameplaceholder SET free_breakfast = False where price is not null limit 5",
+                                        "idx3":"UPDATE keyspacenameplaceholder SET city = 'San Francisco' where free_breakfast=True and free_parking=True limit 5"}]
+
+HOTEL_DS_IDX_QUERY_DELETE_TEMPLATES = [{"idx1":"delete from keyspacenameplaceholder limit 1",
+                                        "idx2":"delete from keyspacenameplaceholder limit 1",
+                                        "idx3":"delete from keyspacenameplaceholder limit 1"}]
+
+HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES = [{"idx1":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 5",
+                                        "idx2":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 5",
+                                        "idx3":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.free_breakfast = o.free_breakfast"}]
 
 def parse_options():
     parser = OptionParser()
@@ -84,6 +102,9 @@ def parse_options():
     parser.add_option("-P", "--print_duration",  dest="print_duration", default=3600,
                       help="The time interval you would like to wait before printing how many queries have been executed")
 
+    parser.add_option("-X", "--txns",  dest="txns", default=False,
+                      help="The time interval you would like to wait before printing how many queries have been executed")
+
     (options, args) = parser.parse_args()
     
     return options
@@ -106,6 +127,9 @@ class query_load(SDKClient):
         self.handles = []
         self.concurrent_batch_size = batch_size
         self.total_count = querycount
+        self.transactions = 0
+        self.transactions_committed = 0
+        self.transactions_timedout = 0
         
         SDKClient(self.ip, "Administrator", "password")
         self.connectionLive = False
@@ -581,9 +605,26 @@ class query_load(SDKClient):
                         self.cancel_count, self.timeout_count)
                     update_time = time.time()
 
-    def generate_queries_for_collections(self, dataset, bucketname):
+    def generate_queries_for_collections(self, dataset, bucketname, txns=False):
 
         idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
+        if txns:
+            idx_insert_templates = HOTEL_DS_IDX_QUERY_INSERT_TEMPLATES
+            idx_delete_templates = HOTEL_DS_IDX_QUERY_DELETE_TEMPLATES
+            idx_update_templates = HOTEL_DS_IDX_QUERY_UPDATE_TEMPLATES
+            idx_merge_templates = HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES
+            keyspace_idx_map = {}
+            txn_queries = {}
+            tmp_merge = {}
+            txn_queries['select'] = []
+            txn_queries['insert'] = []
+            txn_queries['delete'] = []
+            txn_queries['merge'] = []
+            txn_queries['update'] = []
+            tmp_merge['idx1'] = []
+            tmp_merge['idx2'] = []
+            tmp_merge['idx3'] = []
+
         # This needs to be expanded when there are more datasets
         if dataset == "hotel" :
             idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
@@ -606,6 +647,7 @@ class query_load(SDKClient):
         # For each collection, determine the indexes created
         queryList = []
         for keyspace in keyspaceList:
+            keyspace_idx_map[keyspace] = []
             for attempt in range(5):
                 try:
                     idxListQuery = "select `name` from system:all_indexes where `using`='gsi' and " \
@@ -624,20 +666,176 @@ class query_load(SDKClient):
 
             if json.loads(queryResults['metrics'])['resultCount'] > 0:
                 for row in queryResults['results']:
+                    if txns:
+                        keyspace_idx_map[keyspace].append(json.loads(str(row))["name"])
+                        try:
+                            txn_queries['insert'].append(idx_insert_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+                        except Exception as e:
+                            log.info("Issue with keyspace {0}".format(keyspace))
+                            pass
+                        try:
+                            txn_queries['delete'].append(idx_delete_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+                        except Exception as e:
+                            log.info("Issue with keyspace {0}".format(keyspace))
+                            pass
+                        try:
+                            txn_queries['update'].append(idx_update_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+                        except Exception as e:
+                            log.info("Issue with keyspace {0}".format(keyspace))
+                            pass
+                        try:
+                            tmp_merge[json.loads(str(row))["name"]].append(idx_merge_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+                        except Exception as e:
+                            log.info("Issue with keyspace {0}".format(keyspace))
+                            pass
                     try:
-                        queryList.append(idx_query_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+                        if txns:
+                            txn_queries['select'].append(idx_query_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",keyspace))
+                        else:
+                            queryList.append(
+                                idx_query_templates[0][json.loads(str(row))["name"]].replace("keyspacenameplaceholder",
+                                                                                             keyspace))
                     except Exception as e:
                         log.info("Issue with keyspace {0}".format(keyspace))
                         pass
-
+            if txns:
+                # Find the indexes in the merge query
+                for idx in tmp_merge:
+                    # Find the query itself in the templates
+                    for merge_query in tmp_merge[idx]:
+                        # Find the list of available keyspaces
+                        for keyspace in keyspace_idx_map:
+                            # make sure keyspace is not already in the query
+                            if keyspace not in merge_query:
+                                # Make sure the keyspace thats not in the query has the same index as the first keyspace
+                                for index in keyspace_idx_map[keyspace]:
+                                    # ensure no duplicate queries
+                                    if (index == idx) and (merge_query.replace("secondholder",keyspace) not in txn_queries['merge']):
+                                        txn_queries['merge'].append(merge_query.replace("secondholder",keyspace))
+                queryList = txn_queries
         log.info("=====  Query List (total {0} queries )  ===== ".format(len(queryList)))
-        for querystmt in queryList :
-            log.info(querystmt)
+        if txns:
+            for querystmt in queryList:
+                log.info(queryList[querystmt])
+        else:
+            for querystmt in queryList :
+                log.info(querystmt)
 
         # Return query_list
         return queryList
 
-    
+    def generate_txns(self, txns):
+        transactions =[]
+        for z in range(0,10):
+            i = 0
+            rollback_exists = False
+            savepoints = []
+            txn_queries = []
+            savepoint = 0
+            test_batch = []
+            rollback_point = 0
+            transaction = []
+            commit_found = False
+            transaction.append("START TRANSACTION")
+            random.seed(uuid.uuid4())
+            # we want each txn to be between 10-20 queries long
+            txn_size = random.randint(10,20)
+            for x in range(0, txn_size):
+                random.seed(uuid.uuid4())
+                # Select a random query type to append to the txn
+                query_chance = random.randint(1,100)
+                if query_chance <= 50:
+                    query_type = 'select'
+                elif 50 < query_chance <= 70:
+                    query_type = 'update'
+                elif 70 < query_chance <= 80:
+                    query_type = 'insert'
+                elif 80 < query_chance <= 95:
+                    query_type = 'delete'
+                elif 95 < query_chance <= 100:
+                    query_type = 'merge'
+                query = random.choice(txns[query_type])
+                transaction.append(query)
+                # Determine if we want to insert a save point, ~ 5% of the time
+                percentage2 = random.randint(1, 100)
+                if percentage2 <= 5:
+                    savepoint = i
+                    transaction.append("SAVEPOINT s{0}".format(savepoint))
+                    savepoints.append("s{0}".format(savepoint))
+                    i = i + 1
+                # We can only rollback to a savepoint if a savepoint exists
+                if savepoints:
+                    percentage3 = random.randint(1, 100)
+                    if percentage3 <= 10:
+                        # Pick a random savepoint that was created
+                        rollback_point = random.randint(0, savepoint)
+                        # If we want to rollback, then decide to rollback to a savepoint or generic rollback
+                        percentage4 = random.randint(1,100)
+                        if percentage4 <= 70 and not rollback_exists:
+                            transaction.append("ROLLBACK TRANSACTION TO SAVEPOINT s{0}".format(rollback_point))
+                            rollback_exists = True
+                        elif not rollback_exists:
+                            transaction.append("ROLLBACK TRANSACTION")
+                            rollback_exists = True
+
+                percentage5 = random.randint(1,100)
+                # Commit is end of the transaction building, insert randomly  and then exit the txn
+                if percentage5 <= 10:
+                    transaction.append("COMMIT TRANSACTION")
+                    break
+            # We want transactions to be commited a large majority of the time, very rarely we want a txn to timeout instead of being committed
+            for txn in transaction:
+                if "COMMIT" in txn:
+                    commit_found = True
+            if not commit_found:
+                percentage6 = random.randint(1,100)
+                if percentage6 <= 99:
+                    transaction.append("COMMIT TRANSACTION")
+            transactions.append(transaction)
+        return transactions
+
+    def run_txns(self, txns,ip,port, query_timeout):
+        txid = ''
+        headers = {'Content-Type': 'application/json'}
+        auth =('Administrator', 'password')
+        query_endpoint = 'http://{0}:{1}/query/service'.format(ip, port)
+        for txn in txns:
+            self.transactions = self.transactions + 1
+            random.seed(uuid.uuid4())
+            # Randomize transaction timeout per transaction
+            txtimeout = str(random.randint(30,120)) + "s"
+            # Randomize scan_consistency per transaction
+            scan_consistency = random.choice(['request_plus', 'not_bounded'])
+            start_time = time.time()
+            for query in txn:
+                # Start transaction is special because it sets the settings of txn, plus we need to capture txn id to pass with subsequent queries
+                if query == "START TRANSACTION":
+                    data = '{{"statement":"{0}", "txtimeout":"{1}","scan_consistency":"{2}"}}'.format(query,txtimeout,scan_consistency)
+                    try:
+                        response = requests.post(query_endpoint, headers=headers, data=data, auth=auth)
+                        results = response.json()
+                        txid = results['results'][0]['txid']
+                    except Exception as e:
+                        print("txid does not exist, something went wrong with the transaction! query:{0}, response:{1}".format(data,response.json()))
+
+                # Every other query besides start, needs the txid passed to it and the query_timeout passed to it
+                else:
+                    if query == "COMMIT TRANSACTION":
+                        end_time = time.time()
+                        txduration = end_time - start_time
+                        self.transactions_committed = self.transactions_committed + 1
+                    data = '{{"statement":"{0}", "txid":"{1}","timeout":"{2}s"}}'.format(query,txid,query_timeout)
+                    try:
+                        response = requests.post(query_endpoint, headers=headers, data=data, auth=auth)
+                    except Exception as e:
+                        print("Something went wrong query:{0}, response:{1}, error:{2}".format(data,response.json(),str(e)))
+        return
+
+    def transaction_worker(self, queries, ip, port, query_timeout):
+        txns = self.generate_txns(queries)
+        self.run_txns(txns, ip, port, query_timeout)
+        return
+
 def create_log_file(log_config_file_name, log_file_name, level):
     tmpl_log_file = open("jython.logging.conf")
     log_file = open(log_config_file_name, "w")
@@ -691,6 +889,46 @@ def main():
 
     if options.collections_mode:
         queries = load.generate_queries_for_collections(options.dataset, options.bucket)
+    # If we get txns we want to spawn the number of threads specified, each thread runs 10 txns
+    elif options.txns:
+        print("use txns")
+        queries = load.generate_queries_for_collections(options.dataset, options.bucket, options.txns)
+        # If duration is 0 run forever, else run for set amount of time
+        if int(options.duration) == 0:
+            while True:
+                threads = []
+                for i in range(0, load.concurrent_batch_size):
+                    threads.append(Thread(target=load.transaction_worker,
+                                          name="transaction_thread_{0}".format(i),
+                                          args=(queries,options.server_ip, options.port, options.query_timeout)))
+                    print ('creating transaction worker {0}'.format(str(i)))
+
+                for thread in threads:
+                    thread.start()
+
+                for thread in threads:
+                    thread.join()
+                # Updates every thread count x 10 transactions ( for example if threads = 10, update every 100 txns)
+                print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
+
+        else:
+            st_time = time.time()
+            while st_time + int(options.duration) > time.time():
+                threads = []
+                for i in range(0, load.concurrent_batch_size):
+                    threads.append(Thread(target=load.transaction_worker,
+                                          name="query_thread_{0}".format(i),
+                                          args=(queries,options.server_ip, options.port, options.query_timeout)))
+                    print ('creating transaction worker {0}'.format(str(i)))
+
+                for thread in threads:
+                    thread.start()
+
+                for thread in threads:
+                    thread.join()
+                # Updates every thread count x 10 transactions ( for example if threads = 10, update every 100 txns)
+                print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
+
     else:
         if options.query_file:
             f = open(options.query_file, 'r')
@@ -709,7 +947,10 @@ def main():
                 'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds2 where duration between 3009 and 3010 and profile is not missing',
                  'select sum(friends.num_friends) from (select array_length(profile.friends) as num_friends from ds3) as friends',
                  'SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result = "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3009 and 3010 UNION ALL SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result != "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3010 and 3012']
-    if options.n1ql:
+
+    if options.txns:
+        print("{0} num_txns, {1} num_txns_committed".format(load.transactions,load.transactions_committed))
+    elif options.n1ql:
         threads = []
         for i in range(0, load.concurrent_batch_size):
             threads.append(Thread(target=load._run_concurrent_queries,
@@ -726,10 +967,10 @@ def main():
     else:
         load._run_concurrent_queries(queries, int(options.querycount), duration=int(options.duration))
 
-    print("%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
-        load.total_query_count, load.failed_count, load.success_count, load.rejected_count, load.cancel_count, load.timeout_count))
-
-    print(load.total_count)
+    if not options.txns:
+        print("%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+            load.total_query_count, load.failed_count, load.success_count, load.rejected_count, load.cancel_count, load.timeout_count))
+        print(load.total_count)
     print("Done!!")
 
 '''
