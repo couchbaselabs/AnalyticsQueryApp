@@ -28,7 +28,7 @@ HOTEL_DS_IDX_QUERY_TEMPLATES = [
               "and (any r in reviews satisfies r.ratings.`Check in / front desk` is not null end) limit 100 ",
     "idx2" : "select avg(price) as AvgPrice, min(price) as MinPrice, max(price) as MaxPrice from keyspacenameplaceholder "
               "where free_breakfast=True and free_parking=True and price is not null and array_count(public_likes)>5 "
-              "and `type`='Hotel' group by country",
+              "and `type`='Hotel' group by country limit 100",
     "idx3" : "select city,country,count(*) from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
               "group by country,city order by country,city limit 100 offset 100"}
 ]
@@ -47,7 +47,7 @@ HOTEL_DS_IDX_QUERY_DELETE_TEMPLATES = [{"idx1":"delete from keyspacenameplacehol
 
 HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES = [{"idx1":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 5",
                                         "idx2":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 5",
-                                        "idx3":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.free_breakfast = o.free_breakfast"}]
+                                        "idx3":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.free_breakfast = o.free_breakfast limit 5"}]
 
 def parse_options():
     parser = OptionParser()
@@ -803,7 +803,7 @@ class query_load(SDKClient):
             self.transactions = self.transactions + 1
             random.seed(uuid.uuid4())
             # Randomize transaction timeout per transaction
-            txtimeout = str(random.randint(30,120)) + "s"
+            txtimeout = str(random.randint(900,1200)) + "s"
             # Randomize scan_consistency per transaction
             scan_consistency = random.choice(['request_plus', 'not_bounded'])
             start_time = time.time()
@@ -823,6 +823,7 @@ class query_load(SDKClient):
                     if query == "COMMIT TRANSACTION":
                         end_time = time.time()
                         txduration = end_time - start_time
+                        print("txns took {0}s to run".format(txduration))
                         self.transactions_committed = self.transactions_committed + 1
                     data = '{{"statement":"{0}", "txid":"{1}","timeout":"{2}s"}}'.format(query,txid,query_timeout)
                     try:
