@@ -34,20 +34,20 @@ HOTEL_DS_IDX_QUERY_TEMPLATES = [
 ]
 
 HOTEL_DS_IDX_QUERY_INSERT_TEMPLATES = [ {"idx1":"INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'type': 'hotel', 'name' : 'new hotel' })",
-                                         "idx2":"INSERT INTO keyspacenameplaceholder (KEY UUID(), VALUE price) SELECT price FROM keyspacenameplaceholder WHERE type='Hotel' AND free_breakfast=True AND free_parking=True LIMIT 5",
+                                         "idx2":"INSERT INTO keyspacenameplaceholder (KEY UUID(), VALUE price) SELECT price FROM keyspacenameplaceholder WHERE type='Hotel' AND free_breakfast=True AND free_parking=True LIMIT 1000",
                                          "idx3":"INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'int': 123})"}]
 
-HOTEL_DS_IDX_QUERY_UPDATE_TEMPLATES = [{"idx1":"UPDATE keyspacenameplaceholder SET foo = 5 limit 5",
-                                        "idx2":"UPDATE keyspacenameplaceholder SET free_breakfast = False where price is not null limit 5",
-                                        "idx3":"UPDATE keyspacenameplaceholder SET city = 'San Francisco' where free_breakfast=True and free_parking=True limit 5"}]
+HOTEL_DS_IDX_QUERY_UPDATE_TEMPLATES = [{"idx1":"UPDATE keyspacenameplaceholder SET foo = 5 limit 1000",
+                                        "idx2":"UPDATE keyspacenameplaceholder SET free_breakfast = False where price is not null limit 1000",
+                                        "idx3":"UPDATE keyspacenameplaceholder SET city = 'San Francisco' where free_breakfast=True and free_parking=True limit 1000"}]
 
 HOTEL_DS_IDX_QUERY_DELETE_TEMPLATES = [{"idx1":"delete from keyspacenameplaceholder limit 1",
-                                        "idx2":"delete from keyspacenameplaceholder limit 1",
+                                        "idx2":"delete from keyspacenameplaceholder limit 200",
                                         "idx3":"delete from keyspacenameplaceholder limit 1"}]
 
-HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES = [{"idx1":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 5",
-                                        "idx2":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 5",
-                                        "idx3":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.free_breakfast = o.free_breakfast limit 5"}]
+HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES = [{"idx1":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 1000",
+                                        "idx2":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 1000",
+                                        "idx3":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.free_breakfast = o.free_breakfast limit 1000"}]
 
 def parse_options():
     parser = OptionParser()
