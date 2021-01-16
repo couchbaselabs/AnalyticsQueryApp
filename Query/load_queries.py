@@ -646,6 +646,7 @@ class query_load(SDKClient):
 
         # For each collection, determine the indexes created
         queryList = []
+        keyspace_idx_map = {}
         for keyspace in keyspaceList:
             keyspace_idx_map[keyspace] = []
             for attempt in range(5):
