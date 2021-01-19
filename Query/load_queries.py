@@ -105,6 +105,12 @@ def parse_options():
     parser.add_option("-X", "--txns",  dest="txns", default=False,
                       help="The time interval you would like to wait before printing how many queries have been executed")
 
+    parser.add_option("-a", "--analytics_mode", dest="analytics_mode", default=False,
+                      help="Run the script for datasets and auto-discover queries to be run")
+
+    parser.add_option("-", "--analytics_queries", dest="analytics_queries", default="common_queries",
+                      help="queries to be run on analytics")
+
     (options, args) = parser.parse_args()
     
     return options
@@ -838,6 +844,41 @@ class query_load(SDKClient):
         self.run_txns(txns, ip, port, query_timeout)
         return
 
+    def generate_queries_for_analytics(self, analytics_queries):
+        from cbas_queries import cbas_queries
+        query_templates = cbas_queries[analytics_queries]
+
+        statement = "select value dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
+        output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
+                                                username=None, password=None, timeout = 300, analytics_timeout=300)
+        if output["results"]:
+            dataverses = output["results"]
+
+        datasets = list()
+        for dataverse in dataverses:
+            statement = "select value ds.DatasetName from Metadata.`Dataset` as ds where ds.DataverseName = \"{0}\";".format(
+                dataverse)
+            output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
+                                                    username=None, password=None, timeout=300, analytics_timeout=300)
+            for dataset in output["results"]:
+                datasets.append(".".join(dataverse,dataset))
+
+            statement_1 = "select value syn.SynonymName from Metadata.`Synonym` as syn where syn.DataverseName = \"{0}\";".format(
+                dataverse)
+            output_1 = self.execute_statement_on_cbas(statement_1, pretty=True, client_context_id=None,
+                                                      username=None, password=None, timeout=300, analytics_timeout=300)
+            for synonym in output_1["results"]:
+                datasets.append(".".join(dataverse,synonym))
+
+        queries = list()
+        while datasets:
+            for query_template in query_templates:
+                try:
+                    queries.append(query_template.format(datasets.pop()))
+                except:
+                    continue
+        return queries
+
 def create_log_file(log_config_file_name, log_file_name, level):
     tmpl_log_file = open("jython.logging.conf")
     log_file = open(log_config_file_name, "w")
@@ -930,7 +971,8 @@ def main():
                     thread.join()
                 # Updates every thread count x 10 transactions ( for example if threads = 10, update every 100 txns)
                 print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
-
+    elif options.analytics_mode:
+        queries = load.generate_queries_for_analytics(options.analytics_queries)
     else:
         if options.query_file:
             f = open(options.query_file, 'r')
