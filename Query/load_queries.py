@@ -105,10 +105,10 @@ def parse_options():
     parser.add_option("-X", "--txns",  dest="txns", default=False,
                       help="The time interval you would like to wait before printing how many queries have been executed")
 
-    parser.add_option("-a", "--analytics_mode", dest="analytics_mode", default=False,
+    parser.add_option("-am", "--analytics_mode", dest="analytics_mode", default=False,
                       help="Run the script for datasets and auto-discover queries to be run")
 
-    parser.add_option("-", "--analytics_queries", dest="analytics_queries", default="common_queries",
+    parser.add_option("-aq", "--analytics_queries", dest="analytics_queries", default="common_queries",
                       help="queries to be run on analytics")
 
     (options, args) = parser.parse_args()
