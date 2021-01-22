@@ -3,7 +3,7 @@ Created on Apr 26, 2018
 
 @author: riteshagarwal
 '''
-import random, os
+import random
 import json
 import logging.config
 import uuid
@@ -21,6 +21,7 @@ from java.util.concurrent import TimeoutException, RejectedExecutionException,\
 from com.couchbase.client.core import RequestCancelledException, CouchbaseException
 import traceback, sys
 from datetime import datetime
+import importlib
 
 
 HOTEL_DS_IDX_QUERY_TEMPLATES = [
@@ -105,10 +106,10 @@ def parse_options():
     parser.add_option("-X", "--txns",  dest="txns", default=False,
                       help="The time interval you would like to wait before printing how many queries have been executed")
 
-    parser.add_option("-am", "--analytics_mode", dest="analytics_mode", default=False,
+    parser.add_option("-a", "--analytics_mode", dest="analytics_mode", default=False,
                       help="Run the script for datasets and auto-discover queries to be run")
 
-    parser.add_option("-aq", "--analytics_queries", dest="analytics_queries", default="common_queries",
+    parser.add_option("--analytics_queries", dest="analytics_queries", default="common_queries",
                       help="queries to be run on analytics")
 
     (options, args) = parser.parse_args()
@@ -211,7 +212,9 @@ class query_load(SDKClient):
             for i in range(0, num_queries):
                 total_query_count += 1
                 threads.append(Thread(target=self._run_query,
-                                      name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
+                                      name="query_thread_{0}".format(total_query_count),
+                                      args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False)))
+
         i = 0
         for thread in threads:
             # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
@@ -248,7 +251,7 @@ class query_load(SDKClient):
                         total_query_count += 1
                         threads.append(Thread(target=self._run_query,
                                               name="query_thread_{0}".format(total_query_count),
-                                              args=(random.choice(query), False)))
+                                              args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False)))
                         if total_query_count % 1000 == 0:
                             log.warning(
                                 "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
@@ -282,7 +285,8 @@ class query_load(SDKClient):
                     for i in range(0, new_queries_to_run):
                         total_query_count += 1
                         threads.append(Thread(target=self._run_query,
-                                              name="query_thread_{0}".format(total_query_count), args=(random.choice(query),False)))
+                                              name="query_thread_{0}".format(total_query_count),
+                                              args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False)))
                         if total_query_count%1000 == 0:
                             log.warning(
                         "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
@@ -481,7 +485,7 @@ class query_load(SDKClient):
         q = AnalyticsQuery.simple(statement, params)
         try:
             result = self.bucket.query(q, 3600, TimeUnit.SECONDS)
-            
+
             output["status"] = result.status()
             output["metrics"] = str(result.info().asJsonObject())
             
@@ -845,38 +849,53 @@ class query_load(SDKClient):
         return
 
     def generate_queries_for_analytics(self, analytics_queries):
-        from cbas_queries import cbas_queries
-        query_templates = cbas_queries[analytics_queries]
+        log.info("Generating queries for CBAS")
+        query_templates = (importlib.import_module('cbas_queries').cbas_queries)[analytics_queries]
 
-        statement = "select value dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
+        statement = "select dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
         output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
                                                 username=None, password=None, timeout = 300, analytics_timeout=300)
         if output["results"]:
-            dataverses = output["results"]
+            dataverses = json.loads(output["results"])
 
-        datasets = list()
-        for dataverse in dataverses:
-            statement = "select value ds.DatasetName from Metadata.`Dataset` as ds where ds.DataverseName = \"{0}\";".format(
+        def get_all_datasets_and_synonyms(dataverse, datasets):
+            statement = "select ds.DatasetName from Metadata.`Dataset` as ds where ds.DataverseName = \"{0}\";".format(
                 dataverse)
             output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
                                                     username=None, password=None, timeout=300, analytics_timeout=300)
-            for dataset in output["results"]:
-                datasets.append(".".join(dataverse,dataset))
+            for dataset in json.loads(output["results"]):
+                datasets.append([dataverse, dataset["DatasetName"]])
 
-            statement_1 = "select value syn.SynonymName from Metadata.`Synonym` as syn where syn.DataverseName = \"{0}\";".format(
+            statement_1 = "select syn.SynonymName from Metadata.`Synonym` as syn where syn.DataverseName = \"{0}\";".format(
                 dataverse)
             output_1 = self.execute_statement_on_cbas(statement_1, pretty=True, client_context_id=None,
                                                       username=None, password=None, timeout=300, analytics_timeout=300)
-            for synonym in output_1["results"]:
-                datasets.append(".".join(dataverse,synonym))
+            for synonym in json.loads(output_1["results"]):
+                datasets.append([dataverse, synonym["SynonymName"]])
+
+        threads = []
+        datasets = list()
+        for dataverse in dataverses:
+            thread_name = "dataverse_{0}".format(dataverse["DataverseName"])
+            threads.append(Thread(target=get_all_datasets_and_synonyms,
+                                  name=thread_name,
+                                  args=(dataverse["DataverseName"], datasets)))
+
+        for thread in threads:
+            thread.start()
+
+        for thread in threads:
+            thread.join()
 
         queries = list()
         while datasets:
             for query_template in query_templates:
                 try:
-                    queries.append(query_template.format(datasets.pop()))
+                    dataset = datasets.pop()
+                    queries.append(query_template.format(dataset[0], dataset[1]))
                 except:
                     continue
+        log.info("Finished generating CBAS queries")
         return queries
 
 def create_log_file(log_config_file_name, log_file_name, level):
