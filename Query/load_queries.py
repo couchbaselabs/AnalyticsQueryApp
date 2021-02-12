@@ -436,7 +436,7 @@ class query_load(SDKClient):
                                                           timeout=timeout,scan_consistency=scan_consistency)
             else:
                 log.info("Running query on cbas via %s: %s"%(thread_name,statement))
-                response = self.execute_statement_on_cbas(statement, pretty, client_context_id, username, password,timeout=timeout, analytics_timeout=analytics_timeout)
+                response = self.execute_statement_on_cbas(statement, pretty, client_context_id, username, password)
             
             if type(response) == str: 
                 response = json.loads(response)
@@ -468,13 +468,13 @@ class query_load(SDKClient):
         except Exception,e:
             raise Exception(str(e))
         
-    def execute_statement_on_cbas(self, statement, pretty=True, 
-        client_context_id=None, 
-        username=None, password=None, timeout = 300, analytics_timeout=300):
+    def execute_statement_on_cbas(
+            self, statement, pretty=True, client_context_id=None,
+            username=None, password=None):
 
         params = AnalyticsParams.build()
         params = params.rawParam("pretty", pretty)
-        params = params.rawParam("timeout", str(analytics_timeout)+"s")
+        params = params.rawParam("timeout", str(options.query_timeout)+"s")
         params = params.rawParam("username", username)
         params = params.rawParam("password", password)
         params = params.rawParam("clientContextID", client_context_id)
@@ -484,7 +484,7 @@ class query_load(SDKClient):
         output = {}
         q = AnalyticsQuery.simple(statement, params)
         try:
-            result = self.bucket.query(q, 3600, TimeUnit.SECONDS)
+            result = self.bucket.query(q, int(options.query_timeout), TimeUnit.SECONDS)
 
             output["status"] = result.status()
             output["metrics"] = str(result.info().asJsonObject())
@@ -854,7 +854,7 @@ class query_load(SDKClient):
 
         statement = "select dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
         output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
-                                                username=None, password=None, timeout = 300, analytics_timeout=300)
+                                                username=None, password=None)
         if output["results"]:
             dataverses = json.loads(output["results"])
 
@@ -862,14 +862,14 @@ class query_load(SDKClient):
             statement = "select ds.DatasetName from Metadata.`Dataset` as ds where ds.DataverseName = \"{0}\";".format(
                 dataverse)
             output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
-                                                    username=None, password=None, timeout=300, analytics_timeout=300)
+                                                    username=None, password=None)
             for dataset in json.loads(output["results"]):
                 datasets.append([dataverse, dataset["DatasetName"]])
 
             statement_1 = "select syn.SynonymName from Metadata.`Synonym` as syn where syn.DataverseName = \"{0}\";".format(
                 dataverse)
             output_1 = self.execute_statement_on_cbas(statement_1, pretty=True, client_context_id=None,
-                                                      username=None, password=None, timeout=300, analytics_timeout=300)
+                                                      username=None, password=None)
             for synonym in json.loads(output_1["results"]):
                 datasets.append([dataverse, synonym["SynonymName"]])
 
