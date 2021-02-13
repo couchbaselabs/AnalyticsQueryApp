@@ -109,7 +109,7 @@ def parse_options():
     parser.add_option("-a", "--analytics_mode", dest="analytics_mode", default=False,
                       help="Run the script for datasets and auto-discover queries to be run")
 
-    parser.add_option("--analytics_queries", dest="analytics_queries", default="common_queries",
+    parser.add_option("--analytics_queries", dest="analytics_queries", default="catapult_queries",
                       help="queries to be run on analytics")
 
     (options, args) = parser.parse_args()
@@ -196,7 +196,8 @@ class query_load(SDKClient):
                 log.error("%s"%e)
                 traceback.print_exception(*sys.exc_info())
 
-    def _run_concurrent_queries(self, query, num_queries, duration = 120, n1ql_system_test=False, timeout=300, scan_consistency="NOT_BOUNDED",validate=False):
+    def _run_concurrent_queries(self, query, num_queries, duration = 120, n1ql_system_test=False, 
+                                timeout=300, scan_consistency="NOT_BOUNDED",validate=False, analytics_timeout=300):
         # Run queries concurrently
         log.info("Running queries concurrently now...")
         threads = []
@@ -207,13 +208,13 @@ class query_load(SDKClient):
             thread_name = "query_for_{0}".format(name)
             threads.append(Thread(target=self._run_query,
                                   name=thread_name,
-                                  args=(random.choice(query), False, 0, True, timeout, scan_consistency,validate)))
+                                  args=(random.choice(query), False, 0, True, timeout, scan_consistency,validate,analytics_timeout)))
         else:
             for i in range(0, num_queries):
                 total_query_count += 1
                 threads.append(Thread(target=self._run_query,
                                       name="query_thread_{0}".format(total_query_count),
-                                      args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False)))
+                                      args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False,analytics_timeout)))
 
         i = 0
         for thread in threads:
@@ -238,7 +239,7 @@ class query_load(SDKClient):
                 if n1ql_system_test:
                     log.info("#" * 50)
                     self.total_count += 1
-                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency,validate)
+                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency,validate,analytics_timeout)
                     i += 1
                     query_count += 1
                     self.total_query_count += 1
@@ -251,7 +252,7 @@ class query_load(SDKClient):
                         total_query_count += 1
                         threads.append(Thread(target=self._run_query,
                                               name="query_thread_{0}".format(total_query_count),
-                                              args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False)))
+                                              args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False,analytics_timeout)))
                         if total_query_count % 1000 == 0:
                             log.warning(
                                 "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
@@ -273,7 +274,7 @@ class query_load(SDKClient):
                 if n1ql_system_test:
                     log.info("#"*50)
                     self.total_count += 1
-                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency, validate)
+                    self._run_query(random.choice(query), False, 0, True, timeout, scan_consistency, validate,analytics_timeout)
                     i += 1
                     query_count += 1
                     self.total_query_count += 1
@@ -286,7 +287,7 @@ class query_load(SDKClient):
                         total_query_count += 1
                         threads.append(Thread(target=self._run_query,
                                               name="query_thread_{0}".format(total_query_count),
-                                              args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False)))
+                                              args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False,analytics_timeout)))
                         if total_query_count%1000 == 0:
                             log.warning(
                         "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
@@ -309,7 +310,8 @@ class query_load(SDKClient):
         if self.failed_count+self.error_count != 0:
             raise Exception("Queries Failed:%s , Queries Error Out:%s"%(self.failed_count,self.error_count))
     
-    def _run_query(self, query,validate_item_count=False, expected_count=0, n1ql_execution=False, timeout=300, scan_consistency="NOT_BOUNDED", validate=True):
+    def _run_query(self, query,validate_item_count=False, expected_count=0, n1ql_execution=False, 
+                   timeout=300, scan_consistency="NOT_BOUNDED", validate=True, analytics_timeout=300):
         name = threading.currentThread().getName();
         client_context_id = name
         try:
@@ -317,20 +319,21 @@ class query_load(SDKClient):
                 if validate:
                     status, metrics, errors, results, handle = self.execute_statement_on_util(
                         query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql",
-                        scan_consistency=scan_consistency)
+                        scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
                     if status == "success":
                         split_query = query.split("WHERE")
                         primary_query = split_query[0] + "USE INDEX (`#primary`) WHERE" + split_query[1]
                         primary_status, primary_metrics, primary_errors, primary_results, primary_handle = self.execute_statement_on_util(
-                        primary_query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql",
-                        scan_consistency=scan_consistency)
+                            primary_query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql",
+                            scan_consistency=scan_consistency,analytics_timeout=analytics_timeout)
 
                 else:
                     status, metrics, errors, results, handle = self.execute_statement_on_util(
-                    query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql", scan_consistency=scan_consistency)
+                        query, timeout=timeout, client_context_id=client_context_id, thread_name=name, 
+                        utility="n1ql", scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
             else:
-                status, metrics, errors, results, handle = self.execute_statement_on_util(query, timeout=300,
-                                                                                               client_context_id=client_context_id, thread_name=name)
+                status, metrics, errors, results, handle = self.execute_statement_on_util(
+                    query, timeout=300, client_context_id=client_context_id, thread_name=name, analytics_timeout=analytics_timeout)
             log.info("query : {0}".format(query))
 
             # Validate if the status of the request is success, and if the count matches num_items
@@ -424,7 +427,10 @@ class query_load(SDKClient):
                 self.total_count -= 1
                 log.info(str(e))
                 
-    def execute_statement_on_util(self, statement, timeout=300, client_context_id=None, username=None, password=None, analytics_timeout=300, thread_name=None, utility="cbas",scan_consistency="NOT_BOUNDED"):
+    def execute_statement_on_util(
+            self, statement, timeout=300, client_context_id=None, username=None, 
+            password=None, analytics_timeout=300, thread_name=None, utility="cbas", 
+            scan_consistency="NOT_BOUNDED"):
         """
         Executes a statement on CBAS using the REST API using REST Client
         """
@@ -432,11 +438,13 @@ class query_load(SDKClient):
         try:
             if utility == "n1ql":
                 log.info("Running query on n1ql via %s: %s" % (thread_name, statement))
-                response = self.execute_statement_on_n1ql(statement, pretty=True, client_context_id=client_context_id, username=username, password=password,
-                                                          timeout=timeout,scan_consistency=scan_consistency)
+                response = self.execute_statement_on_n1ql(
+                    statement, pretty=True, client_context_id=client_context_id, username=username, password=password,
+                    timeout=timeout,scan_consistency=scan_consistency)
             else:
                 log.info("Running query on cbas via %s: %s"%(thread_name,statement))
-                response = self.execute_statement_on_cbas(statement, pretty, client_context_id, username, password)
+                response = self.execute_statement_on_cbas(statement, pretty, client_context_id, 
+                                                          username, password, timeout, analytics_timeout)
             
             if type(response) == str: 
                 response = json.loads(response)
@@ -470,11 +478,11 @@ class query_load(SDKClient):
         
     def execute_statement_on_cbas(
             self, statement, pretty=True, client_context_id=None,
-            username=None, password=None):
+            username=None, password=None, timeout=300, analytics_timeout=300):
 
         params = AnalyticsParams.build()
         params = params.rawParam("pretty", pretty)
-        params = params.rawParam("timeout", str(options.query_timeout)+"s")
+        params = params.rawParam("timeout", str(analytics_timeout)+"s")
         params = params.rawParam("username", username)
         params = params.rawParam("password", password)
         params = params.rawParam("clientContextID", client_context_id)
@@ -484,7 +492,7 @@ class query_load(SDKClient):
         output = {}
         q = AnalyticsQuery.simple(statement, params)
         try:
-            result = self.bucket.query(q, int(options.query_timeout), TimeUnit.SECONDS)
+            result = self.bucket.query(q, int(timeout), TimeUnit.SECONDS)
 
             output["status"] = result.status()
             output["metrics"] = str(result.info().asJsonObject())
@@ -848,44 +856,50 @@ class query_load(SDKClient):
         self.run_txns(txns, ip, port, query_timeout)
         return
 
-    def generate_queries_for_analytics(self, analytics_queries):
+    def generate_queries_for_analytics(self, analytics_queries, bucket_list, timeout=300, analytics_timeout=300):
         log.info("Generating queries for CBAS")
         query_templates = (importlib.import_module('cbas_queries').cbas_queries)[analytics_queries]
 
         statement = "select dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
         output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
-                                                username=None, password=None)
+                                                username=None, password=None, 
+                                                timeout=timeout, analytics_timeout=analytics_timeout)
         if output["results"]:
             dataverses = json.loads(output["results"])
+            dataverses = [dv["DataverseName"]for dv in dataverses]
+            dataverses = json.dumps(dataverses, encoding="utf-8").replace("\'", "\"")
 
-        def get_all_datasets_and_synonyms(dataverse, datasets):
-            statement = "select ds.DatasetName from Metadata.`Dataset` as ds where ds.DataverseName = \"{0}\";".format(
-                dataverse)
-            output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
-                                                    username=None, password=None)
-            for dataset in json.loads(output["results"]):
-                datasets.append([dataverse, dataset["DatasetName"]])
-
-            statement_1 = "select syn.SynonymName from Metadata.`Synonym` as syn where syn.DataverseName = \"{0}\";".format(
-                dataverse)
-            output_1 = self.execute_statement_on_cbas(statement_1, pretty=True, client_context_id=None,
-                                                      username=None, password=None)
-            for synonym in json.loads(output_1["results"]):
-                datasets.append([dataverse, synonym["SynonymName"]])
-
-        threads = []
+        bucket_list = json.dumps(bucket_list, encoding="utf-8").replace("\'", "\"")
         datasets = list()
-        for dataverse in dataverses:
-            thread_name = "dataverse_{0}".format(dataverse["DataverseName"])
-            threads.append(Thread(target=get_all_datasets_and_synonyms,
-                                  name=thread_name,
-                                  args=(dataverse["DataverseName"], datasets)))
+        statement = "select ds.DataverseName, ds.DatasetName from Metadata.`Dataset` as ds " \
+                    "where ds.DataverseName in {0} and ds.BucketName in {1};".format(dataverses, bucket_list)
+        output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
+                                                username=None, password=None,
+                                                timeout=timeout, analytics_timeout=analytics_timeout)
+        for dataset in json.loads(output["results"]):
+            datasets.append([dataset["DataverseName"], dataset["DatasetName"]])
+        
+        # Find all synonyms created on synonyms
+        statement = "select syn.ObjectName from Metadata.`Synonym` as syn where syn.ObjectName like \"synonym_%\""
+        output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
+                                                username=None, password=None,
+                                                timeout=timeout, analytics_timeout=analytics_timeout)
+        syn_on_syn = list()
+        for synonym in json.loads(output["results"]):
+            syn_on_syn.append(synonym["ObjectName"])
+        syn_on_syn = json.dumps(syn_on_syn, encoding="utf-8").replace("\'", "\"")
 
-        for thread in threads:
-            thread.start()
-
-        for thread in threads:
-            thread.join()
+        statement = "select syn.DataverseName, syn.SynonymName from Metadata.`Synonym` as syn " \
+                    "where syn.ObjectDataverseName in {0} and syn.ObjectName in (select value ds.DatasetName from " \
+                    "Metadata.`Dataset` as ds where ds.DataverseName in {0} and ds.BucketName in {1}) or syn.ObjectName " \
+                    "in (select value syn1.SynonymName from Metadata.`Synonym` as syn1 where syn1.SynonymName in {2} and " \
+                    "syn1.ObjectName in (select value ds1.DatasetName from Metadata.`Dataset` as ds1 where ds1.DataverseName " \
+                    "in {0} and ds1.BucketName in {1}));".format(dataverses, bucket_list, syn_on_syn)
+        output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
+                                                username=None, password=None,
+                                                timeout=timeout, analytics_timeout=analytics_timeout)
+        for synonym in json.loads(output["results"]):
+            datasets.append([synonym["DataverseName"], synonym["SynonymName"]])
 
         queries = list()
         while datasets:
@@ -991,7 +1005,8 @@ def main():
                 # Updates every thread count x 10 transactions ( for example if threads = 10, update every 100 txns)
                 print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
     elif options.analytics_mode:
-        queries = load.generate_queries_for_analytics(options.analytics_queries)
+        queries = load.generate_queries_for_analytics(options.analytics_queries, bucket_list,
+                                                      timeout=options.query_timeout, analytics_timeout=options.query_timeout)
     else:
         if options.query_file:
             f = open(options.query_file, 'r')
@@ -1028,7 +1043,8 @@ def main():
         for thread in threads:
             thread.join()
     else:
-        load._run_concurrent_queries(queries, int(options.querycount), duration=int(options.duration))
+        load._run_concurrent_queries(queries, int(options.querycount), duration=int(options.duration), 
+                                     timeout=options.query_timeout, analytics_timeout=options.query_timeout)
 
     if not options.txns:
         print("%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
