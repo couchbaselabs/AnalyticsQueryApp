@@ -46,9 +46,9 @@ HOTEL_DS_IDX_QUERY_DELETE_TEMPLATES = [{"idx1":"delete from keyspacenameplacehol
                                         "idx2":"delete from keyspacenameplaceholder limit 200",
                                         "idx3":"delete from keyspacenameplaceholder limit 1"}]
 
-HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES = [{"idx1":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 1000",
-                                        "idx2":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 1000",
-                                        "idx3":"MERGE INTO keyspacenameplaceholder p USING secondholder o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.free_breakfast = o.free_breakfast limit 1000"}]
+HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES = [{"idx1":"MERGE INTO keyspacenameplaceholder p USING [{'country':'Gibraltar', 'email': 'Lebsack.Freddie@hotels.com'},{'country':'Macedonia', 'email': 'username.lastname@hotels.com'},{'country':'Finland', 'email': 'Bruen.Lacy@hotels.com'},{'country':'Paraguay', 'email': 'fake.name@hotels.com'},{'country':'Cambodia', 'email': 'user.name@hotels.com'}] o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 1000",
+                                        "idx2":"MERGE INTO keyspacenameplaceholder p USING [{'country':'Gibraltar', 'price': 1146},{'country':'Macedonia', 'price': 1150},{'country':'Finland', 'price': 1147},{'country':'Paraguay', 'price': 1148},{'country':'Cambodia', 'price': 1149}] o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 1000",
+                                        "idx3":"MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.free_breakfast = o.free_breakfast limit 1000"}]
 
 def parse_options():
     parser = OptionParser()
@@ -823,13 +823,14 @@ class query_load(SDKClient):
             random.seed(uuid.uuid4())
             # Randomize transaction timeout per transaction
             txtimeout = str(random.randint(900,1200)) + "s"
+            kvtimeout = str(random.randint(10,20)) + "s"
             # Randomize scan_consistency per transaction
             scan_consistency = random.choice(['request_plus', 'not_bounded'])
             start_time = time.time()
             for query in txn:
                 # Start transaction is special because it sets the settings of txn, plus we need to capture txn id to pass with subsequent queries
                 if query == "START TRANSACTION":
-                    data = '{{"statement":"{0}", "txtimeout":"{1}","scan_consistency":"{2}"}}'.format(query,txtimeout,scan_consistency)
+                    data = '{{"statement":"{0}", "txtimeout":"{1}","scan_consistency":"{2}","Kvtimeout":{3}}}'.format(query,txtimeout,scan_consistency,kvtimeout)
                     try:
                         response = requests.post(query_endpoint, headers=headers, data=data, auth=auth)
                         results = response.json()
