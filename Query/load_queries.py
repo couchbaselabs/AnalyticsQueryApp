@@ -860,8 +860,7 @@ class query_load(SDKClient):
             for query in txn:
                 # Start transaction is special because it sets the settings of txn, plus we need to capture txn id to pass with subsequent queries
                 if query == "START TRANSACTION":
-                    data = '{{"statement":"{0}", "txtimeout":"{1}","scan_consistency":"{2}","Kvtimeout":{3}}}'.format(
-                        query, txtimeout, scan_consistency, kvtimeout)
+                    data = '{{"statement":"{0}", "txtimeout":"{1}","scan_consistency":"{2}","Kvtimeout":"{3}"}}'.format(query,txtimeout,scan_consistency,kvtimeout)
                     try:
                         response = requests.post(query_endpoint, headers=headers, data=data, auth=auth)
                         results = response.json()
