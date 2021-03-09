@@ -307,7 +307,7 @@ class query_load(SDKClient):
                     for thread in threads:
                         # Send requests in batches, and sleep for 5 seconds before sending another batch of queries.
                         i += 1
-                        if i % self.concurrent_batch_size == 0:
+                        #if i % self.concurrent_batch_size == 0:
                            # log.info("submitted {0} queries".format(i))
                         thread.start()
                     time.sleep(2)
