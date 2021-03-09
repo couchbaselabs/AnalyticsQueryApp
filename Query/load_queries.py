@@ -297,7 +297,7 @@ class query_load(SDKClient):
                                               name="query_thread_{0}".format(total_query_count),
                                               args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False,
                                                     analytics_timeout)))
-                        if total_query_count % 1000 == 0:
+                        #if total_query_count % 1000 == 0:
                             #log.warning(
                              #   "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
                              #       total_query_count, self.failed_count, self.success_count, self.rejected_count,
@@ -311,9 +311,9 @@ class query_load(SDKClient):
                            # log.info("submitted {0} queries".format(i))
                         thread.start()
                     time.sleep(2)
-        if n1ql_system_test:
+        #if n1ql_system_test:
             #log.info("%s queries submitted" % query_count)
-        else:
+        #else:
             #log.info(
             #    "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
             #        num_queries, self.failed_count, self.success_count, self.rejected_count, self.cancel_count,
