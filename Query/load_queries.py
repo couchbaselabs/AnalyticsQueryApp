@@ -260,7 +260,7 @@ class query_load(SDKClient):
                                               name="query_thread_{0}".format(total_query_count),
                                               args=(random.choice(query), False, 0, False, 300, "NOT_BOUNDED", False,
                                                     analytics_timeout)))
-                        if total_query_count % 1000 == 0:
+                        #if total_query_count % 1000 == 0:
                             #log.warning(
                              #   "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
                               #      total_query_count, self.failed_count, self.success_count, self.rejected_count,
@@ -759,11 +759,11 @@ class query_load(SDKClient):
                                         txn_queries['merge'].append(merge_query.replace("secondholder", keyspace))
                 queryList = txn_queries
         #log.info("=====  Query List (total {0} queries )  ===== ".format(len(queryList)))
-        if txns:
-            for querystmt in queryList:
+        #if txns:
+            #for querystmt in queryList:
                 #log.info(queryList[querystmt])
-        else:
-            for querystmt in queryList:
+        #else:
+            #for querystmt in queryList:
                 #log.info(querystmt)
 
         # Return query_list
