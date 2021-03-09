@@ -1050,6 +1050,7 @@ def main():
 
     if options.txns:
         #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
+        pass
     elif options.n1ql:
         threads = []
         for i in range(0, load.concurrent_batch_size):
