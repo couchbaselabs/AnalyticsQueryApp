@@ -887,13 +887,28 @@ class query_load(SDKClient):
         return
 
     def generate_queries_for_analytics(self, analytics_queries, bucket_list, timeout=300, analytics_timeout=300):
-        #log.info("Generating queries for CBAS")
+
+        def retry_execute_statement_on_cbas(ddl):
+            retry = 0
+            while retry < 20:
+                try:
+                    output = self.execute_statement_on_cbas(
+                        statement, pretty=True, client_context_id=None,
+                        username=None, password=None, timeout=timeout,
+                        analytics_timeout=analytics_timeout)
+                    return output
+                except Exception as err:
+                    print "Following error occured - {0}".format(str(err))
+                    print "Sleeping 30 seconds before retrying"
+                    retry += 1
+                    time.sleep(30)
+                    print "Retry attempt - {0}".format(retry)
+
+        print "Generating queries for CBAS"
         query_templates = (importlib.import_module('cbas_queries').cbas_queries)[analytics_queries]
 
         statement = "select dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
-        output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
-                                                username=None, password=None,
-                                                timeout=timeout, analytics_timeout=analytics_timeout)
+        output = retry_execute_statement_on_cbas(statement)
         if output["results"]:
             dataverses = json.loads(output["results"])
             dataverses = [dv["DataverseName"] for dv in dataverses]
@@ -903,17 +918,13 @@ class query_load(SDKClient):
         datasets = list()
         statement = "select ds.DataverseName, ds.DatasetName from Metadata.`Dataset` as ds " \
                     "where ds.DataverseName in {0} and ds.BucketName in {1};".format(dataverses, bucket_list)
-        output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
-                                                username=None, password=None,
-                                                timeout=timeout, analytics_timeout=analytics_timeout)
+        output = retry_execute_statement_on_cbas(statement)
         for dataset in json.loads(output["results"]):
             datasets.append([dataset["DataverseName"], dataset["DatasetName"]])
 
         # Find all synonyms created on synonyms
         statement = "select syn.ObjectName from Metadata.`Synonym` as syn where syn.ObjectName like \"synonym_%\""
-        output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
-                                                username=None, password=None,
-                                                timeout=timeout, analytics_timeout=analytics_timeout)
+        output = retry_execute_statement_on_cbas(statement)
         syn_on_syn = list()
         for synonym in json.loads(output["results"]):
             syn_on_syn.append(synonym["ObjectName"])
@@ -925,9 +936,7 @@ class query_load(SDKClient):
                     "in (select value syn1.SynonymName from Metadata.`Synonym` as syn1 where syn1.SynonymName in {2} and " \
                     "syn1.ObjectName in (select value ds1.DatasetName from Metadata.`Dataset` as ds1 where ds1.DataverseName " \
                     "in {0} and ds1.BucketName in {1}));".format(dataverses, bucket_list, syn_on_syn)
-        output = self.execute_statement_on_cbas(statement, pretty=True, client_context_id=None,
-                                                username=None, password=None,
-                                                timeout=timeout, analytics_timeout=analytics_timeout)
+        output = retry_execute_statement_on_cbas(statement)
         for synonym in json.loads(output["results"]):
             datasets.append([synonym["DataverseName"], synonym["SynonymName"]])
 
@@ -939,7 +948,7 @@ class query_load(SDKClient):
                     queries.append(query_template.format(dataset[0], dataset[1]))
                 except:
                     continue
-        #log.info("Finished generating CBAS queries")
+        print "Finished generating CBAS queries"
         return queries
 
 
