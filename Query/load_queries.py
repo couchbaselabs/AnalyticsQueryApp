@@ -670,14 +670,17 @@ class query_load(SDKClient):
                     bucketname)
                 queryResults = self.execute_statement_on_n1ql(keyspaceListQuery, True)
             except Exception as e:
-                #log.info("Query - {0} - failed. Exception : {1}, retrying..".format(keyspaceListQuery, str(e)))
+                log.info("Query - {0} - failed. Exception : {1}, retrying..".format(keyspaceListQuery, str(e)))
                 time.sleep(120)
             else:
                 break
 
         keyspaceList = []
-        for row in queryResults['results']:
-            keyspaceList.append(json.loads(str(row))['path'])
+        if 'results' in queryResults:
+            for row in queryResults['results']:
+                keyspaceList.append(json.loads(str(row))['path'])
+        else:
+            log.info("No query results for query : {0} : {1}".format(keyspaceListQuery, str(queryResults)))
 
         # For each collection, determine the indexes created
         queryList = []
