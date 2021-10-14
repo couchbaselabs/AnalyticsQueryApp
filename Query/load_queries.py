@@ -981,6 +981,7 @@ def setup_log(options):
     log.addHandler(fh)
 
 log = logging.getLogger()
+logging.getLogger("requests").setLevel(logging.WARNING)
 options = None
 
 
