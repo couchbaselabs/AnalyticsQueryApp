@@ -670,7 +670,7 @@ class query_load(SDKClient):
                     bucketname)
                 queryResults = self.execute_statement_on_n1ql(keyspaceListQuery, True)
             except Exception as e:
-                log.info("Query - {0} - failed. Exception : {1}, retrying..".format(keyspaceListQuery, str(e)))
+                log.info("Query - {0} - failed. Exception : {1}, retrying.. queryResults={2}".format(keyspaceListQuery, str(e), str(queryResults)))
                 time.sleep(120)
             else:
                 break
