@@ -612,7 +612,7 @@ class query_load(SDKClient):
             #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
             raise Exception("Request Rejected")
         except CouchbaseException as e:
-            #log.info("CouchbaseException from Java SDK. %s" % str(e))
+            log.info("CouchbaseException from Java SDK. %s" % str(e))
             raise Exception("CouchbaseException")
         except RuntimeException as e:
             #log.info("RuntimeException from Java SDK. %s" % str(e))
