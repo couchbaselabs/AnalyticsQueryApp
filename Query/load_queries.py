@@ -547,7 +547,7 @@ class query_load(SDKClient):
             raise Exception("Request Rejected")
         except CouchbaseException as e:
             log.info("CouchbaseException from Java SDK. %s" % str(e))
-            #print("CouchbaseException from Java SDK. %s" % str(e))
+            print("CouchbaseException from Java SDK. %s" % str(e))
             #             traceback.print_exception(*sys.exc_info())
             raise Exception("CouchbaseException")
         except RuntimeException as e:
