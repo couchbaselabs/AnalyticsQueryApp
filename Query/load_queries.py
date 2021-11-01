@@ -30,26 +30,64 @@ HOTEL_DS_IDX_QUERY_TEMPLATES = [
              "where free_breakfast=True and free_parking=True and price is not null and array_count(public_likes)>5 "
              "and `type`='Hotel' group by country limit 100",
      "idx3": "select city,country,count(*) from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
-             "group by country,city order by country,city limit 100 offset 100"}
+             "group by country,city order by country,city limit 100 offset 100",
+     "idx4": "WITH city_avg AS (SELECT city, AVG(price) AS avgprice FROM keyspacenameplaceholder WHERE price IS NOT NULL GROUP BY city) "
+             "SELECT h.name, h.price FROM keyspacenameplaceholder h JOIN city_avg ON h.city = city_avg.city WHERE "
+             "h.price < city_avg.avgprice AND h.price IS NOT NULL LIMIT 10;",
+     "idx5": "SELECT h.name, h.city, r.author FROM keyspacenameplaceholder h UNNEST reviews AS r WHERE r.ratings.Rooms < 2 "
+             "AND h.avg_rating >= 3 ORDER BY r.author DESC LIMIT 100;",
+     "idx6": "SELECT COUNT(*) FILTER (WHERE free_breakfast = TRUE) AS count_free_breakfast, "
+             "COUNT(*) FILTER (WHERE free_parking = TRUE) AS count_free_parking, "
+             "COUNT(*) FILTER (WHERE free_breakfast = TRUE AND free_parking = TRUE) AS count_free_parking_and_breakfast "
+             "FROM keyspacenameplaceholder WHERE city LIKE 'North%' ORDER BY count_free_parking_and_breakfast DESC LIMIT 10",
+     "idx7": "SELECT h.name,h.country,h.city,h.price,DENSE_RANK() OVER (window1) AS `rank` FROM keyspacenameplaceholder "
+             "AS h WHERE h.price IS NOT NULL WINDOW window1 AS ( PARTITION BY h.country ORDER BY h.price NULLS LAST) LIMIT 10;",
+     "idx8": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.author LIKE 'M%' AND "
+             "r.ratings.Cleanliness = 3 END AND free_parking = TRUE AND country IS NOT NULL",
+     "idx9": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.author LIKE 'M%' and "
+             "r.ratings.Rooms > 3 END AND free_parking = True",
+     "idx10": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES ANY n:v IN r.ratings "
+              "SATISFIES n = ‘Overall’ AND v = 2 END END",
+     "idx11": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.ratings.Rooms = 3 and "
+              "r.ratings.Cleanliness > 1 END AND free_parking = True"
+
+     }
 ]
 
 HOTEL_DS_IDX_QUERY_INSERT_TEMPLATES = [{
                                            "idx1": "INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'type': 'hotel', 'name' : 'new hotel' })",
-                                           "idx2": "INSERT INTO keyspacenameplaceholder (KEY UUID(), VALUE price) SELECT price FROM keyspacenameplaceholder WHERE type='Hotel' AND free_breakfast=True AND free_parking=True LIMIT 1000",
-                                           "idx3": "INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'int': 123})"}]
+                                           "idx2": "INSERT INTO keyspacenameplaceholder (KEY UUID(), VALUE price) SELECT price FROM keyspacenameplaceholder WHERE type='Hotel' AND free_breakfast=True AND free_parking=True LIMIT 100",
+                                           "idx3": "INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'int': 123})",
+                                           "idx4": "INSERT INTO keyspacenameplaceholder (KEY UUID(), VALUE _v) SELECT _v FROM keyspacenameplaceholder _v where price is not missing order by meta().id desc limit 1",
+                                           "idx5": "INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'int': 123})",
+										   "idx6": "INSERT INTO keyspacenameplaceholder (KEY UUID(), VALUE _v) SELECT _v FROM keyspacenameplaceholder _v where city is not missing order by meta().id desc limit 10",
+										   "idx7": "INSERT INTO keyspacenameplaceholder (KEY UUID(), VALUE _v) SELECT _v FROM keyspacenameplaceholder _v where price is not missing and lower(country) like 'united%' order by meta().id desc limit 1"}]
 
-HOTEL_DS_IDX_QUERY_UPDATE_TEMPLATES = [{"idx1": "UPDATE keyspacenameplaceholder SET foo = 5 limit 1000",
-                                        "idx2": "UPDATE keyspacenameplaceholder SET free_breakfast = False where price is not null limit 1000",
-                                        "idx3": "UPDATE keyspacenameplaceholder SET city = 'San Francisco' where free_breakfast=True and free_parking=True limit 1000"}]
+HOTEL_DS_IDX_QUERY_UPDATE_TEMPLATES = [{"idx1": "UPDATE keyspacenameplaceholder SET foo = 5 where country is not missing limit 100",
+                                        "idx2": "UPDATE keyspacenameplaceholder SET free_breakfast = False where free_breakfast=True limit 100",
+                                        "idx3": "UPDATE keyspacenameplaceholder SET city = 'San Francisco' where free_breakfast=True and free_parking=True limit 100",
+                                        "idx4": "UPDATE keyspacenameplaceholder SET price = price+100 where price is not missing limit 100",
+                                        "idx5": "UPDATE keyspacenameplaceholder SET updated = price where (any r in reviews satisfies r.ratings.`Rooms` > 3 end) limit 100",
+                                        "idx6": "UPDATE keyspacenameplaceholder SET price = price+100 where city is not missing limit 100",
+                                        "idx7": "UPDATE keyspacenameplaceholder SET price = price+100 where price is not missing and lower(country) like 'united%' limit 100",
+                                        }]
 
-HOTEL_DS_IDX_QUERY_DELETE_TEMPLATES = [{"idx1": "delete from keyspacenameplaceholder limit 1",
-                                        "idx2": "delete from keyspacenameplaceholder limit 200",
-                                        "idx3": "delete from keyspacenameplaceholder limit 1"}]
+HOTEL_DS_IDX_QUERY_DELETE_TEMPLATES = [{"idx1": "delete from keyspacenameplaceholder where country is not missing limit 25 ",
+                                        "idx2": "delete from keyspacenameplaceholder where free_breakfast=True limit 200",
+                                        "idx3": "delete from keyspacenameplaceholder where free_breakfast=True and free_parking=True limit 10",
+                                        "idx4": "delete from keyspacenameplaceholder where price is not missing limit 100",
+                                        "idx5": "delete from keyspacenameplaceholder where (any r in reviews satisfies r.ratings.`Rooms` > 3 end) limit 50",
+                                        "idx6": "delete from keyspacenameplaceholder where city is not missing limit 5",
+                                        "idx7": "delete from keyspacenameplaceholder where price is not missing and lower(country) like 'united%' limit 89"
+                                        }]
 
 HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES = [{
-                                          "idx1": "MERGE INTO keyspacenameplaceholder p USING [{'country':'Gibraltar', 'email': 'Lebsack.Freddie@hotels.com'},{'country':'Macedonia', 'email': 'username.lastname@hotels.com'},{'country':'Finland', 'email': 'Bruen.Lacy@hotels.com'},{'country':'Paraguay', 'email': 'fake.name@hotels.com'},{'country':'Cambodia', 'email': 'user.name@hotels.com'}] o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 1000",
-                                          "idx2": "MERGE INTO keyspacenameplaceholder p USING [{'country':'Gibraltar', 'price': 1146},{'country':'Macedonia', 'price': 1150},{'country':'Finland', 'price': 1147},{'country':'Paraguay', 'price': 1148},{'country':'Cambodia', 'price': 1149}] o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 1000",
-                                          "idx3": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.free_breakfast = o.free_breakfast limit 1000"}]
+                                          "idx1": "MERGE INTO keyspacenameplaceholder p USING [{'country':'Gibraltar', 'email': 'Lebsack.Freddie@hotels.com'},{'country':'Macedonia', 'email': 'username.lastname@hotels.com'},{'country':'Finland', 'email': 'Bruen.Lacy@hotels.com'},{'country':'Paraguay', 'email': 'fake.name@hotels.com'},{'country':'Cambodia', 'email': 'user.name@hotels.com'}] o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 100",
+                                          "idx2": "MERGE INTO keyspacenameplaceholder p USING [{'country':'Gibraltar', 'price': 1146},{'country':'Macedonia', 'price': 1150},{'country':'Finland', 'price': 1147},{'country':'Paraguay', 'price': 1148},{'country':'Cambodia', 'price': 1149}] o ON  o.free_breakfast == p.free_breakfast WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100",
+                                          "idx3": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.free_breakfast == p.free_breakfast WHEN MATCHED THEN UPDATE SET p.price = o.price limit 100",
+										  "idx4": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100",
+										  "idx6": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100",
+										  "idx7": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100"}]
 
 
 def parse_options():
