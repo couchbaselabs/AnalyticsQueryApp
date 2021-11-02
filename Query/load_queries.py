@@ -47,7 +47,7 @@ HOTEL_DS_IDX_QUERY_TEMPLATES = [
      "idx9": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.author LIKE 'M%' and "
              "r.ratings.Rooms > 3 END AND free_parking = True",
      "idx10": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES ANY n:v IN r.ratings "
-              "SATISFIES n = ‘Overall’ AND v = 2 END END",
+              "SATISFIES n = 'Overall' AND v = 2 END END",
      "idx11": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.ratings.Rooms = 3 and "
               "r.ratings.Cleanliness > 1 END AND free_parking = True"
 
@@ -85,9 +85,9 @@ HOTEL_DS_IDX_QUERY_MERGE_TEMPLATES = [{
                                           "idx1": "MERGE INTO keyspacenameplaceholder p USING [{'country':'Gibraltar', 'email': 'Lebsack.Freddie@hotels.com'},{'country':'Macedonia', 'email': 'username.lastname@hotels.com'},{'country':'Finland', 'email': 'Bruen.Lacy@hotels.com'},{'country':'Paraguay', 'email': 'fake.name@hotels.com'},{'country':'Cambodia', 'email': 'user.name@hotels.com'}] o ON  o.country == p.country WHEN MATCHED THEN UPDATE SET p.email = o.email limit 100",
                                           "idx2": "MERGE INTO keyspacenameplaceholder p USING [{'country':'Gibraltar', 'price': 1146},{'country':'Macedonia', 'price': 1150},{'country':'Finland', 'price': 1147},{'country':'Paraguay', 'price': 1148},{'country':'Cambodia', 'price': 1149}] o ON  o.free_breakfast == p.free_breakfast WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100",
                                           "idx3": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.free_breakfast == p.free_breakfast WHEN MATCHED THEN UPDATE SET p.price = o.price limit 100",
-										  "idx4": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100",
-										  "idx6": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100",
-										  "idx7": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100"}]
+					  "idx4": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100",
+					  "idx6": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.city == p.city WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100",
+					  "idx7": "MERGE INTO keyspacenameplaceholder p USING [{'city': 'Hattieview','free_breakfast': true},{'city': 'Blakefort','free_breakfast': true},{'city': 'Chuview','free_breakfast': false},{'city': 'Vonfort','free_breakfast': true},{'city': 'Quitzonview','free_breakfast': false}] o ON  o.price == p.price WHEN MATCHED THEN UPDATE SET p.country = o.country limit 100"}]
 
 
 def parse_options():
