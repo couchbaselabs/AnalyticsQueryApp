@@ -134,6 +134,9 @@ def parse_options():
     parser.add_option("-c", "--collections_mode", dest="collections_mode", default=False,
                       help="Run the script for collections and auto-discover queries to be run")
 
+    parser.add_option("-j", "--run_udf_queries", dest="run_udf_queries", default=False,
+                      help="Run the N1QL JS UDF queries")
+
     parser.add_option("-D", "--dataset", dest="dataset", default="hotel",
                       help="Dataset used in the test. Default = hotel")
 
@@ -151,6 +154,8 @@ def parse_options():
 
     parser.add_option("--analytics_queries", dest="analytics_queries", default="catapult_queries",
                       help="queries to be run on analytics")
+
+
 
     (options, args) = parser.parse_args()
 
@@ -677,7 +682,7 @@ class query_load(SDKClient):
                         self.cancel_count, self.timeout_count)
                     update_time = time.time()
 
-    def generate_queries_for_collections(self, dataset, bucketname, txns=False):
+    def generate_queries_for_collections(self, dataset, bucketname, txns=False, run_udf_queries=False):
 
         idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
         if txns:
@@ -808,6 +813,8 @@ class query_load(SDKClient):
                 #log.info(querystmt)
 
         # Return query_list
+        if run_udf_queries:
+            queryList.append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
         return queryList
 
     def generate_txns(self, txns):
@@ -1035,11 +1042,11 @@ def main():
     bucket_list = options.bucket_names.strip('[]').split(',')
 
     if options.collections_mode:
-        queries = load.generate_queries_for_collections(options.dataset, options.bucket)
+        queries = load.generate_queries_for_collections(options.dataset, options.bucket, run_udf_queries=options.run_udf_queries)
     # If we get txns we want to spawn the number of threads specified, each thread runs 10 txns
     elif options.txns:
         #print("use txns")
-        queries = load.generate_queries_for_collections(options.dataset, options.bucket, options.txns)
+        queries = load.generate_queries_for_collections(options.dataset, options.bucket, txns=options.txns, run_udf_queries=options.run_udf_queries)
         # If duration is 0 run forever, else run for set amount of time
         if int(options.duration) == 0:
             while True:
