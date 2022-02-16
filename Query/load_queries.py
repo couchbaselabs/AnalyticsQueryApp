@@ -781,6 +781,9 @@ class query_load(SDKClient):
                         if txns:
                             txn_queries['select'].append(
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder", keyspace))
+                            if run_udf_queries:
+                                txn_queries['select'].append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
+
                         else:
                             queryList.append(
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder",
@@ -788,7 +791,6 @@ class query_load(SDKClient):
                             if run_udf_queries:
                                 queryList.append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
-                            log.info(queryList)
                     except Exception as e:
                         #log.info("Issue with keyspace {0}".format(keyspace))
                         pass
