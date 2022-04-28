@@ -5,15 +5,12 @@ Java based SDK client interface
 @author: riteshagarwal
 
 '''
-import sys
-
-sys.path.append(
-    "/Users/praneeth.bokka/repositories/AnalyticsQueryApp/Couchbase-Java-Client-3.3.0/java-client-3.3.0.jar")
-sys.path.append("/Users/praneeth.bokka/repositories/AnalyticsQueryApp/Couchbase-Java-Client-3.3.0/core-io-2.3.0.jar")
-sys.path.append(
-    "/Users/praneeth.bokka/repositories/AnalyticsQueryApp/Couchbase-Java-Client-3.3.0/reactor-core-3.4.17.jar")
-sys.path.append(
-    "/Users/praneeth.bokka/repositories/AnalyticsQueryApp/Couchbase-Java-Client-3.3.0/reactive-streams-1.0.3.jar")
+import sys,os
+script_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(script_dir+"/../Couchbase-Java-Client-3.3.0/java-client-3.3.0.jar")
+sys.path.append(script_dir+"/../Couchbase-Java-Client-3.3.0/core-io-2.3.0.jar")
+sys.path.append(script_dir+"/../Couchbase-Java-Client-3.3.0/reactor-core-3.4.17.jar")
+sys.path.append(script_dir+"/../Couchbase-Java-Client-3.3.0/reactive-streams-1.0.3.jar")
 
 from com.couchbase.client.java import Cluster, ClusterOptions
 from com.couchbase.client.core.error import CouchbaseException
