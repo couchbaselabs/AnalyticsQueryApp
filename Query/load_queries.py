@@ -777,6 +777,7 @@ class query_load(SDKClient):
                     # We need to extract the string before the _ to use it as a key for the idx-query map
                     idx_template_name = row["name"].split("_")[0]
                     print("idx_template_name:{0}".format(idx_template_name))
+                    print("Generated queries before if txns {}".format(queryList))
                     if txns:
                         keyspace_idx_map[keyspace].append(idx_template_name)
                         try:
@@ -804,10 +805,12 @@ class query_load(SDKClient):
                             #log.info("Issue with keyspace {0}".format(keyspace))
                             pass
                     try:
+                        print("Generated queries before if txns block are {}".format(queryList))
                         if txns:
                             txn_queries['select'].append(
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder", keyspace))
                             if run_udf_queries:
+                                print("Adding udf in if block")
                                 txn_queries['select'].append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
                         else:
@@ -815,6 +818,7 @@ class query_load(SDKClient):
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder",
                                                                                   keyspace))
                             if run_udf_queries:
+                                print("Adding udf in else block")
                                 queryList.append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
                     except Exception as e:
@@ -845,6 +849,7 @@ class query_load(SDKClient):
                 #log.info(querystmt)
 
         # Return query_list
+        print("Generated queries are {}".format(queryList))
         return queryList
 
     def generate_txns(self, txns):
@@ -1042,6 +1047,7 @@ def create_log_file(log_config_file_name, log_file_name, level):
     tmpl_log_file.close()
 
 
+
 def setup_log(options):
     log.setLevel(logging.INFO)
     ch = logging.StreamHandler()
@@ -1153,6 +1159,7 @@ def main():
     elif options.n1ql:
         threads = []
         print("In options.n1ql thread block to run concurrent queries")
+        print("All the queries are {}".format(queries))
         for i in range(0, load.concurrent_batch_size):
             threads.append(Thread(target=load._run_concurrent_queries,
                                   name="query_thread_{0}".format(i),
