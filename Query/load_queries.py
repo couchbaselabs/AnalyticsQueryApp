@@ -490,6 +490,7 @@ class query_load(SDKClient):
                 self.rejected_count += 1
                 self.total_count -= 1
             else:
+                print("Exception we got:{0}".format(str(e)))
                 self.error_count += 1
                 self.total_count -= 1
                 #log.info(str(e))
@@ -647,7 +648,7 @@ class query_load(SDKClient):
 
 
             if str(output['status']) == "FATAL":
-                #TODO: Commenting below exception but need to figure out relevant exception in 3.3.*
+               # TODO: Commenting below exception but need to figure out relevant exception in 3.3.*
                 #msg = output['errors'][0]['msg']
                 #if "Job requirement" in msg and "exceeds capacity" in msg:
                     #raise Exception("Capacity cannot meet job requirement")
