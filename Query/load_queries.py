@@ -379,6 +379,8 @@ class query_load(SDKClient):
 
         try:
             if n1ql_execution:
+                print("Inside n1ql_execution ")
+
                 if validate:
                     print("Inside validate of n1ql_execution ")
                     status, metrics, errors, results, handle = self.execute_statement_on_util(
@@ -393,18 +395,26 @@ class query_load(SDKClient):
                             scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
 
                 else:
+                    print("Inside else of  validate of n1ql_execution ")
                     status, metrics, errors, results, handle = self.execute_statement_on_util(
                         query, timeout=timeout, client_context_id=client_context_id, thread_name=name,
                         utility="n1ql", scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
             else:
+                print("Inside else of  n1ql_execution ")
+
                 status, metrics, errors, results, handle = self.execute_statement_on_util(
                     query, timeout=300, client_context_id=client_context_id, thread_name=name,
                     analytics_timeout=analytics_timeout)
             #log.info("query : {0}".format(query))
 
             # Validate if the status of the request is success, and if the count matches num_items
-            if status == "success":
+            #log.info("status:{0}".format(status))
+            if status == "SUCCESS":
+                print("Inside else of  n1ql_execution ")
+
                 if validate_item_count:
+                    print("Inside else of  n1ql_execution ")
+
                     if results[0]['$1'] != expected_count:
                         #log.info("Query result : %s", results[0]['$1'])
                         #log.info(
@@ -419,6 +429,11 @@ class query_load(SDKClient):
                         self.success_count += 1
                         self.total_count -= 1
                 elif validate:
+                    #log.info("primary_status:{0}".format(primary_status))
+                    #log.info("metrics['resultCount']:{0}".format(metrics['resultCount']))
+                    #log.info("results:{0}".format(results))
+                    #log.info("primary_results:{0}".format(primary_results))
+
                     if primary_status == "success":
                         if metrics['resultCount'] != 0:
                             if results != primary_results:
@@ -434,6 +449,7 @@ class query_load(SDKClient):
                                 #print
                                 #"Primary Index Query: %s" % primary_query
                                 #print("=" * 100)
+                                log.info("failed count increament at  primary_status and metrics result count and results != primary_results")
                                 self.failed_count += 1
                                 self.total_count -= 1
                             else:
@@ -445,11 +461,15 @@ class query_load(SDKClient):
                         else:
                             #print("Results are zero! Please change query to have results!")
                             #print query
+                            log.info("failed count increament at  primary_status and metrics result count==0 ")
+
                             self.failed_count += 1
                             self.total_count -= 1
                     else:
                         #print
                         #"Primary Index did not run properly, cannot vaildate results"
+                        log.info("failed count increament at  primary_status !=success ")
+
                         self.failed_count += 1
                         self.total_count -= 1
 
@@ -462,6 +482,8 @@ class query_load(SDKClient):
                 #log.warning("query : {0}".format(query))
                 #log.warning("errors : {0}".format((str(errors))))
                 #log.warning("********Thread %s : failure**********", name)
+                log.info("failed count increament at status!=sucess")
+
                 self.failed_count += 1
                 self.total_count -= 1
         except Exception as e:
@@ -515,10 +537,17 @@ class query_load(SDKClient):
                 response = self.execute_statement_on_cbas(statement, pretty, client_context_id,
                                                           username, password, timeout, analytics_timeout)
 
+            print("response:{0}".format(response))
             if type(response) == str:
                 response = json.loads(response)
+                print("response:{0}".format(response))
+            print("checking for errors")
             if "errors" in response:
+                print("Got errors in response ")
                 errors = response["errors"]
+                print("errors:{0}".format(errors))
+                print("errors type:{0}".format(type(errors)))
+
                 if type(errors) == str:
                     errors = json.loads(errors)
             else:
@@ -526,16 +555,24 @@ class query_load(SDKClient):
 
             if "results" in response:
                 results = response["results"]
+                print("results:{0}".format(results))
             else:
                 results = None
 
             if "handle" in response:
+                print("Trying to get handle")
                 handle = response["handle"]
+                print("handle:{0}".format(handle))
+
             else:
                 handle = None
 
             if "metrics" in response:
+                print("Trying to get handle")
                 metrics = response["metrics"]
+                print("metrics:{0}".format(metrics))
+                print("metrics Type:{0}".format(type(metrics)))
+
                 if type(metrics) == str:
                     metrics = json.loads(metrics)
             else:
@@ -638,8 +675,12 @@ class query_load(SDKClient):
 
             output["status"] = result.metaData().status().name()
             print("status:{0}".format(output["status"]))
-            output["metrics"] = str(result.metaData().metrics())
-            print("metrics:{0}".format(output["metrics"]))
+
+            try:
+               output["metrics"] = str(result.metaData().metrics().get())
+               print("metrics:{0}".format(output["metrics"]))
+            except:
+               output["metrics"] = None
 
             try:
                 output["results"] = json.loads(str(result.rowsAsObject()))
@@ -656,7 +697,7 @@ class query_load(SDKClient):
                 raise Exception("N1ql Service API failed")
             elif str(output['status']) == "SUCCESS":
                 print("success:{0}".format(output['status']))
-                output["errors"] = None
+                #output["errors"] = None
                 pass
             elif str(output['status']) == 'TIMEOUT':
                 print("timeout:{0}".format(output['status']))
@@ -668,20 +709,21 @@ class query_load(SDKClient):
                 raise Exception("N1ql Service API failed")
 
         except TimeoutException as e:
-            print("Request TimeoutException from Java SDK. {0}")
+            log.info("Request TimeoutException from Java SDK. {0}")
             raise Exception("Request TimeoutException")
         except RequestCanceledException as e:
-            #log.info("RequestCancelledException from Java SDK. %s" % str(e))
+            log.info("RequestCancelledException from Java SDK. %s" % str(e))
             raise Exception("Request RequestCancelledException")
         except RejectedExecutionException as e:
-            #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
             raise Exception("Request Rejected")
         except CouchbaseException as e:
             log.info("CouchbaseException from Java SDK. %s" % str(e))
             raise Exception("CouchbaseException")
         except RuntimeException as e:
-            #log.info("RuntimeException from Java SDK. %s" % str(e))
+            log.info("RuntimeException from Java SDK. %s" % str(e))
             raise Exception("Request RuntimeException")
+        print("Output from n1ql execution:{0}".format(output))
         return output
 
     def monitor_query_status(self, duration, print_duration=3600):
@@ -1074,6 +1116,7 @@ def main():
     print("Options are {}".format(options))
     if options.n1ql:
         print("In If block options.n1ql")
+        print("numThreads:{0}".format(options.threads))
         load = query_load(options.server_ip, options.port, [], options.bucket, int(options.threads),
                            options.username, options.password,int(options.threads))
     else:
