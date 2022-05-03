@@ -3,6 +3,7 @@ Created on Apr 26, 2018
 
 @author: riteshagarwal
 '''
+print ("Custom load_queries image loaded")
 import random
 import json
 import logging.config
@@ -778,6 +779,7 @@ class query_load(SDKClient):
                     # We need to extract the string before the _ to use it as a key for the idx-query map
                     idx_template_name = row["name"].split("_")[0]
                     print("idx_template_name:{0}".format(idx_template_name))
+                    print("Generated queries before if txns {}".format(queryList))
                     if txns:
                         keyspace_idx_map[keyspace].append(idx_template_name)
                         try:
@@ -805,10 +807,12 @@ class query_load(SDKClient):
                             #log.info("Issue with keyspace {0}".format(keyspace))
                             pass
                     try:
+                        print("Generated queries before if txns block are {}".format(queryList))
                         if txns:
                             txn_queries['select'].append(
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder", keyspace))
                             if run_udf_queries:
+                                print("Adding udf in if block")
                                 txn_queries['select'].append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
                         else:
@@ -816,6 +820,7 @@ class query_load(SDKClient):
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder",
                                                                                   keyspace))
                             if run_udf_queries:
+                                print("Adding udf in else block")
                                 queryList.append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
                     except Exception as e:
@@ -846,6 +851,7 @@ class query_load(SDKClient):
                 #log.info(querystmt)
 
         # Return query_list
+        print("Generated queries are {}".format(queryList))
         return queryList
 
     def generate_txns(self, txns):
@@ -1043,6 +1049,7 @@ def create_log_file(log_config_file_name, log_file_name, level):
     tmpl_log_file.close()
 
 
+
 def setup_log(options):
     log.setLevel(logging.INFO)
     ch = logging.StreamHandler()
@@ -1064,19 +1071,24 @@ options = None
 def main():
     options = parse_options()
     setup_log(options)
+    print("Options are {}".format(options))
     if options.n1ql:
+        print("In If block options.n1ql")
         load = query_load(options.server_ip, options.port, [], options.bucket, int(options.threads),
                            options.username, options.password,int(options.threads))
     else:
+        print("In else block options.n1ql")
         load = query_load(options.server_ip, options.port, [], options.bucket, options.username, options.password, int(options.querycount))
 
     bucket_list = options.bucket_names.strip('[]').split(',')
 
     if options.collections_mode:
+        print("In if block collections_mode")
         queries = load.generate_queries_for_collections(options.dataset, options.bucket, run_udf_queries=options.run_udf_queries)
         print("From collections_mode:{0}".format(queries))
     # If we get txns we want to spawn the number of threads specified, each thread runs 10 txns
     elif options.txns:
+        print("In if block use txns")
         #print("use txns")
         queries = load.generate_queries_for_collections(options.dataset, options.bucket, txns=options.txns, run_udf_queries=options.run_udf_queries)
         # If duration is 0 run forever, else run for set amount of time
@@ -1098,6 +1110,7 @@ def main():
                 #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
 
         else:
+            print("In else block")
             st_time = time.time()
             while st_time + int(options.duration) > time.time():
                 threads = []
@@ -1115,11 +1128,14 @@ def main():
                 # Updates every thread count x 10 transactions ( for example if threads = 10, update every 100 txns)
                 #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
     elif options.analytics_mode:
+        print("In analytics_mode if block")
         queries = load.generate_queries_for_analytics(options.analytics_queries, bucket_list,
                                                       timeout=options.query_timeout,
                                                       analytics_timeout=options.query_timeout)
     else:
+        print("In analytics_mode else block")
         if options.query_file:
+            print("In query_file block")
             f = open(options.query_file, 'r')
             queries = f.readlines()
             i = 0
@@ -1132,6 +1148,7 @@ def main():
                 i += 1
             f.close()
         else:
+            print("In query_file else block")
             queries = [
                 'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds1 where duration between 3009 and 3010 and profile is not missing and array_length(profile.friends) > 5 limit 100',
                 'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds2 where duration between 3009 and 3010 and profile is not missing',
@@ -1139,10 +1156,12 @@ def main():
                 'SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result = "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3009 and 3010 UNION ALL SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result != "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3010 and 3012']
 
     if options.txns:
-        #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
+        print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
         pass
     elif options.n1ql:
         threads = []
+        print("In options.n1ql thread block to run concurrent queries")
+        print("All the queries are {}".format(queries))
         for i in range(0, load.concurrent_batch_size):
             threads.append(Thread(target=load._run_concurrent_queries,
                                   name="query_thread_{0}".format(i),
@@ -1158,6 +1177,7 @@ def main():
         for thread in threads:
             thread.join()
     else:
+        print("In options.n1ql else thread block to run concurrent queries")
         load._run_concurrent_queries(queries, int(options.querycount), duration=int(options.duration),
                                      timeout=options.query_timeout, analytics_timeout=options.query_timeout)
 
