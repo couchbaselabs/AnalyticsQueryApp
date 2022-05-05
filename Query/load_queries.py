@@ -375,7 +375,7 @@ class query_load(SDKClient):
                    timeout=300, scan_consistency="NOT_BOUNDED", validate=True, analytics_timeout=300):
         name = threading.currentThread().getName();
         client_context_id = name
-        print("Inside _run_query ")
+        print("Inside _run_query will run this query:{}".format(query))
 
         try:
             if n1ql_execution:
