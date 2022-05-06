@@ -673,7 +673,7 @@ class query_load(SDKClient):
 
             result = self.cluster.query(statement,n1ql_options)
             print("Query execution completed. Printing out results and executing validations")
-            print("Results are {}".format(repr(result)))
+            print("Results are {}".format(result))
             output["status"] = result.metaData().status().name()
             print("status:{0}".format(output["status"]))
 
