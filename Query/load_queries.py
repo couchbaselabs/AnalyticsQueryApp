@@ -251,7 +251,7 @@ class query_load(SDKClient):
     def _run_concurrent_queries(self, query, num_queries, duration=120, n1ql_system_test=False,
                                 timeout=300, scan_consistency="NOT_BOUNDED", validate=False, analytics_timeout=300):
         # Run queries concurrently
-        print("Running queries concurrently now... Inside _run_concurrent_queries method")
+        #log.info("Running queries concurrently now... Inside _run_concurrent_queries method")
         threads = []
         total_query_count = 0
         query_count = 0
@@ -375,19 +375,14 @@ class query_load(SDKClient):
                    timeout=300, scan_consistency="NOT_BOUNDED", validate=True, analytics_timeout=300):
         name = threading.currentThread().getName();
         client_context_id = name
-        print("Inside _run_query will run this query:{}".format(query))
 
         try:
             if n1ql_execution:
-                print("Inside n1ql_execution ")
-
                 if validate:
-                    print("Inside validate of n1ql_execution ")
                     status, metrics, errors, results, handle = self.execute_statement_on_util(
                         query, timeout=timeout, client_context_id=client_context_id, thread_name=name, utility="n1ql",
                         scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
                     if status == "success":
-                        print("Inside if status == \"success\" block")
                         split_query = query.split("WHERE")
                         primary_query = split_query[0] + "USE INDEX (`#primary`) WHERE" + split_query[1]
                         primary_status, primary_metrics, primary_errors, primary_results, primary_handle = self.execute_statement_on_util(
@@ -401,21 +396,17 @@ class query_load(SDKClient):
                         query, timeout=timeout, client_context_id=client_context_id, thread_name=name,
                         utility="n1ql", scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
             else:
-                print("Inside else of  n1ql_execution ")
+                # print("Inside else of  n1ql_execution ")
 
                 status, metrics, errors, results, handle = self.execute_statement_on_util(
                     query, timeout=300, client_context_id=client_context_id, thread_name=name,
                     analytics_timeout=analytics_timeout)
             #log.info("query : {0}".format(query))
-            print ("Results are status: {} metrics: {} errors: {} results: {} handle: {}".format(status, metrics, errors, results, handle))
+            # print ("Results are status: {} metrics: {} errors: {} results: {} handle: {}".format(status, metrics, errors, results, handle))
             # Validate if the status of the request is success, and if the count matches num_items
             #log.info("status:{0}".format(status))
             if status == "SUCCESS":
-                print("Inside else of  n1ql_execution ")
-
                 if validate_item_count:
-                    print("Inside validate_item_count block ")
-
                     if results[0]['$1'] != expected_count:
                         #log.info("Query result : %s", results[0]['$1'])
                         #log.info(
@@ -538,11 +529,11 @@ class query_load(SDKClient):
                 response = self.execute_statement_on_cbas(statement, pretty, client_context_id,
                                                           username, password, timeout, analytics_timeout)
 
-            print("response:{0}".format(response))
+            # print("response:{0}".format(response))
             if type(response) == str:
                 response = json.loads(response)
-                print("response:{0}".format(response))
-            print("checking for errors")
+                # print("response:{0}".format(response))
+            # print("checking for errors")
             if "errors" in response:
                 print("Got errors in response ")
                 errors = response["errors"]
@@ -651,7 +642,6 @@ class query_load(SDKClient):
 
     def execute_statement_on_n1ql(self, statement, pretty=True, client_context_id=None,
                                   username=None, password=None, timeout=300, scan_consistency="NOT_BOUNDED"):
-        print("execute_statement_on_n1ql has begun. Statement is {}".format(statement))
         n1ql_options = QueryOptions.queryOptions()
         n1ql_options = n1ql_options.raw("timeout", str(300) + "s")
         if scan_consistency == "REQUEST_PLUS":
@@ -673,7 +663,6 @@ class query_load(SDKClient):
 
             result = self.cluster.query(statement,n1ql_options)
             print("Query execution completed. Printing out results and executing validations")
-            print("Results are {}".format(result))
             output["status"] = result.metaData().status().name()
             print("status:{0}".format(output["status"]))
 
@@ -724,7 +713,7 @@ class query_load(SDKClient):
         except RuntimeException as e:
             print("RuntimeException from Java SDK. %s" % str(e))
             raise Exception("Request RuntimeException")
-        print("Output from n1ql execution:{0}".format(output))
+        # print("Output from n1ql execution:{0}".format(output))
         return output
 
     def monitor_query_status(self, duration, print_duration=3600):
@@ -748,7 +737,6 @@ class query_load(SDKClient):
                     update_time = time.time()
 
     def generate_queries_for_collections(self, dataset, bucketname, txns=False, run_udf_queries=False):
-        print ("Inside generate_queries_for_collections method")
         idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
         if txns:
             idx_insert_templates = HOTEL_DS_IDX_QUERY_INSERT_TEMPLATES
@@ -894,7 +882,7 @@ class query_load(SDKClient):
                 #log.info(querystmt)
 
         # Return query_list
-        print("Generated queries are {}".format(queryList))
+        # print("Generated queries are {}".format(queryList))
         return queryList
 
     def generate_txns(self, txns):
@@ -1116,23 +1104,22 @@ def main():
     setup_log(options)
     print("Options are {}".format(options))
     if options.n1ql:
-        print("In If block options.n1ql")
-        print("numThreads:{0}".format(options.threads))
+        # print("numThreads:{0}".format(options.threads))
         load = query_load(options.server_ip, options.port, [], options.bucket, int(options.threads),
                            options.username, options.password,int(options.threads))
     else:
-        print("In else block options.n1ql")
+        # print("In else block options.n1ql")
         load = query_load(options.server_ip, options.port, [], options.bucket, options.username, options.password, int(options.querycount))
 
     bucket_list = options.bucket_names.strip('[]').split(',')
 
     if options.collections_mode:
-        print("In if block collections_mode")
+        # print("In if block collections_mode")
         queries = load.generate_queries_for_collections(options.dataset, options.bucket, run_udf_queries=options.run_udf_queries)
-        print("From collections_mode:{0}".format(queries))
+        # print("From collections_mode:{0}".format(queries))
     # If we get txns we want to spawn the number of threads specified, each thread runs 10 txns
     elif options.txns:
-        print("In if block use txns")
+        # print("In if block use txns")
         #print("use txns")
         queries = load.generate_queries_for_collections(options.dataset, options.bucket, txns=options.txns, run_udf_queries=options.run_udf_queries)
         # If duration is 0 run forever, else run for set amount of time
@@ -1154,7 +1141,7 @@ def main():
                 #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
 
         else:
-            print("In else block")
+            # print("In else block")
             st_time = time.time()
             while st_time + int(options.duration) > time.time():
                 threads = []
@@ -1172,14 +1159,14 @@ def main():
                 # Updates every thread count x 10 transactions ( for example if threads = 10, update every 100 txns)
                 #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
     elif options.analytics_mode:
-        print("In analytics_mode if block")
+        # print("In analytics_mode if block")
         queries = load.generate_queries_for_analytics(options.analytics_queries, bucket_list,
                                                       timeout=options.query_timeout,
                                                       analytics_timeout=options.query_timeout)
     else:
-        print("In analytics_mode else block")
+        # print("In analytics_mode else block")
         if options.query_file:
-            print("In query_file block")
+            # print("In query_file block")
             f = open(options.query_file, 'r')
             queries = f.readlines()
             i = 0
@@ -1192,7 +1179,7 @@ def main():
                 i += 1
             f.close()
         else:
-            print("In query_file else block")
+            # print("In query_file else block")
             queries = [
                 'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds1 where duration between 3009 and 3010 and profile is not missing and array_length(profile.friends) > 5 limit 100',
                 'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds2 where duration between 3009 and 3010 and profile is not missing',
