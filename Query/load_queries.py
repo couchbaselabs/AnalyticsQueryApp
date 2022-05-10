@@ -3,7 +3,6 @@ Created on Apr 26, 2018
 
 @author: riteshagarwal
 '''
-print ("Custom load_queries image loaded")
 import random
 import json
 import logging.config
