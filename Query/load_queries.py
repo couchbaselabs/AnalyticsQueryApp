@@ -194,7 +194,7 @@ class query_load(SDKClient):
         self.transactions_committed = 0
         self.transactions_timedout = 0
 
-        SDKClient(self.ip, "Administrator", "Password!")
+        SDKClient(self.ip, self.username, self.password)
         self.connectionLive = False
 
         self.createConn(self.bucket)
@@ -1108,7 +1108,8 @@ def main():
                            options.username, options.password,int(options.threads))
     else:
         # print("In else block options.n1ql")
-        load = query_load(options.server_ip, options.port, [], options.bucket, options.username, options.password, int(options.querycount))
+        load = query_load(options.server_ip, options.port, [], options.bucket, int(options.querycount),
+                          options.username, options.password, int(options.threads))
 
     bucket_list = options.bucket_names.strip('[]').split(',')
 
