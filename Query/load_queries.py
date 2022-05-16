@@ -576,7 +576,7 @@ class query_load(SDKClient):
     def execute_statement_on_cbas(
             self, statement, pretty=True, client_context_id=None,
             username=None, password=None, timeout=300, analytics_timeout=300):
-
+        print("In execute_statement_on_cbas method. Username is {}. Password is {}".format(username, password))
         analytics_options = AnalyticsOptions.analyticsOptions()
         analytics_options = analytics_options.raw("pretty", pretty)
         analytics_options = analytics_options.raw("timeout", str(analytics_timeout) + "s")
@@ -588,7 +588,9 @@ class query_load(SDKClient):
 
         output = {}
         try:
+            print("Will run this statement {} with these options {}".format(statement, analytics_options))
             result = self.cluster.analyticsQuery(statement, analytics_options)
+            print("Result execute_statement_on_cbas: {}".format(result))
             raise Exception("Need to implement Validations for analyticsQuery ")
 
             #output["status"] = result.status()
@@ -1009,7 +1011,7 @@ class query_load(SDKClient):
                 try:
                     output = self.execute_statement_on_cbas(
                         statement, pretty=True, client_context_id=None,
-                        username=None, password=None, timeout=timeout,
+                        username=self.username, password=self.password, timeout=timeout,
                         analytics_timeout=analytics_timeout)
                     return output
                 except Exception as err:
