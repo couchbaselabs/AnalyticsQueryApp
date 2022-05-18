@@ -166,7 +166,7 @@ def parse_options():
 
 
     (options, args) = parser.parse_args()
-
+    print("Options are {}".format(options))
     return options
 
 
@@ -481,30 +481,36 @@ class query_load(SDKClient):
             #log.info("********EXCEPTION: Thread %s **********", name)
             if str(e) == "Request Rejected":
                 #log.info("Error 503 : Request Rejected")
+                print("Request rejected. Query is {}".format(query))
                 self.rejected_count += 1
                 self.total_count -= 1
             elif str(e) == "Request TimeoutException":
                 #log.info("Request TimeoutException")
+                print("Request timed out. Query is {}".format(query))
                 self.timeout_count += 1
                 self.total_count -= 1
             elif str(e) == "Request RuntimeException":
                 #log.info("Request RuntimeException")
+                print("Request runtime exception. Query is {}".format(query))
                 self.timeout_count += 1
                 self.total_count -= 1
-            elif str(e) == "Request RequestCancelledException":
-                #log.info("Request RequestCancelledException")
+            elif str(e) == "Request RequestCanceledException":
+                #log.info("Request RequestCanceledException")
+                print("Request Canceled exception. Query is {}".format(query))
                 self.cancel_count += 1
                 self.total_count -= 1
             elif str(e) == "CouchbaseException":
                 #log.info("General CouchbaseException")
+                print("Request rejected because of CouchbaseException. Query is {}".format(query))
                 self.rejected_count += 1
                 self.total_count -= 1
             elif str(e) == "Capacity cannot meet job requirement":
                 #log.info("Error 500 : Capacity cannot meet job requirement")
+                print("Capacity cannot meet job requirement exception. Query is {0}".format(query))
                 self.rejected_count += 1
                 self.total_count -= 1
             else:
-                print("Exception we got:{0}".format(str(e)))
+                print("Exception we got:{0}. For query {1}".format(str(e),query))
                 self.error_count += 1
                 self.total_count -= 1
                 #log.info(str(e))
@@ -576,7 +582,7 @@ class query_load(SDKClient):
     def execute_statement_on_cbas(
             self, statement, pretty=True, client_context_id=None,
             username=None, password=None, timeout=300, analytics_timeout=300):
-        print("In execute_statement_on_cbas method. Username is {}. Password is {}".format(username, password))
+        print("In execute_statement_on_cbas method. Statement is".format(statement))
         analytics_options = AnalyticsOptions.analyticsOptions()
         analytics_options = analytics_options.raw("pretty", pretty)
         analytics_options = analytics_options.raw("timeout", str(analytics_timeout) + "s")
@@ -602,7 +608,7 @@ class query_load(SDKClient):
                 log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
                 raise Exception("Analytics Service API failed")
             try:
-                output["results"] = json.loads(str(result.rowsAsObject()))
+                output["results"] = str(result.rowsAsObject())
             except:
                 print("Exception while parsing results from the Analytics query:{}".format(statement))
                 output["results"] = None
@@ -614,18 +620,18 @@ class query_load(SDKClient):
                 output["metrics"] = None
             return output
         except TimeoutException as e:
-            #log.info("Request TimeoutException from Java SDK. %s" % str(e))
-            #print("Request TimeoutException from Java SDK. %s" % str(e))
+            log.info("Request TimeoutException from Java SDK. %s" % str(e))
+            print("Request TimeoutException from Java SDK. %s" % str(e))
             #             traceback.print_exception(*sys.exc_info())
             raise Exception("Request TimeoutException")
-        except RequestCancelledException as e:
-            #log.info("RequestCancelledException from Java SDK. %s" % str(e))
-            #print("RequestCancelledException from Java SDK. %s" % str(e))
+        except RequestCanceledException as e:
+            log.info("RequestCanceledException from Java SDK. %s" % str(e))
+            print("RequestCanceledException from Java SDK. %s" % str(e))
             #             traceback.print_exception(*sys.exc_info())
-            raise Exception("Request RequestCancelledException")
+            raise Exception("Request RequestCanceledException")
         except RejectedExecutionException as e:
-            #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
-            #print("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            print("Request RejectedExecutionException from Java SDK. %s" % str(e))
             #             traceback.print_exception(*sys.exc_info())
             raise Exception("Request Rejected")
         except CouchbaseException as e:
@@ -634,18 +640,20 @@ class query_load(SDKClient):
             #             traceback.print_exception(*sys.exc_info())
             raise Exception("CouchbaseException")
         except RuntimeException as e:
-            #log.info("RuntimeException from Java SDK. %s" % str(e))
-            #print("RuntimeException from Java SDK. %s" % str(e))
-            #             traceback.print_exception(*sys.exc_info())
-        #     raise Exception("Request RuntimeException")
+            log.info("RuntimeException from Java SDK. %s" % str(e))
+            print("RuntimeException from Java SDK. %s" % str(e))
+                        # traceback.print_exception(*sys.exc_info())
+            raise Exception("Request RuntimeException")
 
     def populate_metadata_dict(self, result):
+        print ("In populate_metadata_dict method")
         metrics = {"elapsedTime": "", "executionTime": "", "resultCount": "", "resultSize": "", "processedObjects": ""}
-        metrics['elapsedTime'] = result.metaData().metrics().elapsedTime()
-        metrics['executionTime'] = result.metaData().metrics().executionTime()
-        metrics['resultCount'] = result.metaData().metrics().resultCount()
-        metrics['resultSize'] = result.metaData().metrics().resultSize()
-        metrics['processedObjects'] = result.metaData().metrics().processedObjects()
+        metrics['elapsedTime'] = result.elapsedTime()
+        metrics['executionTime'] = result.executionTime()
+        metrics['resultCount'] = result.resultCount()
+        metrics['resultSize'] = result.resultSize()
+        metrics['processedObjects'] = result.processedObjects()
+        print("Result from populate_metadata_dict is {}".format(result))
         return metrics
 
     def execute_statement_on_n1ql(self, statement, pretty=True, client_context_id=None,
@@ -697,8 +705,8 @@ class query_load(SDKClient):
             print("Request TimeoutException from Java SDK. {0}")
             raise Exception("Request TimeoutException")
         except RequestCanceledException as e:
-            print("RequestCancelledException from Java SDK. %s" % str(e))
-            raise Exception("Request RequestCancelledException")
+            print("RequestCanceledException from Java SDK. %s" % str(e))
+            raise Exception("Request RequestCanceledException")
         except RejectedExecutionException as e:
             print("Request RejectedExecutionException from Java SDK. %s" % str(e))
             raise Exception("Request Rejected")
@@ -717,18 +725,16 @@ class query_load(SDKClient):
         if duration == 0:
             while True:
                 if st_time + print_duration < time.time():
-                    print
-                    "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                    print("%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
                         self.total_query_count, self.failed_count, self.success_count, self.rejected_count,
-                        self.cancel_count, self.timeout_count)
+                        self.cancel_count, self.timeout_count))
                     st_time = time.time()
         else:
             while st_time + duration > time.time():
                 if update_time + print_duration < time.time():
-                    print
-                    "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                    print("%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
                         self.total_query_count, self.failed_count, self.success_count, self.rejected_count,
-                        self.cancel_count, self.timeout_count)
+                        self.cancel_count, self.timeout_count))
                     update_time = time.time()
 
     def generate_queries_for_collections(self, dataset, bucketname, txns=False, run_udf_queries=False):
@@ -1017,7 +1023,7 @@ class query_load(SDKClient):
 
         print "Generating queries for CBAS"
         query_templates = (importlib.import_module('cbas_queries').cbas_queries)[analytics_queries]
-
+        print ("Query templates used for CBAS: {}".format(query_templates))
         statement = "select dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
         output = retry_execute_statement_on_cbas(statement)
         if output["results"]:
