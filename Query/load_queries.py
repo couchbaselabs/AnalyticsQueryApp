@@ -591,7 +591,7 @@ class query_load(SDKClient):
             print("Will run this statement {} with these options {}".format(statement, analytics_options))
             result = self.cluster.analyticsQuery(statement, analytics_options)
             print("Result execute_statement_on_cbas: {}".format(result))
-            raise Exception("Need to implement Validations for analyticsQuery ")
+            # raise Exception("Need to implement Validations for analyticsQuery ")
 
             #output["status"] = result.status()
             #output["metrics"] = str(result.info().asJsonObject())
@@ -613,33 +613,34 @@ class query_load(SDKClient):
             #else:
                 #log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
                 #raise Exception("Analytics Service API failed")
-
-        except TimeoutException as e:
-            #log.info("Request TimeoutException from Java SDK. %s" % str(e))
-            #print("Request TimeoutException from Java SDK. %s" % str(e))
-            #             traceback.print_exception(*sys.exc_info())
-            raise Exception("Request TimeoutException")
-        except RequestCancelledException as e:
-            #log.info("RequestCancelledException from Java SDK. %s" % str(e))
-            #print("RequestCancelledException from Java SDK. %s" % str(e))
-            #             traceback.print_exception(*sys.exc_info())
-            raise Exception("Request RequestCancelledException")
-        except RejectedExecutionException as e:
-            #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
-            #print("Request RejectedExecutionException from Java SDK. %s" % str(e))
-            #             traceback.print_exception(*sys.exc_info())
-            raise Exception("Request Rejected")
-        except CouchbaseException as e:
-            log.info("CouchbaseException from Java SDK. %s" % str(e))
-            print("CouchbaseException from Java SDK. %s" % str(e))
-            #             traceback.print_exception(*sys.exc_info())
-            raise Exception("CouchbaseException")
-        except RuntimeException as e:
-            #log.info("RuntimeException from Java SDK. %s" % str(e))
-            #print("RuntimeException from Java SDK. %s" % str(e))
-            #             traceback.print_exception(*sys.exc_info())
-            raise Exception("Request RuntimeException")
-        return output
+            # return output
+        except Exception as e:
+            raise e
+        # except TimeoutException as e:
+        #     #log.info("Request TimeoutException from Java SDK. %s" % str(e))
+        #     #print("Request TimeoutException from Java SDK. %s" % str(e))
+        #     #             traceback.print_exception(*sys.exc_info())
+        #     raise Exception("Request TimeoutException")
+        # except RequestCancelledException as e:
+        #     #log.info("RequestCancelledException from Java SDK. %s" % str(e))
+        #     #print("RequestCancelledException from Java SDK. %s" % str(e))
+        #     #             traceback.print_exception(*sys.exc_info())
+        #     raise Exception("Request RequestCancelledException")
+        # except RejectedExecutionException as e:
+        #     #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
+        #     #print("Request RejectedExecutionException from Java SDK. %s" % str(e))
+        #     #             traceback.print_exception(*sys.exc_info())
+        #     raise Exception("Request Rejected")
+        # except CouchbaseException as e:
+        #     log.info("CouchbaseException from Java SDK. %s" % str(e))
+        #     print("CouchbaseException from Java SDK. %s" % str(e))
+        #     #             traceback.print_exception(*sys.exc_info())
+        #     raise Exception("CouchbaseException")
+        # except RuntimeException as e:
+        #     #log.info("RuntimeException from Java SDK. %s" % str(e))
+        #     #print("RuntimeException from Java SDK. %s" % str(e))
+        #     #             traceback.print_exception(*sys.exc_info())
+        #     raise Exception("Request RuntimeException")
 
     def execute_statement_on_n1ql(self, statement, pretty=True, client_context_id=None,
                                   username=None, password=None, timeout=300, scan_consistency="NOT_BOUNDED"):
