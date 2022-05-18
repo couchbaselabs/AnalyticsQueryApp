@@ -1029,8 +1029,7 @@ class query_load(SDKClient):
         if output["results"]:
             dataverses = json.loads(output["results"])
             dataverses = [dv["DataverseName"] for dv in dataverses]
-            dataverses = json.dumps(dataverses, encoding="utf-8").replace("\'", "\"")
-
+            dataverses = json.dumps(dataverses, encoding="utf-8").replace("\'", "\"").replace("/",".")
         bucket_list = json.dumps(bucket_list, encoding="utf-8").replace("\'", "\"")
         datasets = list()
         statement = "select ds.DataverseName, ds.DatasetName from Metadata.`Dataset` as ds " \
@@ -1038,7 +1037,7 @@ class query_load(SDKClient):
         output = retry_execute_statement_on_cbas(statement)
         for dataset in json.loads(output["results"]):
             datasets.append([dataset["DataverseName"], dataset["DatasetName"]])
-
+        print("Datasets are {}".format(datasets))
         # Find all synonyms created on synonyms
         statement = "select syn.ObjectName from Metadata.`Synonym` as syn where syn.ObjectName like \"synonym_%\""
         output = retry_execute_statement_on_cbas(statement)
@@ -1062,10 +1061,10 @@ class query_load(SDKClient):
             for query_template in query_templates:
                 try:
                     dataset = datasets.pop()
-                    queries.append(query_template.format(dataset[0], dataset[1]))
+                    queries.append(query_template.format(dataset[0].replace("/","."), dataset[1]))
                 except:
                     continue
-        print "Finished generating CBAS queries"
+        print("Finished generating CBAS queries. Queries are {}".format(queries))
         return queries
 
 
