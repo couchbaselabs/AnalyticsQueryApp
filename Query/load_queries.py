@@ -613,7 +613,7 @@ class query_load(SDKClient):
             #else:
                 #log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
                 #raise Exception("Analytics Service API failed")
-            # return output
+            return output
         except Exception as e:
             raise e
         # except TimeoutException as e:
