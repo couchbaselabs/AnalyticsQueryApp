@@ -591,56 +591,62 @@ class query_load(SDKClient):
             print("Will run this statement {} with these options {}".format(statement, analytics_options))
             result = self.cluster.analyticsQuery(statement, analytics_options)
             print("Result execute_statement_on_cbas: {}".format(result))
-            # raise Exception("Need to implement Validations for analyticsQuery ")
+            output["status"] = result.metaData().status().name()
+            if str(output['status']) == "FATAL":
+                # msg = output['errors'][0]['msg']
+                # if "Job requirement" in msg and "exceeds capacity" in msg:
+                raise Exception("Query execution status is FATAl for statement {}".format(statement))
+            elif str(output['status']) == "SUCCESS":
+                output["errors"] = None
+            else:
+                log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
+                raise Exception("Analytics Service API failed")
+            try:
+                output["results"] = json.loads(str(result.rowsAsObject()))
+            except:
+                print("Exception while parsing results from the Analytics query:{}".format(statement))
+                output["results"] = None
 
-            #output["status"] = result.status()
-            #output["metrics"] = str(result.info().asJsonObject())
-
-            #try:
-                #output["results"] = str(result.allRows())
-            #except:
-                #output["results"] = None
-
-            #output["errors"] = json.loads(str(result.errors()))
-
-            #if str(output['status']) == "fatal":
-                #msg = output['errors'][0]['msg']
-                #if "Job requirement" in msg and "exceeds capacity" in msg:
-                    #raise Exception("Capacity cannot meet job requirement")
-            #elif str(output['status']) == "success":
-                #output["errors"] = None
-                #pass
-            #else:
-                #log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
-                #raise Exception("Analytics Service API failed")
+            try:
+                output["metrics"] = self.populate_metadata_dict(result.metaData().metrics())
+            except:
+                print("Exception while parsing metadata from the Analytics query:{}".format(statement))
+                output["metrics"] = None
             return output
-        except Exception as e:
-            raise e
-        # except TimeoutException as e:
-        #     #log.info("Request TimeoutException from Java SDK. %s" % str(e))
-        #     #print("Request TimeoutException from Java SDK. %s" % str(e))
-        #     #             traceback.print_exception(*sys.exc_info())
-        #     raise Exception("Request TimeoutException")
-        # except RequestCancelledException as e:
-        #     #log.info("RequestCancelledException from Java SDK. %s" % str(e))
-        #     #print("RequestCancelledException from Java SDK. %s" % str(e))
-        #     #             traceback.print_exception(*sys.exc_info())
-        #     raise Exception("Request RequestCancelledException")
-        # except RejectedExecutionException as e:
-        #     #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
-        #     #print("Request RejectedExecutionException from Java SDK. %s" % str(e))
-        #     #             traceback.print_exception(*sys.exc_info())
-        #     raise Exception("Request Rejected")
-        # except CouchbaseException as e:
-        #     log.info("CouchbaseException from Java SDK. %s" % str(e))
-        #     print("CouchbaseException from Java SDK. %s" % str(e))
-        #     #             traceback.print_exception(*sys.exc_info())
-        #     raise Exception("CouchbaseException")
-        # except RuntimeException as e:
-        #     #log.info("RuntimeException from Java SDK. %s" % str(e))
-        #     #print("RuntimeException from Java SDK. %s" % str(e))
-        #     #             traceback.print_exception(*sys.exc_info())
+        except TimeoutException as e:
+            #log.info("Request TimeoutException from Java SDK. %s" % str(e))
+            #print("Request TimeoutException from Java SDK. %s" % str(e))
+            #             traceback.print_exception(*sys.exc_info())
+            raise Exception("Request TimeoutException")
+        except RequestCancelledException as e:
+            #log.info("RequestCancelledException from Java SDK. %s" % str(e))
+            #print("RequestCancelledException from Java SDK. %s" % str(e))
+            #             traceback.print_exception(*sys.exc_info())
+            raise Exception("Request RequestCancelledException")
+        except RejectedExecutionException as e:
+            #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            #print("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            #             traceback.print_exception(*sys.exc_info())
+            raise Exception("Request Rejected")
+        except CouchbaseException as e:
+            log.info("CouchbaseException from Java SDK. %s" % str(e))
+            print("CouchbaseException from Java SDK. %s" % str(e))
+            #             traceback.print_exception(*sys.exc_info())
+            raise Exception("CouchbaseException")
+        except RuntimeException as e:
+            #log.info("RuntimeException from Java SDK. %s" % str(e))
+            #print("RuntimeException from Java SDK. %s" % str(e))
+            #             traceback.print_exception(*sys.exc_info())
         #     raise Exception("Request RuntimeException")
+
+    def populate_metadata_dict(self, result):
+        metrics = {"elapsedTime": "", "executionTime": "", "resultCount": "", "resultSize": "", "processedObjects": ""}
+        metrics['elapsedTime'] = result.metaData().metrics().elapsedTime()
+        metrics['executionTime'] = result.metaData().metrics().executionTime()
+        metrics['resultCount'] = result.metaData().metrics().resultCount()
+        metrics['resultSize'] = result.metaData().metrics().resultSize()
+        metrics['processedObjects'] = result.metaData().metrics().processedObjects()
+        return metrics
 
     def execute_statement_on_n1ql(self, statement, pretty=True, client_context_id=None,
                                   username=None, password=None, timeout=300, scan_consistency="NOT_BOUNDED"):
@@ -667,38 +673,25 @@ class query_load(SDKClient):
             print("Query execution completed. Printing out results and executing validations")
             output["status"] = result.metaData().status().name()
             print("status:{0}".format(output["status"]))
-
+            if str(output['status']) == "FATAL":
+                # msg = output['errors'][0]['msg']
+                # if "Job requirement" in msg and "exceeds capacity" in msg:
+                raise Exception("Query execution status is FATAl for statement {}".format(statement))
+            elif str(output['status']) == "SUCCESS":
+                output["errors"] = None
+            else:
+                log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
+                raise Exception("NIQL Service API failed")
             try:
-               output["metrics"] = str(result.metaData().metrics().get())
-               print("metrics:{0}".format(output["metrics"]))
+                output["metrics"] = self.populate_metadata_dict(result.metaData().metrics())
             except:
-               output["metrics"] = None
-
+                print("Exception while parsing metadata from the Analytics query:{}".format(statement))
+                output["metrics"] = None
             try:
                 output["results"] = json.loads(str(result.rowsAsObject()))
                 print("results:{0}".format(output["results"]))
             except:
                 output["results"] = None
-
-
-            if str(output['status']) == "FATAL":
-               # TODO: Commenting below exception but need to figure out relevant exception in 3.3.*
-                #msg = output['errors'][0]['msg']
-                #if "Job requirement" in msg and "exceeds capacity" in msg:
-                    #raise Exception("Capacity cannot meet job requirement")
-                raise Exception("N1ql Service API failed")
-            elif str(output['status']) == "SUCCESS":
-                # print("success:{0}".format(output['status']))
-                # #output["errors"] = None
-                pass
-            elif str(output['status']) == 'TIMEOUT':
-                print("timeout:{0}".format(output['status']))
-                raise Exception("Request TimeoutException")
-            else:
-                #log.info("n1ql query %s failed status:{0},content:{1}".format(
-                #    output["status"], result))
-                print("default:{0}".format(output['status']))
-                raise Exception("N1ql Service API failed")
 
         except TimeoutException as e:
             print("Request TimeoutException from Java SDK. {0}")
