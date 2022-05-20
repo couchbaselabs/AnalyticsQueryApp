@@ -172,7 +172,7 @@ def parse_options():
 
 class query_load(SDKClient):
 
-    def __init__(self, server_ip, server_port, queries, bucket, querycount, username, password,batch_size=50):
+    def __init__(self, server_ip, server_port, queries, bucket, querycount, username='Administrator', password='password',batch_size=50):
         self.ip = server_ip
         self.port = server_port
         self.queries = queries
