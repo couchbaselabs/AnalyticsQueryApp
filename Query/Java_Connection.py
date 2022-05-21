@@ -40,7 +40,7 @@ env = ClusterEnvironment.builder() \
 class SDKClient(object):
     """Java SDK Client Implementation for testrunner - master branch Implementation"""
 
-    def __init__(self, server_ip, username, password):
+    def __init__(self, server_ip, username='Administrator', password='password'):
         self.ip = server_ip
         self.username = username
         self.password = password
