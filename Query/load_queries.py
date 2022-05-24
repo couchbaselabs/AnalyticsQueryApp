@@ -100,10 +100,10 @@ def parse_options():
     parser.add_option("-s", "--server_ip", dest="server_ip",
                       help="server IP")
 
-    parser.add_option("-u", "--username", dest="username",
+    parser.add_option("-u", "--username", dest="username", default="Administrator",
                       help="Username for the database")
 
-    parser.add_option("-z", "--password", dest="password",
+    parser.add_option("-z", "--password", dest="password", default="password",
                       help="Password for the database")
 
     parser.add_option("-p", "--port", dest="port",
