@@ -13,12 +13,14 @@ import time
 import requests
 from optparse import OptionParser
 from Java_Connection import SDKClient
-from com.couchbase.client.java.analytics import AnalyticsQuery, AnalyticsParams
-from com.couchbase.client.java.query import N1qlQuery, N1qlParams, consistency
+from com.couchbase.client.java.analytics import AnalyticsOptions
+from com.couchbase.client.java.query import QueryOptions, QueryScanConsistency
+from java.time import Duration
+
 from java.lang import System, RuntimeException
 from java.util.concurrent import TimeoutException, RejectedExecutionException, \
     TimeUnit
-from com.couchbase.client.core import RequestCancelledException, CouchbaseException
+from com.couchbase.client.core.error import RequestCanceledException, CouchbaseException
 import traceback, sys
 from datetime import datetime
 import importlib
@@ -98,6 +100,12 @@ def parse_options():
     parser.add_option("-s", "--server_ip", dest="server_ip",
                       help="server IP")
 
+    parser.add_option("-u", "--username", dest="username", default="Administrator",
+                      help="Username for the database")
+
+    parser.add_option("-z", "--password", dest="password", default="password",
+                      help="Password for the database")
+
     parser.add_option("-p", "--port", dest="port",
                       help="query port")
 
@@ -158,17 +166,19 @@ def parse_options():
 
 
     (options, args) = parser.parse_args()
-
+    print("Options are {}".format(options))
     return options
 
 
 class query_load(SDKClient):
 
-    def __init__(self, server_ip, server_port, queries, bucket, querycount, batch_size=50):
+    def __init__(self, server_ip, server_port, queries, bucket, querycount, username='Administrator', password='password',batch_size=50):
         self.ip = server_ip
         self.port = server_port
         self.queries = queries
         self.bucket = bucket
+        self.username = username
+        self.password=password
 
         self.failed_count = 0
         self.success_count = 0
@@ -184,21 +194,16 @@ class query_load(SDKClient):
         self.transactions_committed = 0
         self.transactions_timedout = 0
 
-        SDKClient(self.ip, "Administrator", "password")
+        SDKClient(self.ip, self.username, self.password)
         self.connectionLive = False
 
-        self.createConn(self.bucket, "Administrator", "password")
+        self.createConn(self.bucket)
 
-    def createConn(self, bucket, username=None, password=None):
-        if username:
-            self.username = username
-        if password:
-            self.password = password
-
-        self.connectCluster(username, password)
+    def createConn(self, bucket):
+        self.connectCluster()
         System.setProperty("com.couchbase.analyticsEnabled", "true");
         System.setProperty("com.couchbase.sentRequestQueueLimit", '1000');
-        self.bucket = self.cluster.openBucket(bucket);
+        self.bucket = self.cluster.bucket(bucket);
         self.connectionLive = True
 
     def closeConn(self):
@@ -245,13 +250,14 @@ class query_load(SDKClient):
     def _run_concurrent_queries(self, query, num_queries, duration=120, n1ql_system_test=False,
                                 timeout=300, scan_consistency="NOT_BOUNDED", validate=False, analytics_timeout=300):
         # Run queries concurrently
-        #log.info("Running queries concurrently now...")
+        #log.info("Running queries concurrently now... Inside _run_concurrent_queries method")
         threads = []
         total_query_count = 0
         query_count = 0
         if n1ql_system_test:
             name = threading.currentThread().getName()
             thread_name = "query_for_{0}".format(name)
+            print("query:{0}".format(query))
             threads.append(Thread(target=self._run_query,
                                   name=thread_name,
                                   args=(random.choice(query), False, 0, True, timeout, scan_consistency, validate,
@@ -368,6 +374,7 @@ class query_load(SDKClient):
                    timeout=300, scan_consistency="NOT_BOUNDED", validate=True, analytics_timeout=300):
         name = threading.currentThread().getName();
         client_context_id = name
+
         try:
             if n1ql_execution:
                 if validate:
@@ -383,17 +390,21 @@ class query_load(SDKClient):
                             scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
 
                 else:
+                    print("Inside else of  validate of n1ql_execution ")
                     status, metrics, errors, results, handle = self.execute_statement_on_util(
                         query, timeout=timeout, client_context_id=client_context_id, thread_name=name,
                         utility="n1ql", scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
             else:
+                # print("Inside else of  n1ql_execution ")
+
                 status, metrics, errors, results, handle = self.execute_statement_on_util(
                     query, timeout=300, client_context_id=client_context_id, thread_name=name,
                     analytics_timeout=analytics_timeout)
             #log.info("query : {0}".format(query))
-
+            # print ("Results are status: {} metrics: {} errors: {} results: {} handle: {}".format(status, metrics, errors, results, handle))
             # Validate if the status of the request is success, and if the count matches num_items
-            if status == "success":
+            #log.info("status:{0}".format(status))
+            if status == "SUCCESS":
                 if validate_item_count:
                     if results[0]['$1'] != expected_count:
                         #log.info("Query result : %s", results[0]['$1'])
@@ -409,6 +420,11 @@ class query_load(SDKClient):
                         self.success_count += 1
                         self.total_count -= 1
                 elif validate:
+                    #log.info("primary_status:{0}".format(primary_status))
+                    #log.info("metrics['resultCount']:{0}".format(metrics['resultCount']))
+                    #log.info("results:{0}".format(results))
+                    #log.info("primary_results:{0}".format(primary_results))
+
                     if primary_status == "success":
                         if metrics['resultCount'] != 0:
                             if results != primary_results:
@@ -424,6 +440,7 @@ class query_load(SDKClient):
                                 #print
                                 #"Primary Index Query: %s" % primary_query
                                 #print("=" * 100)
+                                log.info("failed count increament at  primary_status and metrics result count and results != primary_results")
                                 self.failed_count += 1
                                 self.total_count -= 1
                             else:
@@ -435,11 +452,15 @@ class query_load(SDKClient):
                         else:
                             #print("Results are zero! Please change query to have results!")
                             #print query
+                            log.info("failed count increament at  primary_status and metrics result count==0 ")
+
                             self.failed_count += 1
                             self.total_count -= 1
                     else:
                         #print
                         #"Primary Index did not run properly, cannot vaildate results"
+                        log.info("failed count increament at  primary_status !=success ")
+
                         self.failed_count += 1
                         self.total_count -= 1
 
@@ -452,35 +473,44 @@ class query_load(SDKClient):
                 #log.warning("query : {0}".format(query))
                 #log.warning("errors : {0}".format((str(errors))))
                 #log.warning("********Thread %s : failure**********", name)
+                log.info("failed count increament at status!=sucess")
+
                 self.failed_count += 1
                 self.total_count -= 1
         except Exception as e:
             #log.info("********EXCEPTION: Thread %s **********", name)
             if str(e) == "Request Rejected":
                 #log.info("Error 503 : Request Rejected")
+                print("Request rejected. Query is {}".format(query))
                 self.rejected_count += 1
                 self.total_count -= 1
             elif str(e) == "Request TimeoutException":
                 #log.info("Request TimeoutException")
+                print("Request timed out. Query is {}".format(query))
                 self.timeout_count += 1
                 self.total_count -= 1
             elif str(e) == "Request RuntimeException":
                 #log.info("Request RuntimeException")
+                print("Request runtime exception. Query is {}".format(query))
                 self.timeout_count += 1
                 self.total_count -= 1
-            elif str(e) == "Request RequestCancelledException":
-                #log.info("Request RequestCancelledException")
+            elif str(e) == "Request RequestCanceledException":
+                #log.info("Request RequestCanceledException")
+                print("Request Canceled exception. Query is {}".format(query))
                 self.cancel_count += 1
                 self.total_count -= 1
             elif str(e) == "CouchbaseException":
                 #log.info("General CouchbaseException")
+                print("Request rejected because of CouchbaseException. Query is {}".format(query))
                 self.rejected_count += 1
                 self.total_count -= 1
             elif str(e) == "Capacity cannot meet job requirement":
                 #log.info("Error 500 : Capacity cannot meet job requirement")
+                print("Capacity cannot meet job requirement exception. Query is {0}".format(query))
                 self.rejected_count += 1
                 self.total_count -= 1
             else:
+                print("Exception we got:{0}. For query {1}".format(str(e),query))
                 self.error_count += 1
                 self.total_count -= 1
                 #log.info(str(e))
@@ -504,10 +534,17 @@ class query_load(SDKClient):
                 response = self.execute_statement_on_cbas(statement, pretty, client_context_id,
                                                           username, password, timeout, analytics_timeout)
 
+            # print("response:{0}".format(response))
             if type(response) == str:
                 response = json.loads(response)
+                # print("response:{0}".format(response))
+            # print("checking for errors")
             if "errors" in response:
+                print("Got errors in response ")
                 errors = response["errors"]
+                print("errors:{0}".format(errors))
+                print("errors type:{0}".format(type(errors)))
+
                 if type(errors) == str:
                     errors = json.loads(errors)
             else:
@@ -515,16 +552,24 @@ class query_load(SDKClient):
 
             if "results" in response:
                 results = response["results"]
+                print("results:{0}".format(results))
             else:
                 results = None
 
             if "handle" in response:
+                print("Trying to get handle")
                 handle = response["handle"]
+                print("handle:{0}".format(handle))
+
             else:
                 handle = None
 
             if "metrics" in response:
+                print("Trying to get handle")
                 metrics = response["metrics"]
+                print("metrics:{0}".format(metrics))
+                print("metrics Type:{0}".format(type(metrics)))
+
                 if type(metrics) == str:
                     metrics = json.loads(metrics)
             else:
@@ -537,55 +582,56 @@ class query_load(SDKClient):
     def execute_statement_on_cbas(
             self, statement, pretty=True, client_context_id=None,
             username=None, password=None, timeout=300, analytics_timeout=300):
-
-        params = AnalyticsParams.build()
-        params = params.rawParam("pretty", pretty)
-        params = params.rawParam("timeout", str(analytics_timeout) + "s")
-        params = params.rawParam("username", username)
-        params = params.rawParam("password", password)
-        params = params.rawParam("clientContextID", client_context_id)
+        print("In execute_statement_on_cbas method. Statement is".format(statement))
+        analytics_options = AnalyticsOptions.analyticsOptions()
+        analytics_options = analytics_options.raw("pretty", pretty)
+        analytics_options = analytics_options.raw("timeout", str(analytics_timeout) + "s")
+        analytics_options = analytics_options.raw("username", username)
+        analytics_options = analytics_options.raw("password", password)
+        analytics_options = analytics_options.raw("clientContextID", client_context_id)
         if client_context_id:
-            params = params.withContextId(client_context_id)
+            analytics_options = analytics_options.clientContextId(client_context_id)
 
         output = {}
-        q = AnalyticsQuery.simple(statement, params)
         try:
-            result = self.bucket.query(q, int(timeout), TimeUnit.SECONDS)
-
-            output["status"] = result.status()
-            output["metrics"] = str(result.info().asJsonObject())
-
+            print("Will run this statement {} with these options {}".format(statement, analytics_options))
+            result = self.cluster.analyticsQuery(statement, analytics_options)
+            print("Result execute_statement_on_cbas: {}".format(result))
+            output["status"] = result.metaData().status().name()
+            if str(output['status']) == "FATAL":
+                # msg = output['errors'][0]['msg']
+                # if "Job requirement" in msg and "exceeds capacity" in msg:
+                raise Exception("Query execution status is FATAl for statement {}".format(statement))
+            elif str(output['status']) == "SUCCESS":
+                output["errors"] = None
+            else:
+                log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
+                raise Exception("Analytics Service API failed")
             try:
-                output["results"] = str(result.allRows())
+                output["results"] = str(result.rowsAsObject())
             except:
+                print("Exception while parsing results from the Analytics query:{}".format(statement))
                 output["results"] = None
 
-            output["errors"] = json.loads(str(result.errors()))
-
-            if str(output['status']) == "fatal":
-                msg = output['errors'][0]['msg']
-                if "Job requirement" in msg and "exceeds capacity" in msg:
-                    raise Exception("Capacity cannot meet job requirement")
-            elif str(output['status']) == "success":
-                output["errors"] = None
-                pass
-            else:
-                #log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
-                raise Exception("Analytics Service API failed")
-
+            try:
+                output["metrics"] = self.populate_metadata_dict(result.metaData().metrics())
+            except:
+                print("Exception while parsing metadata from the Analytics query:{}".format(statement))
+                output["metrics"] = None
+            return output
         except TimeoutException as e:
-            #log.info("Request TimeoutException from Java SDK. %s" % str(e))
-            #print("Request TimeoutException from Java SDK. %s" % str(e))
+            log.info("Request TimeoutException from Java SDK. %s" % str(e))
+            print("Request TimeoutException from Java SDK. %s" % str(e))
             #             traceback.print_exception(*sys.exc_info())
             raise Exception("Request TimeoutException")
-        except RequestCancelledException as e:
-            #log.info("RequestCancelledException from Java SDK. %s" % str(e))
-            #print("RequestCancelledException from Java SDK. %s" % str(e))
+        except RequestCanceledException as e:
+            log.info("RequestCanceledException from Java SDK. %s" % str(e))
+            print("RequestCanceledException from Java SDK. %s" % str(e))
             #             traceback.print_exception(*sys.exc_info())
-            raise Exception("Request RequestCancelledException")
+            raise Exception("Request RequestCanceledException")
         except RejectedExecutionException as e:
-            #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
-            #print("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            print("Request RejectedExecutionException from Java SDK. %s" % str(e))
             #             traceback.print_exception(*sys.exc_info())
             raise Exception("Request Rejected")
         except CouchbaseException as e:
@@ -594,72 +640,83 @@ class query_load(SDKClient):
             #             traceback.print_exception(*sys.exc_info())
             raise Exception("CouchbaseException")
         except RuntimeException as e:
-            #log.info("RuntimeException from Java SDK. %s" % str(e))
-            #print("RuntimeException from Java SDK. %s" % str(e))
-            #             traceback.print_exception(*sys.exc_info())
+            log.info("RuntimeException from Java SDK. %s" % str(e))
+            print("RuntimeException from Java SDK. %s" % str(e))
+                        # traceback.print_exception(*sys.exc_info())
             raise Exception("Request RuntimeException")
-        return output
+
+    def populate_metadata_dict(self, result):
+        print ("In populate_metadata_dict method")
+        metrics = {"elapsedTime": "", "executionTime": "", "resultCount": "", "resultSize": "", "processedObjects": ""}
+        metrics['elapsedTime'] = result.elapsedTime()
+        metrics['executionTime'] = result.executionTime()
+        metrics['resultCount'] = result.resultCount()
+        metrics['resultSize'] = result.resultSize()
+        metrics['processedObjects'] = result.processedObjects()
+        print("Result from populate_metadata_dict is {}".format(result))
+        return metrics
 
     def execute_statement_on_n1ql(self, statement, pretty=True, client_context_id=None,
                                   username=None, password=None, timeout=300, scan_consistency="NOT_BOUNDED"):
-        params = N1qlParams.build()
-        params = params.pretty(pretty)
-        params = params.rawParam("timeout", str(timeout) + "s")
+        n1ql_options = QueryOptions.queryOptions()
+        n1ql_options = n1ql_options.raw("timeout", str(300) + "s")
         if scan_consistency == "REQUEST_PLUS":
-            params = params.consistency(consistency.ScanConsistency.REQUEST_PLUS)
+            n1ql_options = n1ql_options.scanConsistency(QueryScanConsistency.REQUEST_PLUS);
         elif scan_consistency == "STATEMENT_PLUS":
-            params = params.consistency(consistency.ScanConsistency.STATEMENT_PLUS)
+            n1ql_options = n1ql_options.scanConsistency(QueryScanConsistency.STATEMENT_PLUS);
         else:
-            params = params.consistency(consistency.ScanConsistency.NOT_BOUNDED)
+            n1ql_options = n1ql_options.scanConsistency(QueryScanConsistency.NOT_BOUNDED);
 
         if client_context_id:
-            params = params.withContextId(client_context_id)
+            n1ql_options = n1ql_options.clientContextId(client_context_id)
+
+        n1ql_options = n1ql_options.timeout(Duration.ofSeconds(3600))
 
         output = {}
-        q = N1qlQuery.simple(statement, params)
         try:
-            result = self.bucket.query(q, 3600, TimeUnit.SECONDS)
+            print("Acquired all n1ql_options for execute_statement_on_n1ql. Executing query")
+            print("Query Stmt:{0}".format(statement))
 
-            output["status"] = result.status()
-            output["metrics"] = str(result.info().asJsonObject())
-
+            result = self.cluster.query(statement,n1ql_options)
+            print("Query execution completed. Printing out results and executing validations")
+            output["status"] = result.metaData().status().name()
+            print("status:{0}".format(output["status"]))
+            if str(output['status']) == "FATAL":
+                # msg = output['errors'][0]['msg']
+                # if "Job requirement" in msg and "exceeds capacity" in msg:
+                raise Exception("Query execution status is FATAl for statement {}".format(statement))
+            elif str(output['status']) == "SUCCESS":
+                output["errors"] = None
+            else:
+                log.info("analytics query %s failed status:{0},content:{1}".format(output["status"], result))
+                raise Exception("NIQL Service API failed")
             try:
-                output["results"] = result.allRows()
+                output["metrics"] = self.populate_metadata_dict(result.metaData().metrics())
+            except:
+                print("Exception while parsing metadata from the Analytics query:{}".format(statement))
+                output["metrics"] = None
+            try:
+                output["results"] = json.loads(str(result.rowsAsObject()))
+                print("results:{0}".format(output["results"]))
             except:
                 output["results"] = None
 
-            output["errors"] = json.loads(str(result.errors()))
-
-            if str(output['status']) == "fatal":
-                msg = output['errors'][0]['msg']
-                if "Job requirement" in msg and "exceeds capacity" in msg:
-                    raise Exception("Capacity cannot meet job requirement")
-            elif str(output['status']) == "success":
-                output["errors"] = None
-                pass
-            elif str(output['status'] == 'timeout'):
-                #log.info("timeout")
-                raise Exception("Request TimeoutException")
-            else:
-                #log.info("n1ql query %s failed status:{0},content:{1}".format(
-                #    output["status"], result))
-                raise Exception("N1ql Service API failed")
-
         except TimeoutException as e:
-            #log.info("Request TimeoutException from Java SDK. %s" % str(e))
+            print("Request TimeoutException from Java SDK. {0}")
             raise Exception("Request TimeoutException")
-        except RequestCancelledException as e:
-            #log.info("RequestCancelledException from Java SDK. %s" % str(e))
-            raise Exception("Request RequestCancelledException")
+        except RequestCanceledException as e:
+            print("RequestCanceledException from Java SDK. %s" % str(e))
+            raise Exception("Request RequestCanceledException")
         except RejectedExecutionException as e:
-            #log.info("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            print("Request RejectedExecutionException from Java SDK. %s" % str(e))
             raise Exception("Request Rejected")
         except CouchbaseException as e:
-            log.info("CouchbaseException from Java SDK. %s" % str(e))
+            print("CouchbaseException from Java SDK. %s" % str(e))
             raise Exception("CouchbaseException")
         except RuntimeException as e:
-            #log.info("RuntimeException from Java SDK. %s" % str(e))
+            print("RuntimeException from Java SDK. %s" % str(e))
             raise Exception("Request RuntimeException")
+        # print("Output from n1ql execution:{0}".format(output))
         return output
 
     def monitor_query_status(self, duration, print_duration=3600):
@@ -668,22 +725,19 @@ class query_load(SDKClient):
         if duration == 0:
             while True:
                 if st_time + print_duration < time.time():
-                    print
-                    "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                    print("%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
                         self.total_query_count, self.failed_count, self.success_count, self.rejected_count,
-                        self.cancel_count, self.timeout_count)
+                        self.cancel_count, self.timeout_count))
                     st_time = time.time()
         else:
             while st_time + duration > time.time():
                 if update_time + print_duration < time.time():
-                    print
-                    "%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
+                    print("%s queries submitted, %s failed, %s passed, %s rejected, %s cancelled, %s timeout" % (
                         self.total_query_count, self.failed_count, self.success_count, self.rejected_count,
-                        self.cancel_count, self.timeout_count)
+                        self.cancel_count, self.timeout_count))
                     update_time = time.time()
 
     def generate_queries_for_collections(self, dataset, bucketname, txns=False, run_udf_queries=False):
-
         idx_query_templates = HOTEL_DS_IDX_QUERY_TEMPLATES
         if txns:
             idx_insert_templates = HOTEL_DS_IDX_QUERY_INSERT_TEMPLATES
@@ -721,7 +775,10 @@ class query_load(SDKClient):
         keyspaceList = []
         if 'results' in queryResults:
             for row in queryResults['results']:
-                keyspaceList.append(json.loads(str(row))['path'])
+                print("Each row:{0}".format(row))
+                print("Each Path:{0}".format(row['path']))
+
+                keyspaceList.append(row['path'])
         else:
             log.info("No query results for query : {0} : {1}".format(keyspaceListQuery, str(queryResults)))
 
@@ -745,19 +802,23 @@ class query_load(SDKClient):
 
             # For each index, select the corresponding query from the index-query mapping template for the dataset.
             # Add the query to the query_list after replacing the keyspace name
-
-            if json.loads(queryResults['metrics'])['resultCount'] > 0:
+            if len(queryResults['results']) > 0:
+                print("queryResults['results'] for IDX:{0}".format(queryResults['results']))
                 for row in queryResults['results']:
+                    print("row for IDX:{0}".format(row))
+
                     # Idx name has a suffix that is a random string separated by an underscore.
                     # We need to extract the string before the _ to use it as a key for the idx-query map
-                    idx_template_name = json.loads(str(row))["name"].split("_")[0]
+                    idx_template_name = row["name"].split("_")[0]
+                    print("idx_template_name:{0}".format(idx_template_name))
+                    print("Generated queries before if txns {}".format(queryList))
                     if txns:
                         keyspace_idx_map[keyspace].append(idx_template_name)
                         try:
                             txn_queries['insert'].append(
                                 idx_insert_templates[0][idx_template_name].replace("keyspacenameplaceholder", keyspace))
                         except Exception as e:
-                            #log.info("Issue with keyspace {0}".format(keyspace))
+                            log.info("Issue with keyspace {0}".format(keyspace))
                             pass
                         try:
                             txn_queries['delete'].append(
@@ -778,10 +839,12 @@ class query_load(SDKClient):
                             #log.info("Issue with keyspace {0}".format(keyspace))
                             pass
                     try:
+                        print("Generated queries before if txns block are {}".format(queryList))
                         if txns:
                             txn_queries['select'].append(
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder", keyspace))
                             if run_udf_queries:
+                                print("Adding udf in if block")
                                 txn_queries['select'].append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
                         else:
@@ -789,6 +852,7 @@ class query_load(SDKClient):
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder",
                                                                                   keyspace))
                             if run_udf_queries:
+                                print("Adding udf in else block")
                                 queryList.append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
                     except Exception as e:
@@ -819,6 +883,7 @@ class query_load(SDKClient):
                 #log.info(querystmt)
 
         # Return query_list
+        # print("Generated queries are {}".format(queryList))
         return queryList
 
     def generate_txns(self, txns):
@@ -946,7 +1011,7 @@ class query_load(SDKClient):
                 try:
                     output = self.execute_statement_on_cbas(
                         statement, pretty=True, client_context_id=None,
-                        username=None, password=None, timeout=timeout,
+                        username=self.username, password=self.password, timeout=timeout,
                         analytics_timeout=analytics_timeout)
                     return output
                 except Exception as err:
@@ -958,14 +1023,13 @@ class query_load(SDKClient):
 
         print "Generating queries for CBAS"
         query_templates = (importlib.import_module('cbas_queries').cbas_queries)[analytics_queries]
-
+        print ("Query templates used for CBAS: {}".format(query_templates))
         statement = "select dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
         output = retry_execute_statement_on_cbas(statement)
         if output["results"]:
             dataverses = json.loads(output["results"])
             dataverses = [dv["DataverseName"] for dv in dataverses]
-            dataverses = json.dumps(dataverses, encoding="utf-8").replace("\'", "\"")
-
+            dataverses = json.dumps(dataverses, encoding="utf-8").replace("\'", "\"").replace("/",".")
         bucket_list = json.dumps(bucket_list, encoding="utf-8").replace("\'", "\"")
         datasets = list()
         statement = "select ds.DataverseName, ds.DatasetName from Metadata.`Dataset` as ds " \
@@ -973,7 +1037,7 @@ class query_load(SDKClient):
         output = retry_execute_statement_on_cbas(statement)
         for dataset in json.loads(output["results"]):
             datasets.append([dataset["DataverseName"], dataset["DatasetName"]])
-
+        print("Datasets are {}".format(datasets))
         # Find all synonyms created on synonyms
         statement = "select syn.ObjectName from Metadata.`Synonym` as syn where syn.ObjectName like \"synonym_%\""
         output = retry_execute_statement_on_cbas(statement)
@@ -997,10 +1061,10 @@ class query_load(SDKClient):
             for query_template in query_templates:
                 try:
                     dataset = datasets.pop()
-                    queries.append(query_template.format(dataset[0], dataset[1]))
+                    queries.append(query_template.format(dataset[0].replace("/","."), dataset[1]))
                 except:
                     continue
-        print "Finished generating CBAS queries"
+        print("Finished generating CBAS queries. Queries are {}".format(queries))
         return queries
 
 
@@ -1014,6 +1078,7 @@ def create_log_file(log_config_file_name, log_file_name, level):
         log_file.write(newline)
     log_file.close()
     tmpl_log_file.close()
+
 
 
 def setup_log(options):
@@ -1037,18 +1102,25 @@ options = None
 def main():
     options = parse_options()
     setup_log(options)
+    print("Options are {}".format(options))
     if options.n1ql:
+        # print("numThreads:{0}".format(options.threads))
         load = query_load(options.server_ip, options.port, [], options.bucket, int(options.threads),
-                          int(options.threads))
+                           options.username, options.password,int(options.threads))
     else:
-        load = query_load(options.server_ip, options.port, [], options.bucket, int(options.querycount))
+        # print("In else block options.n1ql")
+        load = query_load(options.server_ip, options.port, [], options.bucket, int(options.querycount),
+                          options.username, options.password, int(options.threads))
 
     bucket_list = options.bucket_names.strip('[]').split(',')
 
     if options.collections_mode:
+        # print("In if block collections_mode")
         queries = load.generate_queries_for_collections(options.dataset, options.bucket, run_udf_queries=options.run_udf_queries)
+        # print("From collections_mode:{0}".format(queries))
     # If we get txns we want to spawn the number of threads specified, each thread runs 10 txns
     elif options.txns:
+        # print("In if block use txns")
         #print("use txns")
         queries = load.generate_queries_for_collections(options.dataset, options.bucket, txns=options.txns, run_udf_queries=options.run_udf_queries)
         # If duration is 0 run forever, else run for set amount of time
@@ -1070,6 +1142,7 @@ def main():
                 #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
 
         else:
+            # print("In else block")
             st_time = time.time()
             while st_time + int(options.duration) > time.time():
                 threads = []
@@ -1087,11 +1160,14 @@ def main():
                 # Updates every thread count x 10 transactions ( for example if threads = 10, update every 100 txns)
                 #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
     elif options.analytics_mode:
+        # print("In analytics_mode if block")
         queries = load.generate_queries_for_analytics(options.analytics_queries, bucket_list,
                                                       timeout=options.query_timeout,
                                                       analytics_timeout=options.query_timeout)
     else:
+        # print("In analytics_mode else block")
         if options.query_file:
+            # print("In query_file block")
             f = open(options.query_file, 'r')
             queries = f.readlines()
             i = 0
@@ -1104,6 +1180,7 @@ def main():
                 i += 1
             f.close()
         else:
+            # print("In query_file else block")
             queries = [
                 'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds1 where duration between 3009 and 3010 and profile is not missing and array_length(profile.friends) > 5 limit 100',
                 'SELECT name as id, result as bucketName, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds2 where duration between 3009 and 3010 and profile is not missing',
@@ -1111,10 +1188,12 @@ def main():
                 'SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result = "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3009 and 3010 UNION ALL SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result != "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3010 and 3012']
 
     if options.txns:
-        #print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
+        print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
         pass
     elif options.n1ql:
         threads = []
+        print("In options.n1ql thread block to run concurrent queries")
+        print("All the queries are {}".format(queries))
         for i in range(0, load.concurrent_batch_size):
             threads.append(Thread(target=load._run_concurrent_queries,
                                   name="query_thread_{0}".format(i),
@@ -1130,6 +1209,7 @@ def main():
         for thread in threads:
             thread.join()
     else:
+        print("In options.n1ql else thread block to run concurrent queries")
         load._run_concurrent_queries(queries, int(options.querycount), duration=int(options.duration),
                                      timeout=options.query_timeout, analytics_timeout=options.query_timeout)
 

@@ -5,42 +5,64 @@ Java based SDK client interface
 @author: riteshagarwal
 
 '''
-from com.couchbase.client.java import CouchbaseCluster
-from com.couchbase.client.core import CouchbaseException
-from java.util.logging import Logger, Level, ConsoleHandler, FileHandler
-from com.couchbase.client.java.env import DefaultCouchbaseEnvironment
-from com.couchbase.client.core.retry import BestEffortRetryStrategy
-from com.couchbase.client.core.env import QueryServiceConfig
+import sys,os
+script_dir = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(script_dir+"/../Couchbase-Java-Client-3.3.0/java-client-3.3.0.jar")
+sys.path.append(script_dir+"/../Couchbase-Java-Client-3.3.0/core-io-2.3.0.jar")
+sys.path.append(script_dir+"/../Couchbase-Java-Client-3.3.0/reactor-core-3.4.17.jar")
+sys.path.append(script_dir+"/../Couchbase-Java-Client-3.3.0/reactive-streams-1.0.3.jar")
 
-env = DefaultCouchbaseEnvironment.builder().maxRequestLifetime(300000).queryServiceConfig(QueryServiceConfig.create(2,100)).mutationTokensEnabled(True).computationPoolSize(5).socketConnectTimeout(100000).keepAliveTimeout(100000).keepAliveInterval(100000).connectTimeout(100000).autoreleaseAfter(10000).retryStrategy(BestEffortRetryStrategy.INSTANCE).build();
+from com.couchbase.client.java import Cluster, ClusterOptions
+from com.couchbase.client.core.error import CouchbaseException
+from java.util.logging import Logger, Level, ConsoleHandler, FileHandler
+from java.time import Duration
+
+from com.couchbase.client.java.env import ClusterEnvironment
+from com.couchbase.client.core.retry import BestEffortRetryStrategy
+from com.couchbase.client.core.env import CompressionConfig, TimeoutConfig, SecurityConfig, \
+    IoConfig
+from com.couchbase.client.core.deps.io.netty.handler.ssl.util import InsecureTrustManagerFactory
+
+env = ClusterEnvironment.builder() \
+    .compressionConfig(CompressionConfig.create().enable(True)) \
+    .timeoutConfig(TimeoutConfig
+                   .kvTimeout(Duration.ofSeconds(60))
+                   .queryTimeout(Duration.ofSeconds(100))
+                   .searchTimeout(Duration.ofSeconds(100))
+                   .analyticsTimeout(Duration.ofSeconds(100))) \
+    .securityConfig(SecurityConfig.enableTls(True)
+                    .trustManagerFactory(InsecureTrustManagerFactory.INSTANCE)) \
+    .ioConfig(IoConfig.numKvConnections(2)
+              .enableDnsSrv(True)) \
+    .build();
+
+
 class SDKClient(object):
     """Java SDK Client Implementation for testrunner - master branch Implementation"""
 
-    def __init__(self, server_ip, username, password):
+    def __init__(self, server_ip, username='Administrator', password='password'):
         self.ip = server_ip
         self.username = username
         self.password = password
         self.cluster = None
-        self.clusterManager = None
-        
-    def connectCluster(self, username=None, password=None):
-        if username:
-            self.username = username
-        if password:
-            self.password = password
+
+    def connectCluster(self):
         try:
             logger = Logger.getLogger("com.couchbase.client");
             logger.setLevel(Level.SEVERE);
-#             fh = FileHandler("java_client.log");
-#             logger.addHandler(fh);
+            #             fh = FileHandler("java_client.log");
+            #             logger.addHandler(fh);
             for h in logger.getParent().getHandlers():
-                if isinstance(h, ConsoleHandler) :
+                if isinstance(h, ConsoleHandler):
                     h.setLevel(Level.SEVERE);
-            self.cluster = CouchbaseCluster.create(env, self.ip)
-            self.cluster.authenticate(self.username, self.password)
-            self.clusterManager = self.cluster.clusterManager()
+            print("Username used for login:{0}".format(self.username))
+            print("Password used for login:{0}".format(self.password))
+
+            self.cluster = Cluster.connect(self.ip,
+                                           ClusterOptions.clusterOptions(self.username, self.password).environment(
+                                               env));
         except CouchbaseException:
-            print "cannot login from user: %s/%s"%(self.username, self.password)
+            print "cannot login from user: %s/%s" % (self.username, self.password)
             raise
 
     def reconnectCluster(self):
