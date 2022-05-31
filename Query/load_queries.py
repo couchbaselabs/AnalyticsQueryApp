@@ -51,7 +51,9 @@ HOTEL_DS_IDX_QUERY_TEMPLATES = [
      "idx10": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES ANY n:v IN r.ratings "
               "SATISFIES n = 'Overall' AND v = 2 END END",
      "idx11": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.ratings.Rooms = 3 and "
-              "r.ratings.Cleanliness > 1 END AND free_parking = True"
+              "r.ratings.Cleanliness > 1 END AND free_parking = True",
+     "idx12": "SELECT * from keyspacenameplaceholder where `type` is not null limit 100",
+     "idx13": "SELECT * from keyspacenameplaceholder where phone like \"4%\" limit 100"
 
      }
 ]
