@@ -259,7 +259,6 @@ class query_load(SDKClient):
         if n1ql_system_test:
             name = threading.currentThread().getName()
             thread_name = "query_for_{0}".format(name)
-            print("query:{0}".format(query))
             threads.append(Thread(target=self._run_query,
                                   name=thread_name,
                                   args=(random.choice(query), False, 0, True, timeout, scan_consistency, validate,
@@ -392,7 +391,6 @@ class query_load(SDKClient):
                             scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
 
                 else:
-                    print("Inside else of  validate of n1ql_execution ")
                     status, metrics, errors, results, handle = self.execute_statement_on_util(
                         query, timeout=timeout, client_context_id=client_context_id, thread_name=name,
                         utility="n1ql", scan_consistency=scan_consistency, analytics_timeout=analytics_timeout)
@@ -542,11 +540,7 @@ class query_load(SDKClient):
                 # print("response:{0}".format(response))
             # print("checking for errors")
             if "errors" in response:
-                print("Got errors in response ")
                 errors = response["errors"]
-                print("errors:{0}".format(errors))
-                print("errors type:{0}".format(type(errors)))
-
                 if type(errors) == str:
                     errors = json.loads(errors)
             else:
@@ -554,23 +548,17 @@ class query_load(SDKClient):
 
             if "results" in response:
                 results = response["results"]
-                print("results:{0}".format(results))
             else:
                 results = None
 
             if "handle" in response:
-                print("Trying to get handle")
                 handle = response["handle"]
-                print("handle:{0}".format(handle))
 
             else:
                 handle = None
 
             if "metrics" in response:
-                print("Trying to get handle")
                 metrics = response["metrics"]
-                print("metrics:{0}".format(metrics))
-                print("metrics Type:{0}".format(type(metrics)))
 
                 if type(metrics) == str:
                     metrics = json.loads(metrics)
@@ -584,7 +572,6 @@ class query_load(SDKClient):
     def execute_statement_on_cbas(
             self, statement, pretty=True, client_context_id=None,
             username=None, password=None, timeout=300, analytics_timeout=300):
-        print("In execute_statement_on_cbas method. Statement is".format(statement))
         analytics_options = AnalyticsOptions.analyticsOptions()
         analytics_options = analytics_options.raw("pretty", pretty)
         analytics_options = analytics_options.raw("timeout", str(analytics_timeout) + "s")
@@ -596,9 +583,7 @@ class query_load(SDKClient):
 
         output = {}
         try:
-            print("Will run this statement {} with these options {}".format(statement, analytics_options))
             result = self.cluster.analyticsQuery(statement, analytics_options)
-            print("Result execute_statement_on_cbas: {}".format(result))
             output["status"] = result.metaData().status().name()
             if str(output['status']) == "FATAL":
                 # msg = output['errors'][0]['msg']
@@ -612,13 +597,11 @@ class query_load(SDKClient):
             try:
                 output["results"] = str(result.rowsAsObject())
             except:
-                print("Exception while parsing results from the Analytics query:{}".format(statement))
                 output["results"] = None
 
             try:
                 output["metrics"] = self.populate_metadata_dict(result.metaData().metrics())
             except:
-                print("Exception while parsing metadata from the Analytics query:{}".format(statement))
                 output["metrics"] = None
             return output
         except TimeoutException as e:
@@ -648,14 +631,12 @@ class query_load(SDKClient):
             raise Exception("Request RuntimeException")
 
     def populate_metadata_dict(self, result):
-        print ("In populate_metadata_dict method")
         metrics = {"elapsedTime": "", "executionTime": "", "resultCount": "", "resultSize": "", "processedObjects": ""}
         metrics['elapsedTime'] = result.elapsedTime()
         metrics['executionTime'] = result.executionTime()
         metrics['resultCount'] = result.resultCount()
         metrics['resultSize'] = result.resultSize()
         metrics['processedObjects'] = result.processedObjects()
-        print("Result from populate_metadata_dict is {}".format(result))
         return metrics
 
     def execute_statement_on_n1ql(self, statement, pretty=True, client_context_id=None,
@@ -676,11 +657,7 @@ class query_load(SDKClient):
 
         output = {}
         try:
-            print("Acquired all n1ql_options for execute_statement_on_n1ql. Executing query")
-            print("Query Stmt:{0}".format(statement))
-
             result = self.cluster.query(statement,n1ql_options)
-            print("Query execution completed. Printing out results and executing validations")
             output["status"] = result.metaData().status().name()
             print("status:{0}".format(output["status"]))
             if str(output['status']) == "FATAL":
@@ -777,9 +754,6 @@ class query_load(SDKClient):
         keyspaceList = []
         if 'results' in queryResults:
             for row in queryResults['results']:
-                print("Each row:{0}".format(row))
-                print("Each Path:{0}".format(row['path']))
-
                 keyspaceList.append(row['path'])
         else:
             log.info("No query results for query : {0} : {1}".format(keyspaceListQuery, str(queryResults)))
@@ -805,15 +779,11 @@ class query_load(SDKClient):
             # For each index, select the corresponding query from the index-query mapping template for the dataset.
             # Add the query to the query_list after replacing the keyspace name
             if len(queryResults['results']) > 0:
-                print("queryResults['results'] for IDX:{0}".format(queryResults['results']))
                 for row in queryResults['results']:
-                    print("row for IDX:{0}".format(row))
 
                     # Idx name has a suffix that is a random string separated by an underscore.
                     # We need to extract the string before the _ to use it as a key for the idx-query map
                     idx_template_name = row["name"].split("_")[0]
-                    print("idx_template_name:{0}".format(idx_template_name))
-                    print("Generated queries before if txns {}".format(queryList))
                     if txns:
                         keyspace_idx_map[keyspace].append(idx_template_name)
                         try:
@@ -841,12 +811,10 @@ class query_load(SDKClient):
                             #log.info("Issue with keyspace {0}".format(keyspace))
                             pass
                     try:
-                        print("Generated queries before if txns block are {}".format(queryList))
                         if txns:
                             txn_queries['select'].append(
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder", keyspace))
                             if run_udf_queries:
-                                print("Adding udf in if block")
                                 txn_queries['select'].append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
                         else:
@@ -854,7 +822,6 @@ class query_load(SDKClient):
                                 idx_query_templates[0][idx_template_name].replace("keyspacenameplaceholder",
                                                                                   keyspace))
                             if run_udf_queries:
-                                print("Adding udf in else block")
                                 queryList.append("EXECUTE FUNCTION run_n1ql_query('{0}')".format(bucketname))
 
                     except Exception as e:
@@ -990,7 +957,6 @@ class query_load(SDKClient):
                     if query == "COMMIT TRANSACTION":
                         end_time = time.time()
                         txduration = end_time - start_time
-                        print("txns took {0}s to run".format(txduration))
                         self.transactions_committed = self.transactions_committed + 1
                     data = '{{"statement":"{0}", "txid":"{1}","timeout":"{2}s"}}'.format(query, txid, query_timeout)
                     try:
@@ -1017,15 +983,11 @@ class query_load(SDKClient):
                         analytics_timeout=analytics_timeout)
                     return output
                 except Exception as err:
-                    print "Following error occured - {0}".format(str(err))
-                    print "Sleeping 30 seconds before retrying"
                     retry += 1
                     time.sleep(30)
-                    print "Retry attempt - {0}".format(retry)
 
-        print "Generating queries for CBAS"
         query_templates = (importlib.import_module('cbas_queries').cbas_queries)[analytics_queries]
-        print ("Query templates used for CBAS: {}".format(query_templates))
+        print("Query templates used for CBAS: {}".format(query_templates))
         statement = "select dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
         output = retry_execute_statement_on_cbas(statement)
         if output["results"]:
