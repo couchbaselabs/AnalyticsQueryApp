@@ -1,0 +1,4 @@
+{"statement":"START TRANSACTION"}
+{"statement":"SELECT avg_rating FROM `default` LIMIT 10"}
+{"statement":"SELECT free_parking FROM `default`"}
+{"statement":"COMMIT TRANSACTION"}
