@@ -1,0 +1,2 @@
+This is a placeholder file. The older test files require the folders Couchbase-Java-Client-2.5.6 and  Couchbase-Java-Client-2.7.21 to be present, or they throw errors.
+Once all the test files have been changed to remove "-J -cp" option, this file, and it's enclosing folder can be deleted.
