@@ -987,7 +987,6 @@ class query_load(SDKClient):
                     time.sleep(30)
 
         query_templates = (importlib.import_module('cbas_queries').cbas_queries)[analytics_queries]
-        print("Query templates used for CBAS: {}".format(query_templates))
         statement = "select dv.DataverseName from Metadata.`Dataverse` as dv where dv.DataverseName != \"Metadata\";"
         output = retry_execute_statement_on_cbas(statement)
         if output["results"]:
