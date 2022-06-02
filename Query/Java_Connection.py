@@ -62,7 +62,7 @@ class SDKClient(object):
                                            ClusterOptions.clusterOptions(self.username, self.password).environment(
                                                env));
         except CouchbaseException:
-            print "cannot login from user: %s/%s" % (self.username, self.password)
+            print("cannot login from user: %s/%s" % (self.username, self.password))
             raise
 
     def reconnectCluster(self):

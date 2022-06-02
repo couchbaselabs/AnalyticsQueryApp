@@ -659,7 +659,7 @@ class query_load(SDKClient):
         try:
             result = self.cluster.query(statement,n1ql_options)
             output["status"] = result.metaData().status().name()
-            print("status:{0}".format(output["status"]))
+            # print("status:{0}".format(output["status"]))
             if str(output['status']) == "FATAL":
                 # msg = output['errors'][0]['msg']
                 # if "Job requirement" in msg and "exceeds capacity" in msg:
@@ -672,28 +672,28 @@ class query_load(SDKClient):
             try:
                 output["metrics"] = self.populate_metadata_dict(result.metaData().metrics())
             except:
-                print("Exception while parsing metadata from the Analytics query:{}".format(statement))
+                # print("Exception while parsing metadata from the Analytics query:{}".format(statement))
                 output["metrics"] = None
             try:
                 output["results"] = json.loads(str(result.rowsAsObject()))
-                print("results:{0}".format(output["results"]))
+                # print("results:{0}".format(output["results"]))
             except:
                 output["results"] = None
 
         except TimeoutException as e:
-            print("Request TimeoutException from Java SDK. {0}")
+            # print("Request TimeoutException from Java SDK. {0}")
             raise Exception("Request TimeoutException")
         except RequestCanceledException as e:
-            print("RequestCanceledException from Java SDK. %s" % str(e))
+            # print("RequestCanceledException from Java SDK. %s" % str(e))
             raise Exception("Request RequestCanceledException")
         except RejectedExecutionException as e:
-            print("Request RejectedExecutionException from Java SDK. %s" % str(e))
+            # print("Request RejectedExecutionException from Java SDK. %s" % str(e))
             raise Exception("Request Rejected")
         except CouchbaseException as e:
-            print("CouchbaseException from Java SDK. %s" % str(e))
+            # print("CouchbaseException from Java SDK. %s" % str(e))
             raise Exception("CouchbaseException")
         except RuntimeException as e:
-            print("RuntimeException from Java SDK. %s" % str(e))
+            # print("RuntimeException from Java SDK. %s" % str(e))
             raise Exception("Request RuntimeException")
         # print("Output from n1ql execution:{0}".format(output))
         return output
@@ -1000,7 +1000,7 @@ class query_load(SDKClient):
         output = retry_execute_statement_on_cbas(statement)
         for dataset in json.loads(output["results"]):
             datasets.append([dataset["DataverseName"], dataset["DatasetName"]])
-        print("Datasets are {}".format(datasets))
+        # print("Datasets are {}".format(datasets))
         # Find all synonyms created on synonyms
         statement = "select syn.ObjectName from Metadata.`Synonym` as syn where syn.ObjectName like \"synonym_%\""
         output = retry_execute_statement_on_cbas(statement)
@@ -1027,7 +1027,7 @@ class query_load(SDKClient):
                     queries.append(query_template.format(dataset[0].replace("/","."), dataset[1]))
                 except:
                     continue
-        print("Finished generating CBAS queries. Queries are {}".format(queries))
+        # print("Finished generating CBAS queries. Queries are {}".format(queries))
         return queries
 
 
@@ -1151,12 +1151,12 @@ def main():
                 'SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result = "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3009 and 3010 UNION ALL SELECT name as id, result as Result, `type` as `Type`, array_length(profile.friends) as num_friends FROM  ds4 where result != "SUCCESS" and profile is not missing and array_length(profile.friends) = 5 and duration between 3010 and 3012']
 
     if options.txns:
-        print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
+        # print("{0} num_txns, {1} num_txns_committed".format(load.transactions, load.transactions_committed))
         pass
     elif options.n1ql:
         threads = []
-        print("In options.n1ql thread block to run concurrent queries")
-        print("All the queries are {}".format(queries))
+        # print("In options.n1ql thread block to run concurrent queries")
+        # print("All the queries are {}".format(queries))
         for i in range(0, load.concurrent_batch_size):
             threads.append(Thread(target=load._run_concurrent_queries,
                                   name="query_thread_{0}".format(i),
@@ -1172,7 +1172,7 @@ def main():
         for thread in threads:
             thread.join()
     else:
-        print("In options.n1ql else thread block to run concurrent queries")
+        # print("In options.n1ql else thread block to run concurrent queries")
         load._run_concurrent_queries(queries, int(options.querycount), duration=int(options.duration),
                                      timeout=options.query_timeout, analytics_timeout=options.query_timeout)
 
