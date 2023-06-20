@@ -31,7 +31,7 @@ HOTEL_DS_IDX_QUERY_TEMPLATES = [
              "and (any r in reviews satisfies r.ratings.`Check in / front desk` is not null end) limit 100 ",
      "idx2": "select price, country from keyspacenameplaceholder "
              "where free_breakfast=True and free_parking=True and price is not null and array_count(public_likes)>5 "
-             "and `type`='Hotel' group by country limit 100",
+             "and `type`='Hotel' limit 100",
      "idx3": "select city,country from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
              "group by country,city order by country,city limit 100 offset 100",
      "idx4": "WITH city_avg AS (SELECT city, AVG(price) AS avgprice FROM keyspacenameplaceholder WHERE country = 'Bulgaria' GROUP BY city limit 10) "
