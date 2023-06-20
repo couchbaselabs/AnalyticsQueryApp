@@ -25,38 +25,68 @@ import traceback, sys
 from datetime import datetime
 import importlib
 
+# Capella optimised queries
 HOTEL_DS_IDX_QUERY_TEMPLATES = [
     {"idx1": "select meta().id from keyspacenameplaceholder where country is not null and `type` is not null "
              "and (any r in reviews satisfies r.ratings.`Check in / front desk` is not null end) limit 100 ",
-     "idx2": "select avg(price) as AvgPrice, min(price) as MinPrice, max(price) as MaxPrice from keyspacenameplaceholder "
+     "idx2": "select price, country from keyspacenameplaceholder "
              "where free_breakfast=True and free_parking=True and price is not null and array_count(public_likes)>5 "
              "and `type`='Hotel' group by country limit 100",
-     "idx3": "select city,country,count(*) from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
+     "idx3": "select city,country from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
              "group by country,city order by country,city limit 100 offset 100",
-     "idx4": "WITH city_avg AS (SELECT city, AVG(price) AS avgprice FROM keyspacenameplaceholder WHERE price IS NOT NULL GROUP BY city) "
+     "idx4": "WITH city_avg AS (SELECT city, AVG(price) AS avgprice FROM keyspacenameplaceholder WHERE country = 'Bulgaria' GROUP BY city limit 10) "
              "SELECT h.name, h.price FROM keyspacenameplaceholder h JOIN city_avg ON h.city = city_avg.city WHERE "
-             "h.price < city_avg.avgprice AND h.price IS NOT NULL LIMIT 10;",
-     "idx5": "SELECT h.name, h.city, r.author FROM keyspacenameplaceholder h UNNEST reviews AS r WHERE r.ratings.Rooms < 2 "
-             "AND h.avg_rating >= 3 ORDER BY r.author DESC LIMIT 100;",
-     "idx6": "SELECT COUNT(*) FILTER (WHERE free_breakfast = TRUE) AS count_free_breakfast, "
-             "COUNT(*) FILTER (WHERE free_parking = TRUE) AS count_free_parking, "
-             "COUNT(*) FILTER (WHERE free_breakfast = TRUE AND free_parking = TRUE) AS count_free_parking_and_breakfast "
-             "FROM keyspacenameplaceholder WHERE city LIKE 'North%' ORDER BY count_free_parking_and_breakfast DESC LIMIT 10",
-     "idx7": "SELECT h.name,h.country,h.city,h.price,DENSE_RANK() OVER (window1) AS `rank` FROM keyspacenameplaceholder "
-             "AS h WHERE h.price IS NOT NULL WINDOW window1 AS ( PARTITION BY h.country ORDER BY h.price NULLS LAST) LIMIT 10;",
-     "idx8": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.author LIKE 'M%' AND "
-             "r.ratings.Cleanliness = 3 END AND free_parking = TRUE AND country IS NOT NULL",
-     "idx9": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.author LIKE 'M%' and "
-             "r.ratings.Rooms > 3 END AND free_parking = True",
-     "idx10": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES ANY n:v IN r.ratings "
-              "SATISFIES n = 'Overall' AND v = 2 END END",
-     "idx11": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.ratings.Rooms = 3 and "
-              "r.ratings.Cleanliness > 1 END AND free_parking = True",
+             "h.price < city_avg.avgprice AND h.country='Bulgaria' limit 100;",
+     "idx5": "SELECT h.name, h.city, r.author FROM keyspacenameplaceholder h UNNEST reviews AS r WHERE r.ratings.Rooms = 2 "
+             "AND h.avg_rating >= 3 LIMIT 100;",
+     "idx6": "SELECT COUNT(1) AS cnt FROM keyspacenameplaceholder WHERE city LIKE 'North%'",
+     "idx7": "SELECT h.name,h.country,h.city,h.price FROM keyspacenameplaceholder "
+             "AS h WHERE h.price IS NOT NULL LIMIT 10;",
+     "idx8": "SELECT * FROM keyspacenameplaceholder where `name` is not null limit 100",
+     "idx9": "SELECT * FROM keyspacenameplaceholder where city like \"San%\" limit 100",
+     "idx10": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES  r.author LIKE 'M%' AND r.ratings.Cleanliness = 3 END AND free_parking = TRUE AND country = 'Bulgaria' limit 100",
      "idx12": "SELECT * from keyspacenameplaceholder where `type` is not null limit 100",
      "idx13": "SELECT * from keyspacenameplaceholder where phone like \"4%\" limit 100"
 
      }
 ]
+
+# On-prem queries
+
+# HOTEL_DS_IDX_QUERY_TEMPLATES = [
+#     {"idx1": "select meta().id from keyspacenameplaceholder where country is not null and `type` is not null "
+#              "and (any r in reviews satisfies r.ratings.`Check in / front desk` is not null end) limit 100 ",
+#      "idx2": "select avg(price) as AvgPrice, min(price) as MinPrice, max(price) as MaxPrice from keyspacenameplaceholder "
+#              "where free_breakfast=True and free_parking=True and price is not null and array_count(public_likes)>5 "
+#              "and `type`='Hotel' group by country limit 100",
+#      "idx3": "select city,country,count(*) from keyspacenameplaceholder where free_breakfast=True and free_parking=True "
+#              "group by country,city order by country,city limit 100 offset 100",
+#      "idx4": "WITH city_avg AS (SELECT city, AVG(price) AS avgprice FROM keyspacenameplaceholder WHERE price IS NOT NULL GROUP BY city) "
+#              "SELECT h.name, h.price FROM keyspacenameplaceholder h JOIN city_avg ON h.city = city_avg.city WHERE "
+#              "h.price < city_avg.avgprice AND h.price IS NOT NULL LIMIT 10;",
+#      "idx5": "SELECT h.name, h.city, r.author FROM keyspacenameplaceholder h UNNEST reviews AS r WHERE r.ratings.Rooms < 2 "
+#              "AND h.avg_rating >= 3 ORDER BY r.author DESC LIMIT 100;",
+#      "idx6": "SELECT COUNT(*) FILTER (WHERE free_breakfast = TRUE) AS count_free_breakfast, "
+#              "COUNT(*) FILTER (WHERE free_parking = TRUE) AS count_free_parking, "
+#              "COUNT(*) FILTER (WHERE free_breakfast = TRUE AND free_parking = TRUE) AS count_free_parking_and_breakfast "
+#              "FROM keyspacenameplaceholder WHERE city LIKE 'North%' ORDER BY count_free_parking_and_breakfast DESC LIMIT 10",
+#      "idx7": "SELECT h.name,h.country,h.city,h.price,DENSE_RANK() OVER (window1) AS `rank` FROM keyspacenameplaceholder "
+#              "AS h WHERE h.price IS NOT NULL WINDOW window1 AS ( PARTITION BY h.country ORDER BY h.price NULLS LAST) LIMIT 10;",
+#      "idx8": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.author LIKE 'M%' AND "
+#              "r.ratings.Cleanliness = 3 END AND free_parking = TRUE AND country IS NOT NULL",
+#      "idx9": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.author LIKE 'M%' and "
+#              "r.ratings.Rooms > 3 END AND free_parking = True",
+#      "idx10": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES ANY n:v IN r.ratings "
+#               "SATISFIES n = 'Overall' AND v = 2 END END",
+#      "idx11": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES r.ratings.Rooms = 3 and "
+#               "r.ratings.Cleanliness > 1 END AND free_parking = True",
+#      "idx12": "SELECT * from keyspacenameplaceholder where `type` is not null limit 100",
+#      "idx13": "SELECT * from keyspacenameplaceholder where phone like \"4%\" limit 100"
+#
+#      }
+# ]
+
+
 
 HOTEL_DS_IDX_QUERY_INSERT_TEMPLATES = [{
                                            "idx1": "INSERT INTO keyspacenameplaceholder (KEY, VALUE) VALUES (UUID(), { 'type': 'hotel', 'name' : 'new hotel' })",
