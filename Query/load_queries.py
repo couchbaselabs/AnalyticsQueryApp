@@ -42,11 +42,11 @@ HOTEL_DS_IDX_QUERY_TEMPLATES = [
      "idx6": "SELECT COUNT(1) AS cnt FROM keyspacenameplaceholder WHERE city LIKE 'North%'",
      "idx7": "SELECT h.name,h.country,h.city,h.price FROM keyspacenameplaceholder "
              "AS h WHERE h.price IS NOT NULL LIMIT 10;",
-     "idx8": "SELECT * FROM keyspacenameplaceholder where `name` is not null limit 100",
-     "idx9": "SELECT * FROM keyspacenameplaceholder where city like \"San%\" limit 100",
-     "idx10": "SELECT * FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES  r.author LIKE 'M%' AND r.ratings.Cleanliness = 3 END AND free_parking = TRUE AND country = 'Bulgaria' limit 100",
-     "idx12": "SELECT * from keyspacenameplaceholder where `type` is not null limit 100",
-     "idx13": "SELECT * from keyspacenameplaceholder where phone like \"4%\" limit 100"
+     "idx8": "SELECT phone FROM keyspacenameplaceholder where `name` is not null limit 100",
+     "idx9": "SELECT country FROM keyspacenameplaceholder where city like \"San%\" limit 100",
+     "idx10": "SELECT email FROM keyspacenameplaceholder AS d WHERE ANY r IN d.reviews SATISFIES  r.author LIKE 'M%' AND r.ratings.Cleanliness = 3 END AND free_parking = TRUE AND country = 'Bulgaria' limit 100",
+     "idx12": "SELECT address from keyspacenameplaceholder where `type` is not null limit 100",
+     "idx13": "SELECT city from keyspacenameplaceholder where phone like \"4%\" limit 100"
 
      }
 ]
